@@ -232,6 +232,40 @@ export default function Editor({
     }
   }, [llmImage]);
 
+
+  const createChunkFromEditorContent = () => {
+    const newContent = editorRef.current.editor.getContent();
+    const newChunkId = `chunk_${new Date().getTime()}`;
+  
+    // Assuming your chunk structure looks something like this
+    const newChunk = {
+      frontend_id: newChunkId,
+      content: newContent, // Extract the relevant content for the chunk
+      versions: [{ frontend_id: `${newChunkId}_v1`, text: newContent }],
+    };
+  
+    setCurrentDocument((prevDocument) => ({
+      ...prevDocument,
+      chunks: [...prevDocument.chunks, newChunk],
+    }));
+  
+    setActiveChunkid(newChunkId);
+    setPopupToolbarVisible(true);
+    setEditingMode(true);
+
+    setChunksVisbleInDocument((prevVisibleChunks) => [
+      ...prevVisibleChunks,
+      newChunkId,
+    ]);
+  
+    console.log(`New chunk created with ID: ${newChunkId}`);
+
+    sendChunkToBackend(currentDocument._id, newChunk);
+
+
+  };
+  
+
   const handleEditorClick = () => {
     const node = editorRef.current.editor.selection.getNode();
     const chunk = editorRef.current.editor.dom.getParent(node, "span.chunk");
@@ -394,6 +428,28 @@ export default function Editor({
     }
   };
 
+
+  const sendChunkToBackend = async (documentId, chunkData) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8080/documents/${documentId}/chunks`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ chunk_data: chunkData }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      console.log('Chunk sent to backend successfully:', data);
+    } catch (error) {
+      console.error('Failed to send chunk to backend:', error);
+    }
+  };
+  
 
   async function getLLMResult(promptText, promptNode) {
     function countTags(text) {
@@ -694,7 +750,8 @@ export default function Editor({
               <TinyEditor
                 ref={editorRef}
                 disabled={llmStreaming && llmContinue}
-                apiKey={import.meta.env.VITE_TINYMCE}
+                // apiKey={import.meta.env.VITE_TINYMCE}
+                
                 initialValue={currentDocument.content}
                 recipes={recipes}
                 createVersion={createVersion}
