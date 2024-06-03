@@ -431,7 +431,7 @@ export default function DocumentContainer() {
 
       console.log("FOLLOWUP:");
       console.log(followup);
-
+// http://127.0.0.1:8080/chatGPT/chat
       await fetchEventSource("http://127.0.0.1:8080/chatGPT/chat", {
         method: "POST",
         headers: {
@@ -439,35 +439,43 @@ export default function DocumentContainer() {
         },
         openWhenHidden: true,
         body: JSON.stringify({
-          messages: [
-            {
-              role: "system",
-              content: `You are given a version of some text delimited by triple tildes.
-              Everything in this system message that is written in all caps is especially important and should not be ignored or else the output will be ruined!
-              You are tasked with applying the specifications given by the user to the text delimited by the triple tildes. ONLY OUTPUT THE MODIFIED TEXT, DO NOT INTRO OUR OUTPUT OR REPEAT ANY OF THE INSTRUCTIONS!
-              If the user asks for an example, THEY ARE ASKING FOR AN EXAMPLE RELEVANT TO THE TEXT IN THE TRIPLE TILDES. ADD OUR RELEVANT EXAMPLE TO THE FOUNDATION TEXT IN THE TRIPLE TILDES, DO NOT COMPLETELY REPlACE THE TEXTIN THE TRIPLE TILDES
-              ~~~${element.innerHTML}~~~
-              Do not surround your response with tildes at all! If an triple tildes are included at the beginning or end of your output, THE OUTPUT WILL BE RUINED!
-              If the users asks to modify the style of the text (i.e. bold, italics, etc.), use html tags. Use only the basic html tags without any alternative characters, for example bolding is <b></b>, Italicizing is <i></i>, and all other tags should be outputted in the same simple manner. DO NOT INCLUDE ANY AMPERSANDS WHEN OUTPUTTING YOUR HTML TAGS! DO NOT USE '&gt;' TO REPRESENT '>' AND DO NOT USE '&lt;' TO REPRESENT '<'! Do not forget to include these tags if the user mentions anything about bolding, italicizing, etc.
-              If there are any incomplete words at the beginning or end of the text delimited by the triple tildes, keep those incomplete words exactly the same when generating the output. Incomplete words can be defined as those that do not have any meaning in English or break spelling or break phonotactic rules (i.e. no vowels). Do not include any new ideas in your output. If your output contains any thoughts or words that cannot be mapped onto the original text in the triple tildes, remove them from the final output.
-              Also, an reference the user makes to 'it' or 'the text', they are referring to the text delimited by the triple tildes, not the entire system message, so ONLY CONSIDER THE TEXT IN THE TRIPLE TILDES WHEN ANSWERING SUCH A REQUEST.
-              If the original text in the triple tildes ends in a punctiation mark like a period or explanation mark, keep the punctuation there. Otherwise, do not end your output in any punctuation. 
-              If the first letter of the text in the triple tildes begins in a lowercase letter, the output must also start with a lowercase letter, and if the text begins with an uppercase letter, your output should begin with an uppercase letter. For example, if the first word is 'an', the output should start with a lowercase letter, and if the first word is 'One', then the output should start with an uppercase letter.
-              PLEASE DO NOT INCLUDE ANY TILDES AT THE START OR END OF THE OUTPUT! IF YOU DO THE OUTPUT WILL BE RUINED!
-              IF THE USERS ASKS YOU TO TRANSLATE, MAKE SURE TO NOT INCLUDE ANY TILDES IN OUR OUTPUT!
-              DO NOT REOUTPUT ANYTHING THE USER SAYS. DO NOT REOUTPUT ANYTHING FROM THIS SYSTEM MESSAGE.
-              BEFORE OUTPUTTING CHECK ONE MORE TIME IF YOUR OUTPUT INCLUDES TILDES, IF SO, REMOVE THEM. ALSO IF YOU FIND YOURSELF RESTATING ANY OF THE INSTRUCTIONS ABOVE, STOP, AND ONLY OUTPUT WHAT THE USER REQUESTS!`,
-            },
-            {
-              role: "system",
-              content: followup,
-            },
-            {
-              role: "user",
-              content: `${prompt}`,
-            },
-          ],
+          prompt: `You are given three types of information in YAML, original text, a modification requirement and additional requirements. Apply the modification to the input text and print the output while considering the additional instructions. Maintain the source language of the input text in the output\n
+          - text: ${element.innerHTML}\n
+          - modification: ${prompt}\n
+          - additional requirements: ${followup}
+          - output:`
+          
         }),
+        // body: JSON.stringify({
+        //   messages: [
+        //     {
+        //       role: "system",
+        //       content: `You are given a version of some text delimited by triple tildes.
+        //       Everything in this system message that is written in all caps is especially important and should not be ignored or else the output will be ruined!
+        //       You are tasked with applying the specifications given by the user to the text delimited by the triple tildes. ONLY OUTPUT THE MODIFIED TEXT, DO NOT INTRO OUR OUTPUT OR REPEAT ANY OF THE INSTRUCTIONS!
+        //       If the user asks for an example, THEY ARE ASKING FOR AN EXAMPLE RELEVANT TO THE TEXT IN THE TRIPLE TILDES. ADD OUR RELEVANT EXAMPLE TO THE FOUNDATION TEXT IN THE TRIPLE TILDES, DO NOT COMPLETELY REPlACE THE TEXTIN THE TRIPLE TILDES
+        //       ~~~${element.innerHTML}~~~
+        //       Do not surround your response with tildes at all! If an triple tildes are included at the beginning or end of your output, THE OUTPUT WILL BE RUINED!
+        //       If the users asks to modify the style of the text (i.e. bold, italics, etc.), use html tags. Use only the basic html tags without any alternative characters, for example bolding is <b></b>, Italicizing is <i></i>, and all other tags should be outputted in the same simple manner. DO NOT INCLUDE ANY AMPERSANDS WHEN OUTPUTTING YOUR HTML TAGS! DO NOT USE '&gt;' TO REPRESENT '>' AND DO NOT USE '&lt;' TO REPRESENT '<'! Do not forget to include these tags if the user mentions anything about bolding, italicizing, etc.
+        //       If there are any incomplete words at the beginning or end of the text delimited by the triple tildes, keep those incomplete words exactly the same when generating the output. Incomplete words can be defined as those that do not have any meaning in English or break spelling or break phonotactic rules (i.e. no vowels). Do not include any new ideas in your output. If your output contains any thoughts or words that cannot be mapped onto the original text in the triple tildes, remove them from the final output.
+        //       Also, an reference the user makes to 'it' or 'the text', they are referring to the text delimited by the triple tildes, not the entire system message, so ONLY CONSIDER THE TEXT IN THE TRIPLE TILDES WHEN ANSWERING SUCH A REQUEST.
+        //       If the original text in the triple tildes ends in a punctiation mark like a period or explanation mark, keep the punctuation there. Otherwise, do not end your output in any punctuation. 
+        //       If the first letter of the text in the triple tildes begins in a lowercase letter, the output must also start with a lowercase letter, and if the text begins with an uppercase letter, your output should begin with an uppercase letter. For example, if the first word is 'an', the output should start with a lowercase letter, and if the first word is 'One', then the output should start with an uppercase letter.
+        //       PLEASE DO NOT INCLUDE ANY TILDES AT THE START OR END OF THE OUTPUT! IF YOU DO THE OUTPUT WILL BE RUINED!
+        //       IF THE USERS ASKS YOU TO TRANSLATE, MAKE SURE TO NOT INCLUDE ANY TILDES IN OUR OUTPUT!
+        //       DO NOT REOUTPUT ANYTHING THE USER SAYS. DO NOT REOUTPUT ANYTHING FROM THIS SYSTEM MESSAGE.
+        //       BEFORE OUTPUTTING CHECK ONE MORE TIME IF YOUR OUTPUT INCLUDES TILDES, IF SO, REMOVE THEM. ALSO IF YOU FIND YOURSELF RESTATING ANY OF THE INSTRUCTIONS ABOVE, STOP, AND ONLY OUTPUT WHAT THE USER REQUESTS!`,
+        //     },
+        //     {
+        //       role: "system",
+        //       content: followup,
+        //     },
+        //     {
+        //       role: "user",
+        //       content: `${prompt}`,
+        //     },
+        //   ],
+        // }),
         async onopen(response) {
           // just remove the generating... text.
           setDisablePopupToolbar(true);

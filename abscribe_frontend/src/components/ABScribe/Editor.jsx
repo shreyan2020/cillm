@@ -7,10 +7,42 @@ import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
 
 import { Editor as TinyEditor } from "@tinymce/tinymce-react";
+
+import tinymce from 'tinymce/tinymce';
+
+
+import "tinymce/icons/default";
+import "tinymce/themes/silver";
+import "tinymce/skins/ui/oxide/skin.min.css";
+import "tinymce/plugins/code";
+import "tinymce/plugins/link";
+import "tinymce/plugins/image";
+import "tinymce/plugins/advlist";
+import "tinymce/plugins/autolink";
+import "tinymce/plugins/lists";
+import "tinymce/plugins/charmap";
+import "tinymce/plugins/preview";
+import "tinymce/plugins/anchor";
+import "tinymce/plugins/searchreplace";
+import "tinymce/plugins/visualblocks";
+import "tinymce/plugins/fullscreen";
+import "tinymce/plugins/insertdatetime";
+import "tinymce/plugins/media";
+import "tinymce/plugins/table";
+import "tinymce/plugins/help";
+import "tinymce/plugins/wordcount";
+
+
+
+
 import useLLM from "usellm";
 import parse from "html-react-parser";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import PlaceHolder from "../../resources/placeHolderImg.png";
+
+
+
+
 
 import "../../scss/editor.scss";
 
@@ -93,6 +125,8 @@ export default function Editor({
   activeRecipe,
   setActiveRecipe,
   generateVersion,
+
+  setDebouncedContent,
 }) {
   //React-Router-DOM
   const navigate = useNavigate();
@@ -103,6 +137,9 @@ export default function Editor({
 
   //Refs
   const editorRef = useRef(null); //TinyMCE Editor
+  // inactivity tracker to create chunks to generate continuation
+const [debounceTimeout, setDebounceTimeout] = useState(null);
+const [inactivityDuration] = useState(5000); // Example: 5 seconds
 
   //States
   const [gptActive, setGptActive] = useState(false);
@@ -121,6 +158,9 @@ export default function Editor({
   const [llmId, setLlmId] = useState([]);
   const [inline, SetInline] = useState(true);
 
+
+
+  
   const [value, setValue] = useState(currentDocument?.content ?? "");
 
   const [items, setItems] = useState([
@@ -132,6 +172,9 @@ export default function Editor({
       },
     },
   ]);
+
+  const [editorContent, setEditorContent] = useState(currentDocument?.content ?? "");
+  const debounceTimeoutRef = useRef(null);
 
   useEffect(() => {
     if (activeChunkid === "") {
@@ -166,61 +209,6 @@ export default function Editor({
     }
   }, [llmResult, llmStreaming, llmContinue]);
 
-  // useEffect(() => {
-  //   if (
-  //     editorRef.current !== null &&
-  //     editorRef.current.editor !== undefined &&
-  //     inline
-  //   ) {
-  //     SetInline(false);
-  //     console.log(inline);
-  //     editorRef.current.editor.on("keydown", function (event) {
-  //       console.log(event.keyCode);
-  //       if (event.keyCode == "16") {
-  //         // 16 is for Shift, for TAB change to 9
-  //         let highlightedText = "";
-  //         const selectedText =
-  //           editorRef.current.editor.selection.getNode().innerHTML;
-  //         const match = selectedText.match(/\*(.*?)\*/g);
-  //         //console.log(selectedText)
-  //         //console.log(match)
-  //         if (match) {
-  //           highlightedText = match[0];
-  //           console.log(highlightedText);
-  //           console.log(highlightedText.replace(/<\/?[^>]+(>|$)/g, ""));
-  //           const node = editorRef.current.editor.selection.getNode();
-  //           const originalContent =
-  //             editorRef.current.editor.selection.getNode().innerHTML;
-  //           const modifiedText = highlightedText.replace(/<\/?[^>]+(>|$)/g, "");
-  //           const modifiedOriginalContent = originalContent.replace(
-  //             highlightedText,
-  //             modifiedText
-  //           );
-  //           console.log(modifiedOriginalContent);
-  //           const newContent = modifiedOriginalContent.replace(
-  //             modifiedText,
-  //             `<span class='inline-prompt'>${modifiedText.replace(
-  //               /\*/g,
-  //               ""
-  //             )}</span>`
-  //           );
-  //           console.log(newContent);
-  //           node.innerHTML = newContent;
-  //           //console.log(node)
-  //           const promptNode = node.querySelector(".inline-prompt");
-  //           const promptText = promptNode.textContent;
-  //           //console.log(promptText)
-  //           //console.log(promptNode)
-  //           getLLMResult(promptText, promptNode);
-
-  //           //event.preventDefault();
-  //         } else {
-  //           highlightedText = null;
-  //         }
-  //       }
-  //     });
-  //   }
-  // });
 
   useEffect(() => {
     if (llmImage !== "") {
@@ -233,39 +221,68 @@ export default function Editor({
   }, [llmImage]);
 
 
-  const createChunkFromEditorContent = () => {
-    const newContent = editorRef.current.editor.getContent();
-    const newChunkId = `chunk_${new Date().getTime()}`;
-  
-    // Assuming your chunk structure looks something like this
-    const newChunk = {
-      frontend_id: newChunkId,
-      content: newContent, // Extract the relevant content for the chunk
-      versions: [{ frontend_id: `${newChunkId}_v1`, text: newContent }],
-    };
-  
-    setCurrentDocument((prevDocument) => ({
-      ...prevDocument,
-      chunks: [...prevDocument.chunks, newChunk],
-    }));
-  
-    setActiveChunkid(newChunkId);
-    setPopupToolbarVisible(true);
-    setEditingMode(true);
+  const sendChunkToBackend = async (documentId, prompt, updateEditorWithResponse) => {
+    // setRequestInProgress(true);
 
-    setChunksVisbleInDocument((prevVisibleChunks) => [
-      ...prevVisibleChunks,
-      newChunkId,
-    ]);
-  
-    console.log(`New chunk created with ID: ${newChunkId}`);
+    try {
+      const response = await fetch(`http://127.0.0.1:8080/chatGPT/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt }),
+      });
 
-    sendChunkToBackend(currentDocument._id, newChunk);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
 
+      while (!done) {
+        const { value, done: readerDone } = await reader.read();
+        done = readerDone;
+        const chunk = decoder.decode(value, { stream: true });
+        updateEditorWithResponse(chunk);
+      }
+    } catch (error) {
+      console.error('Failed to send chunk to backend:', error);
+      // setRequestInProgress(false);
+    }
   };
   
 
+
+// const createChunkFromEditorContent = async () => {
+//   const newContent = editorRef.current.editor.getContent();
+//   const newChunkId = `chunk_${new Date().getTime()}`;
+
+//   // Assuming your chunk structure looks something like this
+//   const newChunk = {
+//     frontend_id: newChunkId,
+//     content: newContent, // Extract the relevant content for the chunk
+//     versions: [{ frontend_id: `${newChunkId}_v1`, text: newContent }],
+//   };
+
+//   setCurrentDocument((prevDocument) => ({
+//     ...prevDocument,
+//     chunks: [...prevDocument.chunks, newChunk],
+//   }));
+
+//   setActiveChunkid(newChunkId);
+//   setPopupToolbarVisible(true);
+//   setEditingMode(true);
+
+//   setChunksVisbleInDocument((prevVisibleChunks) => [
+//     ...prevVisibleChunks,
+//     newChunkId,
+//   ]);
+
+  // console.log(`New chunk created with ID: ${newChunkId}`);
+
+  
   const handleEditorClick = () => {
     const node = editorRef.current.editor.selection.getNode();
     const chunk = editorRef.current.editor.dom.getParent(node, "span.chunk");
@@ -304,45 +321,7 @@ export default function Editor({
     }
   };
 
-  // Buggy version with partial support for sub-chunk selection
-  //   const handleEditorClick = () => {
-  //     const node = editorRef.current.editor.selection.getNode();
-  //     const chunk = editorRef.current.editor.dom.getParent(node, "span.chunk");
-  //     const chunkClass = editorRef.current.editor.dom.getAttrib(chunk, "class");
-  //     const factorId = chunkClass.match(/factor_.....*/);
-  //     let selection = editorRef.current.editor.selection;
-  //     let range = selection.getRng(0);
-  //     const length = Math.abs(range.endOffset - range.startOffset);
-  //     console.log("Factor ID: " + factorId);
-  //     if (factorId) {
-  //       setActiveFactorId(factorId[0]);
-  //       console.log(factorColors);
-  //       console.log("Factor Id Updated to " + factorId);
-  //     }
-  //     if (chunk && length === 0) {
-  //       const chunkid = editorRef.current.editor.dom.getAttrib(chunk, "id");
-  //       console.log(`Chunk Found: ${chunkid}`);
-  //       const chunkFromDocument = currentDocument.chunks.find(
-  //         (chunk) => chunk.frontend_id === chunkid
-  //       );
-  //       if (chunkFromDocument) {
-  //         console.log(`Chunk From Document Found: ${chunkid}`);
-  //         console.log(currentDocument);
-  //         setActiveChunkid(chunkid);
-  //         if (!activeVersionIds[chunkid]) {
-  //           console.log("Active Version Ids Updated");
-  //           updateActiveVersionId(chunkid);
-  //         }
-  //         setEditingMode(true);
-  //       }
-  //     } else {
-  //       setActiveChunkid("");
-  //       if (length === 0) {
-  //         setPopupToolbarVisible(false);
-  //       }
-  //     }
-  //   };
-
+  
   const handleEditorMouseUp = () => {
     updatePopupToolbarLocation();
 
@@ -360,6 +339,7 @@ export default function Editor({
     // handleEditorClick();
     // updatePopupToolbarLocation();
   };
+  
 
   const handleEditorOnChange = () => {
     console.log("handleEditorOnChange");
@@ -428,28 +408,6 @@ export default function Editor({
     }
   };
 
-
-  const sendChunkToBackend = async (documentId, chunkData) => {
-    try {
-      const response = await fetch(`http://127.0.0.1:8080/documents/${documentId}/chunks`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ chunk_data: chunkData }),
-      });
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-  
-      const data = await response.json();
-      console.log('Chunk sent to backend successfully:', data);
-    } catch (error) {
-      console.error('Failed to send chunk to backend:', error);
-    }
-  };
-  
 
   async function getLLMResult(promptText, promptNode) {
     function countTags(text) {
@@ -626,22 +584,7 @@ export default function Editor({
   const handleLlmButtonAdjust = () => {
     console.log("llm adjust button clicked");
     let node = editorRef.current.editor.selection.getNode();
-    // if (node.nodeName === 'IMG') {
-    //   let classes = editorRef.current.editor.dom.getParent(node,'img').classList
-    //   let nodeId = ''
-    //   for(let i=0;i<classes.length;i++){
-    //     if(classes[i].includes('id')){
-    //        nodeId = classes[i]
-    //     }}
-    //   let index = Number(nodeId.slice(2))
-    //   if(nodeId !== ''){
-    //   editorRef.current.editor.dom.remove(
-    //     editorRef.current.editor.dom.select(`.${nodeId}`)
-    //   );
-    //     editorRef.current.editor.selection.setContent(
-    //     "@ai:" + llmPrompts[index]
-    //   );}
-    // }else{
+    
     if (
       editorRef.current.editor.dom.getParent(node, ".llmparagraph") !== null
     ) {
@@ -712,14 +655,7 @@ export default function Editor({
     setLlmPrompt("");
   };
 
-  // const handleLlmButtonStop = () => {
-  //   console.log("llm stop generating button clicked");
-  //   setLlmContinue(false);
-  //   editorRef.current.editor.dom.removeAllAttribs("llmresult");
-  //   setLlmStopButtonVisible(false);
-  //   console.log("llmPrompt Inside Stop:");
-  //   console.log(llmPrompt);
-  // };
+
 
   return (
     <Container fluid className="p-0">
@@ -748,6 +684,7 @@ export default function Editor({
               </div>
 
               <TinyEditor
+                tinymceScriptSrc="tinymce/tinymce.min.js"
                 ref={editorRef}
                 disabled={llmStreaming && llmContinue}
                 // apiKey={import.meta.env.VITE_TINYMCE}
@@ -775,7 +712,9 @@ export default function Editor({
                   inline_boundaries_selector:
                     "a[href],code,b,i,strong,em,span[id]",
                   resize: false,
-                  content_css: "document",
+                  // content_css: "document",
+                  content_css: false,
+
                   toolbar_mode: "sliding",
                   menubar: "file edit insert view format table tools help",
                   menu: {
@@ -816,7 +755,9 @@ export default function Editor({
                     },
                     help: { title: "Help", items: "help" },
                   },
-                  skin: "borderless",
+                  // skin: "borderless",
+                  skin: false,
+                  // content_style: ["document", contentUiCss].join('\n'),
                   height: "100%",
                   plugins: [
                     "code",
@@ -869,11 +810,7 @@ export default function Editor({
                       },
                     },
                   },
-                  // toolbar:
-                  //   "code | undo redo | blocks | " +
-                  //   "bold italic forecolor hilitecolor | alignleft aligncenter " +
-                  //   "alignright alignjustify | bullist numlist outdent indent | " +
-                  //   "removeformat | ideabucket",
+
                   toolbar:
                     "blocks fontfamily fontsize |variationsidebar recipes @ai-Templates|" +
                     "bold italic forecolor hilitecolor | alignleft aligncenter " +
@@ -906,87 +843,45 @@ export default function Editor({
                       "star",
                       '<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/></svg>'
                     );
+
+
+                 
+
                     editor.ui.registry.addMenuButton("recipes", {
                       icon: "WandMagic",
                       text: "LLM Recipes",
                       tooltip: "LLM Recipes",
-                      disabled: true,
-
                       fetch: function (callback) {
-                        callback(
-                          editorRef.current.props.recipes.map((recipe) => ({
-                            type: "menuitem",
-                            icon: "star",
-                            text: recipe.name.toUpperCase(),
-
-                            onAction: async function () {
-                              if (editorRef.current.props.activeChunkid) {
-                                editorRef.current.props.generateVersion(
-                                  editorRef.current.props.activeChunkid,
-                                  recipe.prompt
-                                );
-                              }
-                            },
-                          }))
-                        );
+                        const items = editorRef.current.props.recipes.map((recipe) => ({
+                          type: "menuitem",
+                          icon: "star",
+                          text: recipe.name.toUpperCase(),
+                          onAction: async function () {
+                            if (editorRef.current.props.activeChunkid) {
+                              editorRef.current.props.generateVersion(
+                                editorRef.current.props.activeChunkid,
+                                recipe.prompt
+                              );
+                            }
+                          },
+                        }));
+                        callback(items);
                       },
                       onSetup: (buttonApi) => {
-                        const editorEventCallback = (eventApi) => {
-                          buttonApi.setEnabled(
-                            eventApi.element.classList.contains("chunk") &&
-                              editorRef.current.props.recipes.length > 0
+                        const nodeChangeHandler = (e) => {
+                          const isChunkSelected = e.parents.some(parent =>
+                            parent.classList && parent.classList.contains("chunk")
                           );
+                          buttonApi.setDisabled(!isChunkSelected || editorRef.current.props.recipes.length === 0);
                         };
-                        editor.on("NodeChange", editorEventCallback);
-
-                        /* onSetup should always return the unbind handlers */
-                        return () =>
-                          editor.off("NodeChange", editorEventCallback);
+                        editor.on("NodeChange", nodeChangeHandler);
+                    
+                        return () => editor.off("NodeChange", nodeChangeHandler);
                       },
                     });
 
-                    //                 const onAction = (autocompleteApi, rng, value) => {
-                    //   editor.selection.setRng(rng);
-                    //   editor.insertContent(value);
-                    //   autocompleteApi.hide();
-                    // };
 
-                    // const getMatchedChars = (pattern) => {
-                    //   let uniquePrompts = [...new Set(llmPromptsList)]
-                    //   return uniquePrompts.filter(prompt => prompt.indexOf(pattern) !== -1);
-                    // };
 
-                    // //
-                    // editor.ui.registry.addAutocompleter('prompts', {
-                    //   trigger: '@ai:',
-                    //   minChars: 1,
-                    //   //columns: 1,
-                    //   highlightOn: ['char_name'],
-                    //   onAction: onAction,
-                    //   fetch: (pattern) => {
-                    //     return new Promise((resolve) => {
-                    //       const results = getMatchedChars(pattern).map(char => ({
-                    //         type: 'cardmenuitem',
-                    //         value: '@ai:'+char,
-                    //         //label: char,
-                    //         items: [
-                    //           {
-                    //             type: 'cardcontainer',
-                    //             direction: 'vertical',
-                    //             items: [
-                    //               {
-                    //                 type: 'cardtext',
-                    //                 text: char,
-                    //                 name: 'char_name'
-                    //               }
-                    //             ]
-                    //           }
-                    //         ]
-                    //       }));
-                    //       resolve(results);
-                    //     });
-                    //   }
-                    // });
 
                     editor.ui.registry.addContextToolbar("llmbuttons", {
                       predicate: (node) =>
@@ -1053,16 +948,6 @@ export default function Editor({
                         handleLlmButtonDiscard();
                       },
                     });
-
-                    // editor.ui.registry.addButton("gpt", {
-                    //     text: "Interject Text",
-                    //     onAction: () => {
-                    //         let promptText = editor.selection.getContent()
-                    //         editor.selection.setContent(`<span class='inline-prompt'>${promptText}</span>`)
-                    //         let promptNode = editor.selection.getNode().querySelector('.inline-prompt')
-                    //         getLLMResult(promptText,promptNode)
-                    //     },
-                    // });
 
                     editor.ui.registry.addToggleButton("variationsidebar", {
                       icon: "VariationSidebar",

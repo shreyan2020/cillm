@@ -59,7 +59,6 @@ export default function VariationSidebar({
   generateVersion,
 }) {
   const [selectVersions, setSelectVersions] = useState(false);
-  useState("");
 
   useEffect(() => {
     if (currentDocument) {
@@ -93,15 +92,6 @@ export default function VariationSidebar({
         <strong>
           <FontAwesomeIcon icon={faLightbulb} /> Variation Sidebar
         </strong>
-        {/* <Button
-          variant="outline-dark"
-          size="sm"
-          onClick={() => {
-            setSelectVersions((prevState) => !prevState);
-          }}
-        >
-          A/B Test
-        </Button> */}
       </Card.Header>
       {visibleChunks.length > 0 ? (
         <div className="d-flex flex-column justify-content-between variation-sidebar-container">
@@ -144,7 +134,6 @@ export default function VariationSidebar({
                               <ListGroupItem
                                 key={index}
                                 onClick={() => {
-                                  // setLlmResult("");
                                   updateChunk(
                                     activeChunkid,
                                     version.frontend_id
@@ -155,8 +144,6 @@ export default function VariationSidebar({
                                       [chunk.frontend_id]: version.frontend_id,
                                     })
                                   );
-                                  // const nodeArray =
-                                  //   editorRef.current.dom.select("p.answer");
                                   updatePopupToolbarLocation(
                                     tinymce.activeEditor.dom.get(
                                       chunk.frontend_id
@@ -170,17 +157,6 @@ export default function VariationSidebar({
                                     ? "primary"
                                     : "light"
                                 }
-                                // style={
-                                //   activeVersionIds[activeChunkid] ==
-                                //   version.frontend_id
-                                //     ? {
-                                //         backgroundColor: `${getFactorColor(
-                                //           activeFactorId
-                                //         )}`,
-                                //         // backgroundColor: `#e9ffee`,
-                                //       }
-                                //     : {}
-                                // }
                               >
                                 <>
                                   {activeVersionIds[activeChunkid] ==
@@ -232,23 +208,6 @@ export default function VariationSidebar({
               : ""}
           </Accordion>
 
-          {/* <ButtonGroup>
-              <Button
-                onClick={() => {
-                  console.log(currentDocument);
-                }}
-              >
-                Log Document Datastructure
-              </Button>
-              <Button
-                onClick={() => {
-                  console.log(tinymce.activeEditor.getContent());
-                }}
-              >
-                Log Document Content
-              </Button>
-            </ButtonGroup> */}
-
           <AIModifiers
             selectVersions={selectVersions}
             activeChunkid={activeChunkid}
@@ -270,22 +229,6 @@ export default function VariationSidebar({
             setActiveLlmRecipe={setActiveRecipe}
             generateVersion={generateVersion}
           />
-          {/* {activeChunkid && activeVersionIds[activeChunkid] ? (
-              <>
-                <RefinementRecipes
-                  selectVersions={selectVersions}
-                  activeVersionIds={activeVersionIds}
-                  activeChunkid={activeChunkid}
-                  updateActiveVersionId={updateActiveVersionId}
-                  getVersionTextFromIds={getVersionTextFromIds}
-                  createVersion={createVersion}
-                  deleteChunk={deleteChunk}
-                  makeid={makeid}
-                />
-              </>
-            ) : (
-              ""
-            )} */}
         </div>
       ) : (
         <>
