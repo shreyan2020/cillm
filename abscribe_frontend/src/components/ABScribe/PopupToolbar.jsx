@@ -98,102 +98,72 @@ const PopupToolbar = forwardRef(function MyInput(props, ref) {
         }}
       >
         <Card>
-          <Card.Body className="p-0 mt-0 mb-0 bg-light rounded-1 d-flex">
-            {/* <Card.Text>{content}</Card.Text> */}
+          <Card.Body className="p-0 mt-0 mb-0 bg-light rounded-1 d-flex flex-column align-items-center">
             <div ref={scrollRef} className="versions-container d-flex">
               {activeChunkid !== "" && chunk
                 ? chunk.versions.map((version, index) => (
-                    <>
-                      <span key={index} className="version-container">
-                        <ButtonGroup
-                          className="p-1 border"
-                          // style={
-                          //   activeVersionIds[activeChunkid] == version.frontend_id
-                          //     ? {
-                          //         backgroundColor: `${getFactorColor(
-                          //           activeFactorId
-                          //         )}`,
-                          //         // backgroundColor: "#e9ffee",
-                          //       }
-                          //     : {}
-                          // }
-                          onMouseEnter={() => {
+                    <span key={index} className="version-container">
+                      <ButtonGroup
+                        className="p-1 border"
+                        onMouseEnter={() => {
+                          if (!disable) {
+                            setEditingMode(false);
+                            updateChunk(activeChunkid, version.frontend_id);
+                          }
+                        }}
+                        onMouseLeave={() => {
+                          if (!disable) {
+                            updateChunk(
+                              activeChunkid,
+                              activeVersionIds[activeChunkid]
+                            );
+                          }
+                        }}
+                      >
+                        <Button
+                          size="sm"
+                          variant={
+                            activeVersionIds[activeChunkid] ==
+                            version.frontend_id
+                              ? "outline-dark"
+                              : "light"
+                          }
+                          onClick={() => {
                             if (!disable) {
-                              setEditingMode(false);
                               updateChunk(activeChunkid, version.frontend_id);
-                            }
-                          }}
-                          // onMouseClick={() => {
-                          //   setActiveVersionIds((prevActiveVersionIds) => ({
-                          //     ...prevActiveVersionIds,
-                          //     [activeChunkid]: version.frontend_id,
-                          //   }));
-                          // }}
-                          onMouseLeave={() => {
-                            if (!disable) {
-                              console.log(activeVersionIds);
-                              console.log(activeChunkid, activeVersionIds);
-                              updateChunk(
-                                activeChunkid,
-                                activeVersionIds[activeChunkid]
-                              );
+                              setActiveVersionIds((prevActiveVersionIds) => ({
+                                ...prevActiveVersionIds,
+                                [activeChunkid]: version.frontend_id,
+                              }));
                             }
                           }}
                         >
-                          <Button
-                            size="sm"
-                            variant={
-                              activeVersionIds[activeChunkid] ==
-                              version.frontend_id
-                                ? "outline-dark"
-                                : "light"
-                            }
-                            onClick={() => {
-                              if (!disable) {
-                                updateChunk(activeChunkid, version.frontend_id);
-                                setActiveVersionIds((prevActiveVersionIds) => ({
-                                  ...prevActiveVersionIds,
-                                  [activeChunkid]: version.frontend_id,
-                                }));
+                          {numberToLetters(index)}
+                        </Button>
+                        {activeVersionIds[activeChunkid] ==
+                        version.frontend_id ? (
+                          <>
+                            <Button
+                              size="sm"
+                              ref={
+                                activeVersionIds[activeChunkid] ==
+                                version.frontend_id
+                                  ? activeVersionRef
+                                  : ""
                               }
-                            }}
-                          >
-                            {numberToLetters(index)}{" "}
-                          </Button>
-                          {activeVersionIds[activeChunkid] ==
-                          version.frontend_id ? (
-                            <>
-                              <Button
-                                size="sm"
-                                ref={
-                                  activeVersionIds[activeChunkid] ==
-                                  version.frontend_id
-                                    ? activeVersionRef
-                                    : ""
-                                }
-                                variant={
-                                  activeVersionIds[activeChunkid] ==
-                                  version.frontend_id
-                                    ? "outline-danger"
-                                    : "light"
-                                }
-                                onClick={() => {
-                                  console.log("i have been clicked");
-                                  deleteChunk(
-                                    activeChunkid,
-                                    version.frontend_id
-                                  );
-                                }}
-                              >
-                                <FontAwesomeIcon size="xs" icon={faTrashAlt} />
-                              </Button>
-                            </>
-                          ) : (
-                            ""
-                          )}
-                        </ButtonGroup>
-                      </span>
-                    </>
+                              variant="outline-danger"
+                              onClick={() => {
+                                deleteChunk(activeChunkid, version.frontend_id);
+                              }}
+                            >
+                              <FontAwesomeIcon size="xs" icon={faTrashAlt} />
+                            </Button>
+                          </>
+                        ) : (
+                          ""
+                        )}
+                      </ButtonGroup>
+                    </span>
                   ))
                 : ""}
             </div>
@@ -203,7 +173,7 @@ const PopupToolbar = forwardRef(function MyInput(props, ref) {
                 as={ButtonGroup}
                 align="end"
                 autoClose={true}
-                className="dropdown"
+                className="dropdown mt-2"
               >
                 <Button
                   variant="light"
@@ -218,7 +188,6 @@ const PopupToolbar = forwardRef(function MyInput(props, ref) {
                   }}
                 >
                   <small>
-                    {" "}
                     {activeRecipe ? (
                       <>
                         <FontAwesomeIcon icon={faMagicWandSparkles} />{" "}
@@ -251,6 +220,7 @@ const PopupToolbar = forwardRef(function MyInput(props, ref) {
                       </Dropdown.Item>
                       {recipes.map((recipe, index) => (
                         <Dropdown.Item
+                          key={index}
                           onClick={() => {
                             setActiveRecipe(recipe);
                           }}
@@ -269,68 +239,28 @@ const PopupToolbar = forwardRef(function MyInput(props, ref) {
                 )}
               </Dropdown>
             ) : (
-              <Button
-                variant="light"
-                className="rounded-0"
-                onClick={() => {
-                  handleAddChunkClick();
-                }}
-              >
-                <small>
-                  {/* <FontAwesomeIcon icon={faPlus} /> */}
-                  CREATE VARIATION
-                </small>
-              </Button>
+              <div className="d-flex mt-0">
+                <Button
+                  variant="light"
+                  className="rounded-0 mt-0"
+                  onClick={() => {
+                    handleAddChunkClick();
+                  }}
+                >
+                  <small>CREATE VARIATION</small>
+                </Button>
+                <Button
+                  variant="light"
+                  className="rounded-0 mt-0"
+                  onClick={() => {
+                    handleAddChunkClick();
+                  }}
+                >
+                  <small>CREATE CONTINUATION</small>
+                </Button>
+              </div>
             )}
-            {/* <Button
-              className="mx-1"
-              variant="light"
-              onClick={() => {
-                handleAddChunkClick();
-              }}
-            >
-              <small>{"Copy".toUpperCase()}</small>{" "}
-              <FontAwesomeIcon icon={faPlus} />
-            </Button> */}
           </Card.Body>
-          {/* <Card.Footer className="p-0 m-0">
-            {activeChunkid ? (
-              <>
-                <Select
-                  options={recipes.map((recipe, i) => {
-                    return {
-                      label: recipe.name,
-                      value: recipe.frontend_id,
-                    };
-                  })}
-                />
-              </>
-            ) : (
-              ""
-            )}
-          </Card.Footer> */}
-          {/* <Card.Footer className="p-0">
-            {activeChunkid ? (
-              <>
-                <span className="recipes">
-                  {recipes.map((recipe, index) => (
-                    <Button
-                      className="text-truncate mx-1"
-                      size="sm"
-                      variant="light"
-                      onClick={() => {
-                        generateVersion(activeChunkid, recipe.prompt);
-                      }}
-                    >
-                      {recipe.name}
-                    </Button>
-                  ))}
-                </span>
-              </>
-            ) : (
-              ""
-            )}
-          </Card.Footer> */}
         </Card>
       </div>
     </>

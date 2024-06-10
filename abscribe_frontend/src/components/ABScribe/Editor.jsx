@@ -125,8 +125,7 @@ export default function Editor({
   activeRecipe,
   setActiveRecipe,
   generateVersion,
-
-  setDebouncedContent,
+  handleInactivity,
 }) {
   //React-Router-DOM
   const navigate = useNavigate();
@@ -138,9 +137,11 @@ export default function Editor({
   //Refs
   const editorRef = useRef(null); //TinyMCE Editor
   // inactivity tracker to create chunks to generate continuation
-const [debounceTimeout, setDebounceTimeout] = useState(null);
-const [inactivityDuration] = useState(5000); // Example: 5 seconds
 
+  // const [typingTimer, setTypingTimer] = useState(null); // Example: 5 seconds
+  const [suggestion, setSuggestion] = useState("");
+  const [waiting, setWaiting] = useState(false);
+  const [waitingText, setWaitingText] = useState("");
   //States
   const [gptActive, setGptActive] = useState(false);
   const [llmButtonsTop, setLlmButtonsTop] = useState("");
@@ -172,9 +173,32 @@ const [inactivityDuration] = useState(5000); // Example: 5 seconds
       },
     },
   ]);
+  // useEffect(() => {
+  //   const handleKeyUp = () => {
+  //     clearTimeout(typingTimer);
 
-  const [editorContent, setEditorContent] = useState(currentDocument?.content ?? "");
-  const debounceTimeoutRef = useRef(null);
+  //     const newTimer = setTimeout(() => {
+  //       handleInactivity(editorRef.current.editor.getContent());
+  //     }, 750); // 750 ms of inactivity
+
+  //     setTypingTimer(newTimer);
+  //   };
+
+  //   const editor = tinymce.activeEditor;
+  //   if (editor) {
+  //     editor.on('keyup', handleKeyUp);
+  //   }
+
+  //   return () => {
+  //     if (editor) {
+  //       editor.off('keyup', handleKeyUp);
+  //     }
+  //     clearTimeout(typingTimer);
+  //   };
+  // }, [typingTimer]);
+  
+  
+  
 
   useEffect(() => {
     if (activeChunkid === "") {
@@ -221,40 +245,6 @@ const [inactivityDuration] = useState(5000); // Example: 5 seconds
   }, [llmImage]);
 
 
-  const sendChunkToBackend = async (documentId, prompt, updateEditorWithResponse) => {
-    // setRequestInProgress(true);
-
-    try {
-      const response = await fetch(`http://127.0.0.1:8080/chatGPT/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ prompt }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
-
-      while (!done) {
-        const { value, done: readerDone } = await reader.read();
-        done = readerDone;
-        const chunk = decoder.decode(value, { stream: true });
-        updateEditorWithResponse(chunk);
-      }
-    } catch (error) {
-      console.error('Failed to send chunk to backend:', error);
-      // setRequestInProgress(false);
-    }
-  };
-  
-
-
 // const createChunkFromEditorContent = async () => {
 //   const newContent = editorRef.current.editor.getContent();
 //   const newChunkId = `chunk_${new Date().getTime()}`;
@@ -281,7 +271,142 @@ const [inactivityDuration] = useState(5000); // Example: 5 seconds
 //   ]);
 
   // console.log(`New chunk created with ID: ${newChunkId}`);
+  // useEffect(() => {
+  //   const handleKeyUp = () => {
+  //     clearTimeout(typingTimer);
 
+  //     const newTimer = setTimeout(() => {
+  //       handleInactivity(editorRef.current.editor.getContent());
+  //     }, 1000); // 1 second of inactivity
+
+  //     setTypingTimer(newTimer);
+  //   };
+
+  //   const editor = tinymce.activeEditor;
+  //   editor.on('keyup', handleKeyUp);
+
+  //   return () => {
+  //     editor.off('keyup', handleKeyUp);
+  //     clearTimeout(typingTimer);
+  //   };
+  // }, [typingTimer]);
+
+
+  const debounce = (func, wait) => {
+    let timeout;
+    return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+};
+
+// Example backend call function to fetch suggestions
+const fetchSuggestion = async (text) => {
+  try {
+      const response = await fetch('http://127.0.0.1:8080/chatGPT/suggestions', {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+              prompt: `You are given a text input in YAML, generate the continuation for it in MAX 3 WORDS. Maintain the source language of the input text in the output\n
+              - text: ${text}\n
+              - output:`
+          })
+      });
+
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const jsonResponse = await response.json();
+      console.log('asdd',jsonResponse.suggestion)
+      return jsonResponse.suggestion; // Assuming the backend sends the suggestion in the 'suggestion' field
+  } catch (error) {
+      console.error("Error fetching suggestion:", error);
+      return null;
+  }
+};
+
+
+// Debounced version of the fetchSuggestion function
+const debouncedFetchSuggestion = debounce(fetchSuggestion, 300);
+
+const handleKeydown = async (event, editor) => {
+  console.log('what event', event.code)
+    if (event.code === 'Space') {
+        const rng = editor.selection.getRng(1);
+        const text = rng.startContainer.data?.slice(0, rng.startOffset);
+        if (text && text.trim().length > 0) {
+            const suggestion = await fetchSuggestion(text.trim());
+            setWaiting(true);
+            console.log('asdsd2', suggestion)
+            if (suggestion) {
+              console.log('inside suggestions inset into editor', suggestion)
+                const completion = suggestion.replace(new RegExp(`^${text.trim()}`, 'i'), '');
+                insertCompletionNode(editor, completion);
+            }
+        }
+    } else if (event.code === 'Tab') {
+      console.log('caps lock pressed')
+        event.preventDefault();
+        completeWord(editor);
+    } else {
+        removeSuggestionNode();
+        setWaiting(false);
+        setWaitingText("");
+    }
+};
+
+const insertCompletionNode = (editor, text) => {
+  removeSuggestionNode();
+  
+  const rng = editor.selection.getRng(1);
+  const suggestionNode = editor.getDoc().createElement("span");
+  suggestionNode.style.color = '#536878';
+  suggestionNode.innerHTML = text;
+  suggestionNode.id = 'suggestionNodeId';
+
+  // Insert the suggestion node at the correct position
+  rng.insertNode(suggestionNode);
+
+  // Move the cursor after the suggestion node
+  const newRange = editor.getDoc().createRange();
+  newRange.setStartAfter(suggestionNode);
+  newRange.setEndAfter(suggestionNode);
+
+  const sel = editor.selection.getSel();
+  sel.removeAllRanges();
+  sel.addRange(newRange);
+
+  setWaiting(true);
+  setWaitingText(text);
+};
+
+const removeSuggestionNode = () => {
+  const suggestionNode = editorRef.current?.editor?.dom?.get('suggestionNodeId');
+  if (suggestionNode) {
+      suggestionNode.remove();
+  }
+};
+
+const completeWord = (editor) => {
+  // setWaiting(true);
+
+  // console.log('waiting', waiting)
+  // if (waiting) {
+      const suggestionNode = editorRef.current?.editor?.dom?.get('suggestionNodeId');
+      if (suggestionNode) {
+          const content = suggestionNode.innerHTML;
+          editor.dom.remove(suggestionNode);
+          // editor.ExecCommand('mceInsertContent', false, content);
+          editor.insertContent(content);
+          // editor.setHTML(editor.innerHTML +  content)
+          setWaiting(false);
+          setWaitingText("");
+      }
+  // }
+};
   
   const handleEditorClick = () => {
     const node = editorRef.current.editor.selection.getNode();
@@ -342,7 +467,29 @@ const [inactivityDuration] = useState(5000); // Example: 5 seconds
   
 
   const handleEditorOnChange = () => {
-    console.log("handleEditorOnChange");
+
+    // const handleKeyUp = () => {
+    //   clearTimeout(typingTimer);
+
+    //   const newTimer = setTimeout(() => {
+    //     handleInactivity(editorRef.current.editor.getContent());
+    //   }, 3000); // 1 second of inactivity
+
+    //   setTypingTimer(newTimer);
+    // };
+
+    // const editor = tinymce.activeEditor;
+    // editor.on('keyup', handleKeyUp);
+
+
+  
+    // console.log("handleEditorOnChange", editorRef.current.editor.plugins.keyboardNavigation);
+
+    // return () => {
+    //   editor.off('keyup', handleKeyUp);
+    //   clearTimeout(typingTimer);
+    // };
+
     if (editingMode) {
       const chunk = currentDocument.chunks.find(
         (chunk) => chunk.frontend_id === activeChunkid
@@ -817,6 +964,10 @@ const [inactivityDuration] = useState(5000); // Example: 5 seconds
                     "alignright alignjustify | bullist numlist | code ",
 
                   setup: (editor) => {
+                    // editor.on('keydown', (event) => handleKeydown(event, editor));
+                    // editor.on('blur', () => removeSuggestionNode());
+                    // editor.on('click', () => removeSuggestionNode());
+
                     //adding custom icons
                     editor.on("ExecCommand", function (e) {
                       if ("mceNewDocument" == e.command) {

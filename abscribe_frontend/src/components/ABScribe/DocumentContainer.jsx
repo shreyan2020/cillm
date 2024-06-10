@@ -106,6 +106,9 @@ export default function DocumentContainer() {
       setRecipes(result);
     });
   }, []);
+
+
+  
   const fetchDocument = async (documentId) => {
     await getDocument(documentId)
       .then((document) => {
@@ -175,7 +178,7 @@ export default function DocumentContainer() {
       return chunks[0].style.backgroundColor;
     } else {
       const hue = Math.floor(Math.random() * 360);
-      const color = `hsl(${hue}, 100%, 95%)`;
+      const color = `hsl(${hue}, 50%, 95%)`;
       return color;
     }
   };
@@ -196,7 +199,7 @@ export default function DocumentContainer() {
     return result;
   };
 
-  const createChunk = () => {
+  const createChunk = (type) => {
     const node = tinymce.activeEditor.selection.getNode();
     const chunk = tinymce.activeEditor.dom.getParent(node, "span.chunk");
     const range = tinymce.activeEditor.selection.getRng(0);
@@ -211,25 +214,32 @@ export default function DocumentContainer() {
         setActiveFactorId(factorId);
       };
 
-      const createChunksFromFactor = (factorId) => {
+      const createChunksFromFactor = async (factorId, type) => {
         const factorChunks = getChunksFromFactorId(factorId);
         const newChunks = [];
         for (const chunk of factorChunks) {
           const chunkId = "chunk_" + makeid(5);
           chunk.setAttribute("id", chunkId);
           const content = chunk.innerHTML;
+
+          let versions = [
+            {
+              frontend_id: "version_" + makeid(5),
+              text: content,
+            }
+          ];
+          if (type === "continuation") {
+          const suggestion = await fetchSuggestion(content);
+          if (suggestion) {
+            versions.push({
+              frontend_id: "version_" + makeid(5),
+              text: suggestion,
+            });
+          }
+        }
           const newChunk = {
             frontend_id: chunkId,
-            versions: [
-              {
-                frontend_id: "version_" + makeid(5),
-                text: content,
-              },
-              // {
-              //   frontend_id: "version_" + makeid(5),
-              //   text: content,
-              // },
-            ],
+            versions: versions,
           };
           setCurrentDocument((prevDocument) => {
             return {
@@ -254,7 +264,7 @@ export default function DocumentContainer() {
       };
       const factorId = "factor_" + makeid(5);
       createFactor(factorId);
-      createChunksFromFactor(factorId);
+      createChunksFromFactor(factorId, type);
       // Update the document content with the new span
       const newContent = tinymce.activeEditor.getContent();
 
@@ -277,6 +287,34 @@ export default function DocumentContainer() {
       createVersion(frontend_id, versionContent);
     }
     setChunksVisbleInDocument(getVisibleChunkIds());
+    
+  };
+
+  const fetchSuggestion = async (text) => {
+    try {
+      const response = await fetch('http://127.0.0.1:8080/chatGPT/suggestions', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: `You are given a text input in YAML, generate the continuation for it in MAX 3 WORDS. Maintain the source language of the input text in the output\n
+          - text: ${text}\n
+          - output:`
+        })
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const jsonResponse = await response.json();
+      console.log('Suggestion:', jsonResponse.suggestion);
+      return jsonResponse.suggestion; // Assuming the backend sends the suggestion in the 'suggestion' field
+    } catch (error) {
+      console.error("Error fetching suggestion:", error);
+      return null;
+    }
   };
 
   const getVisibleChunkIds = () => {
@@ -749,6 +787,161 @@ export default function DocumentContainer() {
     console.log(`Active Version Id for Chunk ${chunkId} set to ${versionId}`);
   };
 
+
+
+
+
+
+
+  const handleInactivity = async (content) => {
+    console.log('inactrivity thing called')
+    const newChunkId = `chunk_${new Date().getTime()}`;
+  
+    const newChunk = {
+      frontend_id: newChunkId,
+      content: content,
+      versions: [{ frontend_id: `${newChunkId}_v1`, text: content }],
+    };
+  
+    try {
+      const addedChunk = await addChunk(currentDocument._id, newChunk);
+      setCurrentDocument((prevDocument) => ({
+            ...prevDocument,
+            chunks: [...prevDocument.chunks, addedChunk],
+          }));
+      setActiveChunkid(addedChunk.frontend_id);
+      setPopupToolbarVisible(true);
+      setEditingMode(true);
+      setChunksVisbleInDocument((prevVisibleChunks) => [
+        ...prevVisibleChunks,
+        addedChunk.frontend_id,
+      ]);
+      const responseChunks = [];
+      
+      await fetchEventSource("http://127.0.0.1:8080/chatGPT/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        openWhenHidden: true,
+        body: JSON.stringify({
+          prompt: `You are given a text input in YAML, generate the continuation for it. Maintain the source language of the input text in the output\n
+          - text: ${content}\n
+          - output:`
+  
+        }),
+        onmessage(event) {
+          if (event.data) {
+            responseChunks.push(event.data);
+          }
+        },
+        onclose() {
+          const response = responseChunks.join("");
+          const newVersionId = `version_${new Date().getTime()}`;
+          const newVersion = { frontend_id: newVersionId, text: response };
+  
+          const updatedChunk = {
+            ...addedChunk,
+            versions: [...addedChunk.versions, newVersion],
+          };
+  
+          // Update the state with the new version
+          setCurrentDocument((prevDocument) => ({
+            ...prevDocument,
+            chunks: prevDocument.chunks.map((chunk) =>
+              chunk.frontend_id === addedChunk.frontend_id ? updatedChunk : chunk
+            ),
+          }));
+  
+          // Optionally, update the backend with the new version
+          // await addVersion(currentDocument._id, newChunkId, newVersion);
+        },
+        onerror(err) {
+          console.error("Failed to generate version via LLM:", err);
+        },
+      });
+
+    }
+    catch (error) {
+        console.error("Failed to create chunk or call LLM:", error);
+      }
+    //   // Update the state with the newly added chunk
+    //   setCurrentDocument((prevDocument) => ({
+    //     ...prevDocument,
+    //     chunks: [...prevDocument.chunks, addedChunk],
+    //   }));
+  
+    //   setActiveChunkid(addedChunk.frontend_id);
+    //   setPopupToolbarVisible(true);
+    //   setEditingMode(true);
+    //   setChunksVisbleInDocument((prevVisibleChunks) => [
+    //     ...prevVisibleChunks,
+    //     addedChunk.frontend_id,
+    //   ]);
+  
+    //   // Call the LLM service to generate a new version
+      
+    //   const responseChunks = [];
+    //   await fetchEventSource("http://127.0.0.1:8080/chatGPT/chat", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     openWhenHidden: true,
+    //     body: JSON.stringify({
+    //       prompt: `You are given a text input in YAML, generate the continuation for it. Maintain the source language of the input text in the output\n
+    //       - text: ${element.innerHTML}\n
+    //       - output:`
+  
+    //     }),
+    //     onmessage(event) {
+    //       if (event.data) {
+    //         responseChunks.push(event.data);
+    //       }
+    //     },
+    //     onclose() {
+    //       const response = responseChunks.join("");
+    //       const newVersionId = `version_${new Date().getTime()}`;
+    //       const newVersion = { frontend_id: newVersionId, text: response };
+  
+    //       const updatedChunk = {
+    //         ...addedChunk,
+    //         versions: [...addedChunk.versions, newVersion],
+    //       };
+  
+    //       // Update the state with the new version
+    //       setCurrentDocument((prevDocument) => ({
+    //         ...prevDocument,
+    //         chunks: prevDocument.chunks.map((chunk) =>
+    //           chunk.frontend_id === addedChunk.frontend_id ? updatedChunk : chunk
+    //         ),
+    //       }));
+  
+    //       // Optionally, update the backend with the new version
+    //       // await addVersion(currentDocument._id, newChunkId, newVersion);
+    //     },
+    //     onerror(err) {
+    //       console.error("Failed to generate version via LLM:", err);
+    //     },
+    //   });
+    // } catch (error) {
+    //   console.error("Failed to create chunk or call LLM:", error);
+    // }
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
   return (
     <>
       <Tab.Container defaultActiveKey={tabKey} onSelect={(k) => setTabKey(k)}>
@@ -879,6 +1072,7 @@ export default function DocumentContainer() {
                         activeRecipe={activeRecipe}
                         setActiveRecipe={setActiveRecipe}
                         generateVersion={generateVersion}
+                        handleInactivity={handleInactivity}
                       />
                     </Col>
                     <Collapse in={variationSidebarVisible} dimension={"width"}>

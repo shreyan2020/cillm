@@ -262,6 +262,31 @@ def generate_text():
             #         yield f"data: \n\n"
 
     return app.response_class(stream_chat(), mimetype="text/event-stream")
+
+
+@app.route("/chatGPT/suggestions", methods=['POST'])
+def suggest_texts():
+    data = request.get_json()
+    prompt = data['prompt']
+    print('hello', prompt)
+    chat_stream = gpt_service.get_chat(prompt)
+    # chat_stream = 'temp replacements'
+    print(chat_stream)
+
+    # Collect all the chunks into a single string
+    # response_text = ''
+    # for chunk in chat_stream:
+    #     try:
+    #         content = chunk  # or chunk['choices'][0]['delta']['content'] if you have nested content
+    #         response_text += content
+    #     except KeyError:
+    #         continue
+
+    # Return the collected text as a JSON response
+    return jsonify({'suggestion': chat_stream})
+
+
+
     # return Response(generate(), content_type='text/event-stream')
 # @app.route("/chatGPT/chat", methods=['POST'])
 # def get_chat_message() -> Response:
