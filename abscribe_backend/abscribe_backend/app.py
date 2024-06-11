@@ -3,12 +3,12 @@ import json
 import os
 from typing import Optional, List
 from dotenv import load_dotenv
+import asyncio
+from flask import Flask, request, Response, jsonify, make_response
 
-from flask import Flask, request, Response, jsonify
-
-import abscribe_backend.services.chatgpt_service as chatgpt_service
+# import abscribe_backend.services.chatgpt_service as chatgpt_service
 import abscribe_backend.services.recipe_service as recipe_service
-
+import abscribe_backend.services.gpt4all_service as gpt_service
 from abscribe_backend.models.document import Document
 from flask_cors import CORS
 
@@ -67,9 +67,14 @@ app.config["MONGODB_SETTINGS"] = {
 
 CORS(
     app,
-    origins=["http://127.0.0.1:5173", "https://abtestingtools-frontend.up.railway.app", "http://localhost:5173"],
-    # resources={r"/api/*": {"origins": "http://localhost:5173"}},
+    origins=[
+        "http://127.0.0.1:5173",
+        "https://abtestingtools-frontend.up.railway.app",
+        "http://localhost:5173"
+    ]
 )
+
+
 
 db.init_app(app)
 
@@ -232,32 +237,96 @@ def remove_version_route(
     else:
         return jsonify({"error": "Version not found"}), 404
 
-
 @app.route("/chatGPT/chat", methods=['POST'])
-def get_chat_message() -> Response:
-    """Endpoint for receiving a chat message from the chatGPT API. Sending more messages may be difficult."""
-    message_json = request.get_json()
-    chat_stream = chatgpt_service.get_chat(message_json['messages'])  # returns an event stream we can iterate over.
-    tab = "table" in message_json['messages'][-1]['content']
-    lst = "list" in message_json['messages'][-1]['content']
-
+def generate_text():
+    data = request.get_json()
+    prompt = data['prompt']
+    print('hello',prompt)
+    chat_stream = gpt_service.get_chat(prompt)
+    print(chat_stream)
     def stream_chat():
         for chunk in chat_stream:
             try:
-                content = chunk['choices'][0]['delta']['content']
+                # content = chunk['choices'][0]['delta']['content']
+                content = chunk
                 newline = "\n"
             except KeyError:
                 content = ''
             # 'data:' and newlines format each text block as a new server sent event. See the documentation on MDN.
             yield f"data: {content}\n\n"
             # Start a new paragraph if we see a newline.
-            if '\n' in content:
-                if not tab and not lst:
-                    yield f"data: <br/><br/>\n\n"
-                else:
-                    yield f"data: \n\n"
+            # if '\n' in content:
+            #     if not tab and not lst:
+            #         yield f"data: <br/><br/>\n\n"
+            #     else:
+            #         yield f"data: \n\n"
 
     return app.response_class(stream_chat(), mimetype="text/event-stream")
+
+
+@app.route("/chatGPT/suggestions", methods=['POST'])
+def suggest_texts():
+    data = request.get_json()
+    prompt = data['prompt']
+    print('hello', prompt)
+    chat_stream = gpt_service.get_chat(prompt)
+    # chat_stream = 'temp replacements'
+    print(chat_stream)
+
+    # Collect all the chunks into a single string
+    # response_text = ''
+    # for chunk in chat_stream:
+    #     try:
+    #         content = chunk  # or chunk['choices'][0]['delta']['content'] if you have nested content
+    #         response_text += content
+    #     except KeyError:
+    #         continue
+
+    # Return the collected text as a JSON response
+    return jsonify({'suggestion': chat_stream})
+
+
+
+    # return Response(generate(), content_type='text/event-stream')
+# @app.route("/chatGPT/chat", methods=['POST'])
+# def get_chat_message() -> Response:
+#     """Endpoint for receiving a chat message from the chatGPT API. Sending more messages may be difficult."""
+#     message_json = request.get_json()
+#     chat_stream = chatgpt_service.get_chat(message_json['messages'])  # returns an event stream we can iterate over.
+#     tab = "table" in message_json['messages'][-1]['content']
+#     lst = "list" in message_json['messages'][-1]['content']
+
+#     def stream_chat():
+#         for chunk in chat_stream:
+#             try:
+#                 content = chunk['choices'][0]['delta']['content']
+#                 newline = "\n"
+#             except KeyError:
+#                 content = ''
+#             # 'data:' and newlines format each text block as a new server sent event. See the documentation on MDN.
+#             yield f"data: {content}\n\n"
+#             # Start a new paragraph if we see a newline.
+#             if '\n' in content:
+#                 if not tab and not lst:
+#                     yield f"data: <br/><br/>\n\n"
+#                 else:
+#                     yield f"data: \n\n"
+
+#     return app.response_class(stream_chat(), mimetype="text/event-stream")
+
+
+
+@app.route("/chatGPT/chat", methods=['POST'])
+def generate_gpt_respone():
+    data = request.get_json()
+    prompt = data['prompt']
+    # print('hello', prompt)
+    def generate():
+        # pass
+        for token in gpt_service.generate_text(prompt):
+            yield f"data: {token}\n\n"
+
+    return Response(generate(), content_type='text/event-stream')
 
 
 @app.route("/recipes/", defaults={'recipe_id': None}, methods=['GET']) # I think this is necessary because there are several routes pointing here so there will be a redirect to the backslash.
