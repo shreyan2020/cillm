@@ -76,7 +76,7 @@ app.config["MONGODB_SETTINGS"] = {
 
 CORS(
     app,
-    origins=["http://127.0.0.1:5173", "https://abtestingtools-frontend.up.railway.app", "http://localhost:5173"],
+    # origins=["http://127.0.0.1:5173", "https://abtestingtools-frontend.up.railway.app", "http://localhost:5173", "http://localhost"],
     # resources={r"/api/*": {"origins": "http://localhost:5173"}},
 )
 

@@ -1,12 +1,23 @@
-# Frontend Dockerfile
-FROM node:20.12.0
+# Use official Node.js image as base
+FROM node:20.12.0 AS build
 
+# Set working directory
 WORKDIR /app
 
+# Copy package files and install dependencies
 COPY package*.json ./
-RUN npm update
-RUN npm install
+RUN npm ci
 
+# Copy application code and build the app
 COPY . .
+RUN npm run build
 
-CMD ["npm", "start"]
+# Use a minimal server to serve static files
+FROM nginx:stable-alpine
+
+# Copy built files to NGINX
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Expose port 80 and start NGINX
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

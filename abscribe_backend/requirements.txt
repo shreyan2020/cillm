@@ -6,3 +6,4 @@ gpt4all==2.6.0
 mongoengine==0.28.2
 python-dotenv==1.0.1
 resend==2.1.0
+gunicorn==20.1.0
