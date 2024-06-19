@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 from flask import Flask, request, Response, jsonify
 
-import abscribe_backend.services.chatgpt_service as chatgpt_service
+import abscribe_backend.services.gpt4all_service as gpt_service
 import abscribe_backend.services.recipe_service as recipe_service
 
 from abscribe_backend.models.document import Document
@@ -15,7 +15,16 @@ from flask_cors import CORS
 from abscribe_backend.database.mongo_connection import db
 from abscribe_backend.models.chunk import Chunk
 from abscribe_backend.models.document import Document
+# from abscribe_backend.models.keylogger import KeyloggerActivity
+
+
+
 from abscribe_backend.models.version import Version
+
+from abscribe_backend.services.keylogger_service import (
+    log_keylogger_activity,
+)
+
 from abscribe_backend.services.chunk_service import (
     add_chunk,
     remove_chunk,
@@ -61,8 +70,8 @@ load_dotenv()
 
 app.config["MONGODB_SETTINGS"] = {
     "db": "documents_db",
-    "host": "localhost",
-    "port": int(os.environ["MONGOPORT"]),
+    "host": os.environ.get("MONGO_HOST", "localhost"),
+    "port": int(os.environ.get("MONGO_PORT", 27017)),
 }
 
 CORS(
@@ -79,6 +88,24 @@ def to_dict(obj):
     return obj.to_mongo().to_dict() if obj else None
 
 
+
+@app.route("/log_activity", methods=["POST"])
+def log_activity_route() -> Response:
+    
+    document_id = request.json.get("document_id")
+    prolific_id = request.json.get("prolific_id")
+    task_id = request.json.get("task_id")
+    key_log = request.json.get("key_log", [])
+    # mouseLog = request.json.get("mouseLog", [])
+    click_log = request.json.get("click_log", [])
+
+    if not prolific_id or not task_id:
+        return jsonify({"error": "prolific_id and task_id are required"}), 400
+
+    activity_log = log_keylogger_activity(document_id, prolific_id, task_id, key_log, click_log)
+
+    return Response(activity_log.to_json(), status=201, content_type="application/json")
+
 # Document endpoints
 
 
@@ -93,12 +120,22 @@ def get_documents_route() -> Response:
 def create_document_route() -> Response:
     content: Optional[str] = request.json.get("content")
     name: Optional[str] = request.json.get("name")
+    task_id: str = request.json.get("task_id")
+    prolific_id: str = request.json.get("prolific_id")
+    print(task_id, prolific_id)
     if content is None:
         return jsonify({"error": "Content is required"}), 400
+    
+    if task_id is None:
+        return jsonify({"error": "Task Id is required"}), 400
+    
+    if prolific_id is None:
+        return jsonify({"error": "Prolific Id is required"}), 400
+    
     if name is None:
-        document: Document = create_document(content)
+        document: Document = create_document(content, task_id, prolific_id)
     else:
-        document: Document = create_document(content, name)
+        document: Document = create_document(content, name, task_id, prolific_id)
 
     return Response(document.to_json(), status=201, content_type="application/json")
 
@@ -234,31 +271,51 @@ def remove_version_route(
 
 
 @app.route("/chatGPT/chat", methods=['POST'])
-def get_chat_message() -> Response:
-    """Endpoint for receiving a chat message from the chatGPT API. Sending more messages may be difficult."""
-    message_json = request.get_json()
-    chat_stream = chatgpt_service.get_chat(message_json['messages'])  # returns an event stream we can iterate over.
-    tab = "table" in message_json['messages'][-1]['content']
-    lst = "list" in message_json['messages'][-1]['content']
-
+def generate_text():
+    data = request.get_json()
+    prompt = data['prompt']
+    print('hello',prompt)
+    chat_stream = gpt_service.get_chat(prompt)
+    print(chat_stream)
     def stream_chat():
         for chunk in chat_stream:
             try:
-                content = chunk['choices'][0]['delta']['content']
+                # content = chunk['choices'][0]['delta']['content']
+                content = chunk
                 newline = "\n"
             except KeyError:
                 content = ''
             # 'data:' and newlines format each text block as a new server sent event. See the documentation on MDN.
             yield f"data: {content}\n\n"
             # Start a new paragraph if we see a newline.
-            if '\n' in content:
-                if not tab and not lst:
-                    yield f"data: <br/><br/>\n\n"
-                else:
-                    yield f"data: \n\n"
+            # if '\n' in content:
+            #     if not tab and not lst:
+            #         yield f"data: <br/><br/>\n\n"
+            #     else:
+            #         yield f"data: \n\n"
 
     return app.response_class(stream_chat(), mimetype="text/event-stream")
 
+@app.route("/chatGPT/suggestions", methods=['POST'])
+def suggest_texts():
+    data = request.get_json()
+    prompt = data['prompt']
+    print('hello', prompt)
+    chat_stream = gpt_service.get_chat(prompt,'suggest')
+    # chat_stream = 'temp replacements'
+    print(chat_stream)
+
+    # Collect all the chunks into a single string
+    # response_text = ''
+    # for chunk in chat_stream:
+    #     try:
+    #         content = chunk  # or chunk['choices'][0]['delta']['content'] if you have nested content
+    #         response_text += content
+    #     except KeyError:
+    #         continue
+
+    # Return the collected text as a JSON response
+    return jsonify({'suggestion': chat_stream})
 
 @app.route("/recipes/", defaults={'recipe_id': None}, methods=['GET']) # I think this is necessary because there are several routes pointing here so there will be a redirect to the backslash.
 @app.route("/recipes/<string:recipe_id>", methods=['GET'])

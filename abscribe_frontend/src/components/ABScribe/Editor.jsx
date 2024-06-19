@@ -1,19 +1,18 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
-
 import { Editor as TinyEditor } from "@tinymce/tinymce-react";
 import useLLM from "usellm";
 import parse from "html-react-parser";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import PlaceHolder from "../../resources/placeHolderImg.png";
-
+import { TaskContext } from "../../context/TaskContext";
 import "../../scss/editor.scss";
-
+import apiClient from "../../services/abscribeAPI";
 import {
   getChunks,
   addChunk,
@@ -123,6 +122,16 @@ export default function Editor({
 
   const [value, setValue] = useState(currentDocument?.content ?? "");
 
+  // task context
+  const { taskID, prolificID, addCompletedTask } = useContext(TaskContext);
+  // Keylogger values
+  // const [keylog, setKeylog] = useState([]);
+  // const [mouseLog, setMouseLog] = useState([]);
+  // const [clickLog, setClickLog] = useState([]);
+  const keylogRef = useRef([]);
+  const clickLogRef = useRef([]);
+  
+
   const [items, setItems] = useState([
     {
       type: "menuitem",
@@ -132,6 +141,11 @@ export default function Editor({
       },
     },
   ]);
+
+  // useEffect(() => {
+  //   // This will log the updated keylog whenever it changes
+  //   console.log('Updated keylog:', keylog);
+  // }, [keylog]);
 
   useEffect(() => {
     if (activeChunkid === "") {
@@ -166,6 +180,134 @@ export default function Editor({
     }
   }, [llmResult, llmStreaming, llmContinue]);
 
+// Keylogging
+
+
+const handleKeydown = (e) => {
+  const newLogEntry = { key: e.key, timestamp: new Date() };
+  keylogRef.current = [...keylogRef.current, newLogEntry];
+  console.log('Updated keylogRef:', keylogRef.current); // Debugging statement
+};
+
+const handleClick = (e) => {
+  const newClickEntry = { element: e.target.tagName, id: e.target.id, className: e.target.className, timestamp: new Date() };
+  clickLogRef.current = [...clickLogRef.current, newClickEntry];
+  console.log('Updated clickLogRef:', clickLogRef.current); // Debugging statement
+};
+// const handleKeydown = (e) => {
+  
+//   setKeylog((prevLog) => {
+//     const newLog = [...prevLog, { key: e.key, timestamp: new Date() }];
+//     console.log('keylog:', newLog); // Debugging statement
+//     return newLog;
+//   });
+//   console.log('is key logged?', keylog)
+// };
+
+// const handleMouseMove = (e) => {
+//   console.log('mouse logged');
+//   setMouseLog((prevLog) => [...prevLog, { x: e.clientX, y: e.clientY, timestamp: new Date() }]);
+// };
+
+// const handleClick = (e) => {
+//   console.log('click logged');
+//   setClickLog((prevLog) => [...prevLog, { element: e.target.tagName, id: e.target.id, className: e.target.className, timestamp: new Date() }]);
+// };
+
+
+    
+    //   document.addEventListener("mousemove", handleMouseMove);
+    
+    //   return () => {
+    //     document.removeEventListener("mousemove", handleMouseMove);
+    //   };
+
+// Mouse movement logging
+// useEffect(() => {
+//   const handleMouseMove = (e) => {
+//     console.log('mouse logged')
+//     setMouseLog((prevLog) => [...prevLog, { x: e.clientX, y: e.clientY, timestamp: new Date() }]);
+//   };
+
+//   document.addEventListener("mousemove", handleMouseMove);
+
+//   return () => {
+//     document.removeEventListener("mousemove", handleMouseMove);
+//   };
+// }, []);
+
+// Button click logging
+  // const handleClick = (e) => {
+  //   setClickLog((prevLog) => [
+  //     ...prevLog,
+  //     { element: e.target.tagName, id: e.target.id, className: e.target.className, timestamp: new Date() },
+  //   ]);
+  // };
+
+  // document.addEventListener("click", handleClick);
+
+  // return () => {
+  //   document.removeEventListener("click", handleClick);
+  // };
+
+
+
+
+
+  const handleSaveButtonClick = async (documentID) => {
+    // console.log('keylogger hello?', keylog)
+    console.log('task id', taskID, 'prolific id', prolificID)
+    const activityData = {
+      document_id: documentID, 
+      task_id: taskID,
+      prolific_id: prolificID,
+      key_log: keylogRef.current,
+      // mouseLog: mouseLog,
+      click_log: clickLogRef.current
+    };
+
+    console.log("Activity Data:", activityData);
+
+    try {
+      await apiClient.post("/log_activity", activityData);
+      console.log("Activity logged successfully");
+      addCompletedTask(taskID)
+      navigate(`/?prolific_id=${prolificID}`);
+    } catch (error) {
+      console.error("Failed to log activity:", error);
+    }
+  };
+
+// const handleSaveButtonClick = () => {
+//   const activityData = {
+//           task_id: taskID,
+//           prolific_id: prolificID,
+//           keylog: keylog,
+//           mouseLog: mouseLog,
+//           clickLog: clickLog,
+//         };
+//         console.log(activityData)
+//         navigate("/home", { state: { taskID, prolificID } });
+//   // const newContent = editorRef.current.editor.getContent();
+//   // updateDocument(currentDocument._id, newContent)
+//   //   .then(() => {
+//   //     console.log("Document saved.");
+//   //     const activityData = {
+//   //       task_id: taskID,
+//   //       prolific_id: prolificID,
+//   //       keylog: keylog,
+//   //       mouseLog: mouseLog,
+//   //       clickLog: clickLog,
+//   //     };
+//   //     // Save activity data to your backend if necessary
+
+//   //     // Redirect to the new task or home screen
+//   //     navigate("/home", { state: { taskID, prolificID } });
+//   //   })
+//   //   .catch((error) => {
+//   //     console.error("Failed to save document in backend:", error);
+//   //   });
+// };
   // useEffect(() => {
   //   if (
   //     editorRef.current !== null &&
@@ -221,6 +363,8 @@ export default function Editor({
   //     });
   //   }
   // });
+
+  
 
   useEffect(() => {
     if (llmImage !== "") {
@@ -783,6 +927,7 @@ export default function Editor({
                     "code",
                     "help",
                     "wordcount",
+                    
                   ],
                   text_patterns: [
                     { start: "@ai", cmd: "reply", value: { color: "red" } },
@@ -820,9 +965,14 @@ export default function Editor({
                   toolbar:
                     "blocks fontfamily fontsize |variationsidebar recipes @ai-Templates|" +
                     "bold italic forecolor hilitecolor | alignleft aligncenter " +
-                    "alignright alignjustify | bullist numlist | code ",
+                    "alignright alignjustify | bullist numlist | save",
 
                   setup: (editor) => {
+
+                    // adding keylogger
+                    editor.on('keydown', (e) => { handleKeydown(e) });
+                    editor.on('click', (e) => { handleClick(e) });
+
                     //adding custom icons
                     editor.on("ExecCommand", function (e) {
                       if ("mceNewDocument" == e.command) {
@@ -945,11 +1095,30 @@ export default function Editor({
                       setLlmPrompt(promptText);
                       getLLMResult(promptText, promptNode);
                     }),
+                    editor.ui.registry.addButton("insertAITextButton", {
+                      icon: "checkmark",
+                      tooltip: "Insert AI Generated Text",
+                      onAction: function (_) {
+                        handleLlmButtonInsert();
+                      },
+                    });
                       editor.ui.registry.addButton("save", {
-                        text: "Save",
+                        icon: "save",
+                        text: "Save and Continue",
                         onAction: () => {
                           const newContent =
                             editorRef.current.editor.getContent();
+                          
+                            // console.log('keylogger hello?', keylogRef.current)
+                            // const activityData = {
+                            //   task_id: taskID,
+                            //   prolific_id: prolificID,
+                            //   keylog: keylogRef.current,
+                            //   mouseLog: mouseLog,
+                            //   clickLog: clickLogRef.current
+                            // };
+                            // console.log('activity data', activityData)
+
                           updateDocument(currentDocument._id, newContent)
                             .then(() => {
                               editorRef.current.editor.notificationManager.open(
@@ -973,6 +1142,8 @@ export default function Editor({
                                 }
                               );
                             });
+                            
+                            handleSaveButtonClick(currentDocument._id)
                         },
                       });
                     editor.ui.registry.addButton("insertAITextButton", {
@@ -1137,6 +1308,9 @@ export default function Editor({
                   //p.llmparagraph { border: 0px solid; background-color: #fafaf7; padding: 2px 5px; margin: 2px 2px; border-radius: 5px;}",
                 }}
               />
+              {/* <Button onClick={handleSaveButtonClick} className="mt-2">
+                Save and Proceed
+              </Button> */}
             </>
           ) : (
             // Render a loading message or a spinner while waiting for currentDocument

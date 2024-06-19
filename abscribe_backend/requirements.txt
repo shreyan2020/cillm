@@ -1,0 +1,8 @@
+# Flask==2.2.2
+Flask==2.2.5
+Flask_Cors==4.0.1
+flask_mongoengine==1.0.0
+gpt4all==2.6.0
+mongoengine==0.28.2
+python-dotenv==1.0.1
+resend==2.1.0

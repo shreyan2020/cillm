@@ -68,8 +68,9 @@ const PopupToolbar = forwardRef(function MyInput(props, ref) {
     activeVersionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleAddChunkClick = () => {
-    createChunk();
+  const handleAddChunkClick = (genType) => {
+    console.log('calling master')
+    createChunk(genType);
   };
 
   const numberToLetters = (num) => {
@@ -269,19 +270,27 @@ const PopupToolbar = forwardRef(function MyInput(props, ref) {
                 )}
               </Dropdown>
             ) : (
+              <div className="d-flex mt-0">
               <Button
                 variant="light"
-                className="rounded-0"
+                className="rounded-0 mt-0"
                 onClick={() => {
-                  handleAddChunkClick();
+                  handleAddChunkClick("generation");
                 }}
               >
-                <small>
-                  {/* <FontAwesomeIcon icon={faPlus} /> */}
-                  CREATE VARIATION
-                </small>
+                <small>CREATE VARIATION</small>
               </Button>
-            )}
+              <Button
+                variant="light"
+                className="rounded-0 mt-0"
+                onClick={() => {
+                  handleAddChunkClick("continuation");
+                }}
+              >
+                <small>CREATE CONTINUATION</small>
+              </Button>
+            </div>
+          )}
             {/* <Button
               className="mx-1"
               variant="light"

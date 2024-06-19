@@ -10,8 +10,8 @@ export const getDocument = async (documentId) => {
   return response.data;
 };
 
-export const createDocument = async (content, name) => {
-  const response = await apiClient.post("/documents", { content, name });
+export const createDocument = async (content, task_id, prolific_id, name="") => {
+  const response = await apiClient.post("/documents", { content, task_id, prolific_id, name});
   return response.data;
 };
 

@@ -7,9 +7,9 @@ from datetime import datetime
 from datetime import timezone
 
 
-def create_document(content: str, name: str = "Untitled document") -> Document:
+def create_document(content: str, name: str = "Untitled document", task_id: str = "1234", prolific_id: str = "1234") -> Document:
     """Create a new document."""
-    document = Document(content=content, name=name, timestamp=datetime.now(timezone.utc))
+    document = Document(content=content, name=name, timestamp=datetime.now(timezone.utc), task_id=task_id, prolific_id=prolific_id)
     document.save()
     return document
 

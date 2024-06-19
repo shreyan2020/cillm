@@ -10,6 +10,8 @@ class Document(db.Document):
     name = db.StringField(required=False)
     chunks = db.ListField(db.EmbeddedDocumentField(Chunk))
     timestamp = db.DateTimeField(required=True, default=DUMMY_DATE)
+    task_id = db.StringField(required=True)
+    prolific_id = db.StringField(required=True)
 
     def to_dict(self):
         return {
@@ -17,5 +19,7 @@ class Document(db.Document):
             "name": str(self.name),
             "content": self.content,
             "chunks": [chunk.to_dict() for chunk in self.chunks],
-            "timestamp": self.timestamp.isoformat() if self.timestamp is not None else "Unknown?"
+            "timestamp": self.timestamp.isoformat() if self.timestamp is not None else "Unknown?",
+            "task_id": self.task_id,
+            "prolific_id": self.prolific_id
         }

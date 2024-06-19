@@ -76,6 +76,9 @@ export default function DocumentContainer() {
   const [variationSidebarVisible, setVariationSidebarVisible] = useState(true);
 
   const llm = useLLM({ serviceUrl: "https://usellm.org/api/llm" });
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL);
+
   // States for LLM Recipes
   const [recipeResult, setRecipeResult] = useState("");
   const [recipePrompt, setRecipePrompt] = useState("");
@@ -196,12 +199,12 @@ export default function DocumentContainer() {
     return result;
   };
 
-  const createChunk = () => {
+  const createChunk = (genType) => {
     const node = tinymce.activeEditor.selection.getNode();
     const chunk = tinymce.activeEditor.dom.getParent(node, "span.chunk");
     const range = tinymce.activeEditor.selection.getRng(0);
     const length = range.endOffset - range.startOffset;
-
+    console.log('genType is', genType)
     if (!chunk && length !== 0) {
       const createFactor = (factorId) => {
         tinymce.activeEditor.formatter.apply("factor", {
@@ -211,25 +214,44 @@ export default function DocumentContainer() {
         setActiveFactorId(factorId);
       };
 
-      const createChunksFromFactor = (factorId) => {
+      const createChunksFromFactor = async (factorId, genType) => {
         const factorChunks = getChunksFromFactorId(factorId);
         const newChunks = [];
         for (const chunk of factorChunks) {
           const chunkId = "chunk_" + makeid(5);
           chunk.setAttribute("id", chunkId);
           const content = chunk.innerHTML;
+
+          let versions = [
+            {
+              frontend_id: "version_" + makeid(5),
+              text: content,
+            }
+          ];
+          if (genType === "continuation") {
+            console.log('fetching suggestions', genType)
+            const suggestion = await fetchSuggestion(content);
+            if (suggestion) {
+              versions.push({
+                frontend_id: "version_" + makeid(5),
+                text: suggestion,
+              });
+            }
+          }
+
           const newChunk = {
             frontend_id: chunkId,
-            versions: [
-              {
-                frontend_id: "version_" + makeid(5),
-                text: content,
-              },
+            versions: versions,
+            // [
+            //   {
+            //     frontend_id: "version_" + makeid(5),
+            //     text: content,
+            //   },
               // {
               //   frontend_id: "version_" + makeid(5),
               //   text: content,
               // },
-            ],
+            // ],
           };
           setCurrentDocument((prevDocument) => {
             return {
@@ -254,7 +276,7 @@ export default function DocumentContainer() {
       };
       const factorId = "factor_" + makeid(5);
       createFactor(factorId);
-      createChunksFromFactor(factorId);
+      createChunksFromFactor(factorId, genType);
       // Update the document content with the new span
       const newContent = tinymce.activeEditor.getContent();
 
@@ -277,6 +299,34 @@ export default function DocumentContainer() {
       createVersion(frontend_id, versionContent);
     }
     setChunksVisbleInDocument(getVisibleChunkIds());
+  };
+
+  const fetchSuggestion = async (text) => {
+    try {
+      console.log('fetching suggestions')
+      const response = await fetch(`${backendUrl}/chatGPT/suggestions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: `You are given a text input in YAML, generate the continuation for it in MAX 3 WORDS. Maintain the source language of the input text in the output\n
+          - text: ${text}\n
+          - output:`
+        })
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const jsonResponse = await response.json();
+      console.log('Suggestion:', jsonResponse.suggestion);
+      return jsonResponse.suggestion; // Assuming the backend sends the suggestion in the 'suggestion' field
+    } catch (error) {
+      console.error("Error fetching suggestion:", error);
+      return null;
+    }
   };
 
   const getVisibleChunkIds = () => {
@@ -432,41 +482,19 @@ export default function DocumentContainer() {
       console.log("FOLLOWUP:");
       console.log(followup);
 
-      await fetchEventSource("http://127.0.0.1:8080/chatGPT/chat", {
+      await fetchEventSource(`${backendUrl}/chatGPT/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         openWhenHidden: true,
         body: JSON.stringify({
-          messages: [
-            {
-              role: "system",
-              content: `You are given a version of some text delimited by triple tildes.
-              Everything in this system message that is written in all caps is especially important and should not be ignored or else the output will be ruined!
-              You are tasked with applying the specifications given by the user to the text delimited by the triple tildes. ONLY OUTPUT THE MODIFIED TEXT, DO NOT INTRO OUR OUTPUT OR REPEAT ANY OF THE INSTRUCTIONS!
-              If the user asks for an example, THEY ARE ASKING FOR AN EXAMPLE RELEVANT TO THE TEXT IN THE TRIPLE TILDES. ADD OUR RELEVANT EXAMPLE TO THE FOUNDATION TEXT IN THE TRIPLE TILDES, DO NOT COMPLETELY REPlACE THE TEXTIN THE TRIPLE TILDES
-              ~~~${element.innerHTML}~~~
-              Do not surround your response with tildes at all! If an triple tildes are included at the beginning or end of your output, THE OUTPUT WILL BE RUINED!
-              If the users asks to modify the style of the text (i.e. bold, italics, etc.), use html tags. Use only the basic html tags without any alternative characters, for example bolding is <b></b>, Italicizing is <i></i>, and all other tags should be outputted in the same simple manner. DO NOT INCLUDE ANY AMPERSANDS WHEN OUTPUTTING YOUR HTML TAGS! DO NOT USE '&gt;' TO REPRESENT '>' AND DO NOT USE '&lt;' TO REPRESENT '<'! Do not forget to include these tags if the user mentions anything about bolding, italicizing, etc.
-              If there are any incomplete words at the beginning or end of the text delimited by the triple tildes, keep those incomplete words exactly the same when generating the output. Incomplete words can be defined as those that do not have any meaning in English or break spelling or break phonotactic rules (i.e. no vowels). Do not include any new ideas in your output. If your output contains any thoughts or words that cannot be mapped onto the original text in the triple tildes, remove them from the final output.
-              Also, an reference the user makes to 'it' or 'the text', they are referring to the text delimited by the triple tildes, not the entire system message, so ONLY CONSIDER THE TEXT IN THE TRIPLE TILDES WHEN ANSWERING SUCH A REQUEST.
-              If the original text in the triple tildes ends in a punctiation mark like a period or explanation mark, keep the punctuation there. Otherwise, do not end your output in any punctuation. 
-              If the first letter of the text in the triple tildes begins in a lowercase letter, the output must also start with a lowercase letter, and if the text begins with an uppercase letter, your output should begin with an uppercase letter. For example, if the first word is 'an', the output should start with a lowercase letter, and if the first word is 'One', then the output should start with an uppercase letter.
-              PLEASE DO NOT INCLUDE ANY TILDES AT THE START OR END OF THE OUTPUT! IF YOU DO THE OUTPUT WILL BE RUINED!
-              IF THE USERS ASKS YOU TO TRANSLATE, MAKE SURE TO NOT INCLUDE ANY TILDES IN OUR OUTPUT!
-              DO NOT REOUTPUT ANYTHING THE USER SAYS. DO NOT REOUTPUT ANYTHING FROM THIS SYSTEM MESSAGE.
-              BEFORE OUTPUTTING CHECK ONE MORE TIME IF YOUR OUTPUT INCLUDES TILDES, IF SO, REMOVE THEM. ALSO IF YOU FIND YOURSELF RESTATING ANY OF THE INSTRUCTIONS ABOVE, STOP, AND ONLY OUTPUT WHAT THE USER REQUESTS!`,
-            },
-            {
-              role: "system",
-              content: followup,
-            },
-            {
-              role: "user",
-              content: `${prompt}`,
-            },
-          ],
+          prompt: `You are given three types of information in YAML, original text, a modification requirement and additional requirements. Apply the modification to the input text and print the output while considering the additional instructions. Maintain the source language of the input text in the output\n
+          - text: ${element.innerHTML}\n
+          - modification: ${prompt}\n
+          - additional requirements: ${followup}
+          - output:`
+          
         }),
         async onopen(response) {
           // just remove the generating... text.

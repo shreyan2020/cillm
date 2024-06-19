@@ -15,6 +15,7 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import DocumentList from "./components/DocumentsView/DocumentList";
 import DocumentContainer from "./components/ABScribe/DocumentContainer";
+import { TaskProvider } from "./context/TaskContext"; 
 
 
 const router = createHashRouter([
@@ -58,7 +59,9 @@ const router = createHashRouter([
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
+     <TaskProvider>
     <RouterProvider router={router} />
+    </TaskProvider>
   </React.StrictMode>
 );
 
