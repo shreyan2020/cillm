@@ -76,7 +76,7 @@ export default function DocumentContainer() {
   const [variationSidebarVisible, setVariationSidebarVisible] = useState(true);
 
   const llm = useLLM({ serviceUrl: "https://usellm.org/api/llm" });
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://145.38.194.189/api/";
   console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL);
 
   // States for LLM Recipes
@@ -234,7 +234,7 @@ export default function DocumentContainer() {
             if (suggestion) {
               versions.push({
                 frontend_id: "version_" + makeid(5),
-                text: suggestion,
+                text: content+" "+suggestion,
               });
             }
           }

@@ -76,8 +76,16 @@ app.config["MONGODB_SETTINGS"] = {
 
 CORS(
     app,
-    # origins=["http://127.0.0.1:5173", "https://abtestingtools-frontend.up.railway.app", "http://localhost:5173", "http://localhost"],
-    # resources={r"/api/*": {"origins": "http://localhost:5173"}},
+    origins=[
+        "http://127.0.0.1:5173",
+        "https://abtestingtools-frontend.up.railway.app",
+        "http://localhost:5173",
+        "http://localhost",
+        "http://145.38.194.189"
+    ],
+    resources={
+        r"/*": {"origins": "*"}
+    }
 )
 
 db.init_app(app)
@@ -89,7 +97,7 @@ def to_dict(obj):
 
 
 
-@app.route("/log_activity", methods=["POST"])
+@app.route("/api/log_activity", methods=["POST"])
 def log_activity_route() -> Response:
     
     document_id = request.json.get("document_id")
@@ -109,14 +117,14 @@ def log_activity_route() -> Response:
 # Document endpoints
 
 
-@app.route("/documents", methods=["GET"])
+@app.route("/api/documents", methods=["GET"])
 def get_documents_route() -> Response:
     documents: List[Document] = get_documents()
     response_data: List[dict] = [document.to_dict() for document in documents]
     return Response(json.dumps(response_data), content_type="application/json")
 
 
-@app.route("/documents", methods=["POST"])
+@app.route("/api/documents", methods=["POST"])
 def create_document_route() -> Response:
     content: Optional[str] = request.json.get("content")
     name: Optional[str] = request.json.get("name")
@@ -140,7 +148,7 @@ def create_document_route() -> Response:
     return Response(document.to_json(), status=201, content_type="application/json")
 
 
-@app.route("/documents/<document_id>", methods=["GET"])
+@app.route("/api/documents/<document_id>", methods=["GET"])
 def get_document_route(document_id: str) -> Response:
     document: Optional[Document] = get_document(document_id)
     if document:
@@ -149,7 +157,7 @@ def get_document_route(document_id: str) -> Response:
         return jsonify({"error": "Document not found"}), 404
 
 
-@app.route("/documents/<document_id>", methods=["PUT"])
+@app.route("/api/documents/<document_id>", methods=["PUT"])
 def update_document_route(document_id: str) -> Response:
     updated_content: Optional[str] = request.json.get("content")
     updated_name: Optional[str] = request.json.get("name")
@@ -168,7 +176,7 @@ def update_document_route(document_id: str) -> Response:
         return Response("Document not found", status=404)
 
 
-@app.route("/documents/<document_id>", methods=["DELETE"])
+@app.route("/api/documents/<document_id>", methods=["DELETE"])
 def delete_document_route(document_id: str) -> Response:
     success: bool = delete_document(document_id)
     if success:
@@ -178,7 +186,7 @@ def delete_document_route(document_id: str) -> Response:
 
 
 # Chunk endpoints
-@app.route("/documents/<document_id>/chunks", methods=["GET"])
+@app.route("/api/documents/<document_id>/chunks", methods=["GET"])
 def get_chunks_route(document_id: str) -> Response:
     chunks: Optional[list[Chunk]] = get_chunks(document_id)
     if chunks is not None:
@@ -188,7 +196,7 @@ def get_chunks_route(document_id: str) -> Response:
         return jsonify({"error": "Document not found"}), 404
 
 
-@app.route("/documents/<document_id>/chunks", methods=["POST"])
+@app.route("/api/documents/<document_id>/chunks", methods=["POST"])
 def add_chunk_route(document_id: str) -> Response:
     chunk_data: Optional[str] = request.json.get("chunk_data")
     if chunk_data is None:
@@ -201,7 +209,7 @@ def add_chunk_route(document_id: str) -> Response:
         return jsonify({"error": "Document not found"}), 404
 
 
-@app.route("/documents/<document_id>/chunks/<int:chunk_index>", methods=["GET"])
+@app.route("/api/documents/<document_id>/chunks/<int:chunk_index>", methods=["GET"])
 def get_chunk_route(document_id: str, chunk_index: int) -> Response:
     chunk: Optional[Chunk] = get_chunk(document_id, chunk_index)
     if chunk:
@@ -210,7 +218,7 @@ def get_chunk_route(document_id: str, chunk_index: int) -> Response:
         return jsonify({"error": "Chunk not found"}), 404
 
 
-@app.route("/documents/<document_id>/chunks/<int:chunk_index>", methods=["DELETE"])
+@app.route("/api/documents/<document_id>/chunks/<int:chunk_index>", methods=["DELETE"])
 def remove_chunk_route(document_id: str, chunk_index: int) -> Response:
     chunk: Optional[Chunk] = remove_chunk(document_id, chunk_index)
     if chunk:
@@ -221,7 +229,7 @@ def remove_chunk_route(document_id: str, chunk_index: int) -> Response:
 
 # Version endpoints
 @app.route(
-    "/documents/<document_id>/chunks/<int:chunk_index>/versions", methods=["POST"]
+    "/api/documents/<document_id>/chunks/<int:chunk_index>/versions", methods=["POST"]
 )
 def add_version_route(document_id: str, chunk_index: int) -> Response:
     version_data: Optional[str] = request.json.get("version_data")
@@ -236,7 +244,7 @@ def add_version_route(document_id: str, chunk_index: int) -> Response:
 
 
 @app.route(
-    "/documents/<document_id>/chunks/<int:chunk_index>/versions", methods=["PUT"]
+    "/api/documents/<document_id>/chunks/<int:chunk_index>/versions", methods=["PUT"]
 )
 def update_version_route(document_id: str, chunk_index: int) -> Response:
     version_data: Optional[dict] = request.json.get("version_data")
@@ -257,7 +265,7 @@ def update_version_route(document_id: str, chunk_index: int) -> Response:
 
 
 @app.route(
-    "/documents/<document_id>/chunks/<int:chunk_index>/versions/<int:version_index>",
+    "/api/documents/<document_id>/chunks/<int:chunk_index>/versions/<int:version_index>",
     methods=["DELETE"],
 )
 def remove_version_route(
@@ -270,7 +278,7 @@ def remove_version_route(
         return jsonify({"error": "Version not found"}), 404
 
 
-@app.route("/chatGPT/chat", methods=['POST'])
+@app.route("/api/chatGPT/chat", methods=['POST'])
 def generate_text():
     data = request.get_json()
     prompt = data['prompt']
@@ -296,7 +304,7 @@ def generate_text():
 
     return app.response_class(stream_chat(), mimetype="text/event-stream")
 
-@app.route("/chatGPT/suggestions", methods=['POST'])
+@app.route("/api/chatGPT/suggestions", methods=['POST'])
 def suggest_texts():
     data = request.get_json()
     prompt = data['prompt']
@@ -317,8 +325,8 @@ def suggest_texts():
     # Return the collected text as a JSON response
     return jsonify({'suggestion': chat_stream})
 
-@app.route("/recipes/", defaults={'recipe_id': None}, methods=['GET']) # I think this is necessary because there are several routes pointing here so there will be a redirect to the backslash.
-@app.route("/recipes/<string:recipe_id>", methods=['GET'])
+@app.route("/api/recipes/", defaults={'recipe_id': None}, methods=['GET']) # I think this is necessary because there are several routes pointing here so there will be a redirect to the backslash.
+@app.route("/api/recipes/<string:recipe_id>", methods=['GET'])
 def get_recipes(recipe_id: str) -> Response:
     """Endpoint for retrieving recipes from the database. If an id is passed in, a list of recipes matching that name
     will be retrieved. If an id is not passed in, every recipe will be retrieved."""
@@ -339,7 +347,7 @@ def get_recipes(recipe_id: str) -> Response:
             return []
 
 
-@app.route("/recipes/create", methods=['POST'])
+@app.route("/api/recipes/create", methods=['POST'])
 def create_recipe() -> Response:
     """Endpoint for adding recipes to the database. Send the data as part of the request body since it could be big."""
     data = request.get_json()
@@ -350,7 +358,7 @@ def create_recipe() -> Response:
         return Response("Something went wrong with recipe creation", 500)
 
 
-@app.route("/recipes/update", methods=['POST'])
+@app.route("/api/recipes/update", methods=['POST'])
 def update_recipe() -> Response:
     """Endpoint for updating recipes in the database. Send the data as part of the request body since it could be big."""
     data = request.get_json()
@@ -361,7 +369,7 @@ def update_recipe() -> Response:
         return Response(response="Something weird happened when we were trying to update the recipe.", status=500)
 
 
-@app.route("/recipes/delete/<string:recipe_id>", methods=['DELETE'])
+@app.route("/api/recipes/delete/<string:recipe_id>", methods=['DELETE'])
 def delete_recipe(recipe_id: str) -> Response:
     """Endpoint for deleting a recipe from the database by a particular name."""
     success = recipe_service.delete_recipe(recipe_id)
@@ -372,7 +380,7 @@ def delete_recipe(recipe_id: str) -> Response:
     
 
 # Document Feedback endpoints
-@app.route("/documents/<document_id>/feedback", methods=["POST"])
+@app.route("/api/documents/<document_id>/feedback", methods=["POST"])
 def add_document_feedback_route(document_id: str) -> Response:
     """ Endpoint for adding feedback to a document."""
     feedback_data = request.json
@@ -382,7 +390,7 @@ def add_document_feedback_route(document_id: str) -> Response:
     else:
         return jsonify({"error": "Failed to add feedback"}), 404
 
-@app.route("/documents/<document_id>/feedback", methods=["GET"])
+@app.route("/api/documents/<document_id>/feedback", methods=["GET"])
 def get_document_feedbacks_route(document_id: str) -> Response:
     """ Endpoint for getting all feedbacks for a document."""
     feedbacks = get_doc_feedbacks(document_id)
@@ -392,7 +400,7 @@ def get_document_feedbacks_route(document_id: str) -> Response:
     else:
         return jsonify({"error": "Document not found"}), 404
 
-@app.route("/documents/<document_id>/feedback/<feedback_id>", methods=["GET"])
+@app.route("/api/documents/<document_id>/feedback/<feedback_id>", methods=["GET"])
 def get_document_feedback_route(document_id: str, feedback_id: str) -> Response:
     """ Endpoint for getting a feedback for a document."""
     feedback = get_doc_feedback(document_id, feedback_id)
@@ -401,7 +409,7 @@ def get_document_feedback_route(document_id: str, feedback_id: str) -> Response:
     else:
         return jsonify({"error": "Feedback not found"}), 404
     
-@app.route("/documents/<document_id>/feedback/<feedback_id>", methods=["DELETE"])
+@app.route("/api/documents/<document_id>/feedback/<feedback_id>", methods=["DELETE"])
 def remove_document_feedback_route(document_id: str, feedback_id: str) -> Response:
     """ Endpoint for removing a feedback for a document."""
     feedback = remove_doc_feedback(document_id, feedback_id)
@@ -411,7 +419,7 @@ def remove_document_feedback_route(document_id: str, feedback_id: str) -> Respon
         return jsonify({"error": "Feedback not found"}), 404
 
 # Chunk Feedback endpoints
-@app.route("/documents/<document_id>/chunks/<chunk_id>/feedback", methods=["POST"])
+@app.route("/api/documents/<document_id>/chunks/<chunk_id>/feedback", methods=["POST"])
 def add_chunk_feedback_route(document_id: str, chunk_id: str) -> Response:
     """ Endpoint for adding feedback to a chunk."""
     feedback_data = request.json
@@ -421,7 +429,7 @@ def add_chunk_feedback_route(document_id: str, chunk_id: str) -> Response:
     else:
         return jsonify({"error": "Failed to add feedback"}), 404
 
-@app.route("/documents/<document_id>/chunks/<chunk_id>/feedback", methods=["GET"])
+@app.route("/api/documents/<document_id>/chunks/<chunk_id>/feedback", methods=["GET"])
 def get_chunk_feedbacks_route(document_id: str, chunk_id: str) -> Response:
     """ Endpoint for getting all feedbacks for a chunk."""
     feedbacks = get_chunk_feedbacks(document_id, chunk_id)
@@ -433,7 +441,7 @@ def get_chunk_feedbacks_route(document_id: str, chunk_id: str) -> Response:
 
 
 # Version feedback endpoints
-@app.route("/documents/<document_id>/versions/<version_id>/feedback", methods=["POST"])
+@app.route("/api/documents/<document_id>/versions/<version_id>/feedback", methods=["POST"])
 def add_version_feedback_route(document_id: str, version_id: str) -> Response:
     """ Endpoint for adding feedback to a version."""
     feedback_data = request.json
@@ -444,7 +452,7 @@ def add_version_feedback_route(document_id: str, version_id: str) -> Response:
         return jsonify({"error": "Failed to add feedback"}), 404
 
 
-@app.route("/documents/<document_id>/versions/<version_id>/feedback", methods=["GET"])
+@app.route("/api/documents/<document_id>/versions/<version_id>/feedback", methods=["GET"])
 def get_version_feedbacks_route(document_id: str, version_id: str) -> Response:
     """ Endpoint for getting all feedbacks for a version."""
     feedbacks = get_version_feedbacks(document_id, version_id)
