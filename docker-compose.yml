@@ -1,40 +1,60 @@
 services:
+  frontend:
+    build:
+      context: ./abscribe_frontend
+    container_name: frontend
+    restart: always
+
   backend:
-    build: ./abscribe_backend
-    ports:
-      - "8080:8080"
+    build:
+      context: ./abscribe_backend
+    container_name: backend
+    restart: always
     environment:
       - MONGO_PORT=27017
       - MONGO_HOST=mongodb
       - FLASK_ENV=production # Set Flask environment to production
-    depends_on:
-      - mongodb
-    networks:
-      - app-network
-
-  frontend:
-    build: ./abscribe_frontend
     ports:
-      - "80:80" # NGINX default port
-    environment:
-      - VITE_BACKEND_URL=http://145.38.194.189/api/
-    depends_on:
-      - backend
-    networks:
-      - app-network
+      - "8080:8080"
+
+  ollama:
+    container_name: ollama
+    image: ollama/ollama  # Replace with the specific Ollama version if needed
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: ["gpu"]
+              count: all  # Adjust count for the number of GPUs you want to use
+    volumes:
+      - ollama:/root/.ollama
+    restart: always
+    # runtime: nvidia
 
   mongodb:
-    image: mongo
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    volumes:
+      - mongo_data:/data/db
     ports:
       - "27017:27017"
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
     volumes:
-      - mongo-data:/data/db
-    networks:
-      - app-network
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - backend
+      - ollama
+      - mongodb
 
 volumes:
-  mongo-data:
-
-networks:
-  app-network:
-    driver: bridge
+  ollama:
+  mongo_data:

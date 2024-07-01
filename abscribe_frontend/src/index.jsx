@@ -6,6 +6,7 @@ import Editor from "./components/ABScribe/Editor";
 import Viewer from "./components/ABScribe/Viewer";
 import Home from "./components/Home/Home";
 import Docs from "./components/Docs/docs";
+import Instructions from "./components/Home/Instructions"
 import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
@@ -25,8 +26,12 @@ const router = createHashRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/",
+        path: "/home",
         element: <Home />,
+      },
+      {
+        path: "/instruction",
+        element: <Instructions />,
       },
       {
         path: "/editor",

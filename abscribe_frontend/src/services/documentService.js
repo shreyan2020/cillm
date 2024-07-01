@@ -1,6 +1,7 @@
-import apiClient from "./abscribeAPI";
+import { apiClient } from "./abscribeAPI";
 
 export const getDocuments = async () => {
+  console.log("API Client Base URL:", apiClient.defaults.baseURL);
   const response = await apiClient.get("/documents");
   return response.data;
 };
@@ -11,6 +12,7 @@ export const getDocument = async (documentId) => {
 };
 
 export const createDocument = async (content, task_id, prolific_id, name="") => {
+  console.log("API Client Base URL:", apiClient.defaults.baseURL);
   const response = await apiClient.post("/documents", { content, task_id, prolific_id, name});
   return response.data;
 };

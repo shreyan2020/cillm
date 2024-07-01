@@ -10,7 +10,7 @@ import PopupToolbar from "./PopupToolbar";
 import useLLM from "usellm";
 import Collapse from "react-bootstrap/Collapse";
 import VanillaEditor from "./VanillaEditor";
-
+import { chatgptClient } from "../../services/abscribeAPI";
 import "../../scss/documentcontainer.scss";
 
 import {
@@ -75,9 +75,9 @@ export default function DocumentContainer() {
   const [PopupToolbarVisible, setPopupToolbarVisible] = useState(false);
   const [variationSidebarVisible, setVariationSidebarVisible] = useState(true);
 
-  const llm = useLLM({ serviceUrl: "https://usellm.org/api/llm" });
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://145.38.194.189/api/";
-  console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL);
+  // const llm = useLLM({ serviceUrl: "https://usellm.org/api/llm" });
+  // const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://145.38.194.189/api/";
+  // console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL);
 
   // States for LLM Recipes
   const [recipeResult, setRecipeResult] = useState("");
@@ -221,7 +221,7 @@ export default function DocumentContainer() {
           const chunkId = "chunk_" + makeid(5);
           chunk.setAttribute("id", chunkId);
           const content = chunk.innerHTML;
-
+          let message = ""
           let versions = [
             {
               frontend_id: "version_" + makeid(5),
@@ -229,14 +229,51 @@ export default function DocumentContainer() {
             }
           ];
           if (genType === "continuation") {
-            console.log('fetching suggestions', genType)
-            const suggestion = await fetchSuggestion(content);
-            if (suggestion) {
+            console.log('fetching suggestions', genType);
+            // fetchSuggestions(content).then(response => {
+            //   console.log('Received suggestion:', response);
+            //   versions.push({
+            //     frontend_id: "version_" + makeid(5),
+            //     text: content+" "+response,
+            //   })
+            await chatgptClient.post('/generate', {
+              model: "nous-hermes2:latest",
+              stream: false,
+              prompt: `You are given a text input in YAML, generate the continuation for it in MAX 3 WORDS. Maintain the source language of the input text in the output\n
+              - text: ${content}\n
+              - output:`
+            }).then(response => {
+              console.log(response)
               versions.push({
-                frontend_id: "version_" + makeid(5),
-                text: content+" "+suggestion,
-              });
-            }
+                    frontend_id: "version_" + makeid(5),
+                    text: content+" "+response.data.response,
+                  });
+              // console.log('is it working?', response.data)
+              // response.on('data', (chunk) => {
+              //   message += chunk.data.response;
+
+              // });
+
+              // response.on('end', () => {
+              //   // logic for stream complete
+              //   versions.push({
+              //     frontend_id: "version_" + makeid(5),
+              //     text: content+" "+message,
+              //   });
+              //   console.log(versions)
+              // });
+
+            });
+
+            // }).catch(error => console.error('Error fetching suggestion:', error));
+            // const suggestion = await fetchSuggestion(content);
+            // if (suggestion) {
+            //   versions.push({
+            //     frontend_id: "version_" + makeid(5),
+            //     text: content+" "+suggestion,
+            //   });
+            // }
+
           }
 
           const newChunk = {
@@ -303,26 +340,38 @@ export default function DocumentContainer() {
 
   const fetchSuggestion = async (text) => {
     try {
-      console.log('fetching suggestions')
-      const response = await fetch(`${backendUrl}/chatGPT/suggestions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: `You are given a text input in YAML, generate the continuation for it in MAX 3 WORDS. Maintain the source language of the input text in the output\n
-          - text: ${text}\n
-          - output:`
-        })
+      console.log('fetching suggestions2');
+
+      const response = await chatgptClient.post('/generate', {
+        model: "nous-hermes2:latest",
+        stream: false,
+        prompt: `You are given a text input in YAML, generate the continuation for it in MAX 3 WORDS. Maintain the source language of the input text in the output\n
+        - text: ${text}\n
+        - output:`
+      }, {
+        responseType: 'stream',
       });
   
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
+      const stream = response.response;
+      let suggestion = '';
   
-      const jsonResponse = await response.json();
-      console.log('Suggestion:', jsonResponse.suggestion);
-      return jsonResponse.suggestion; // Assuming the backend sends the suggestion in the 'suggestion' field
+      stream.on('data', (chunk) => {
+        const message = chunk.toString();
+        console.log('message suggestion:', message);
+        suggestion += message;
+      });
+  
+      stream.on('end', () => {
+        console.log('Suggestionssss:', suggestion);
+        return suggestion; // Assuming the backend sends the suggestion in the 'suggestion' field
+      });
+  
+      stream.on('error', (error) => {
+        console.error("Error occurred during streaming:", error);
+        throw error;
+      });
+  
+      
     } catch (error) {
       console.error("Error fetching suggestion:", error);
       return null;
@@ -442,127 +491,114 @@ export default function DocumentContainer() {
       console.log(getStartWord());
       console.log(getEndWord());
 
-      const startBool = checkCompletenessStart();
-      const endBool = checkCompletenessEnd();
-      const startWord = getStartWord();
-      const endWord = getEndWord();
+      // const startBool = checkCompletenessStart();
+      // const endBool = checkCompletenessEnd();
+      // const startWord = getStartWord();
+      // const endWord = getEndWord();
 
-      let followup = "";
-      let punctiation = "";
+      // let followup = "";
+      // let punctiation = "";
 
-      if (startBool && endBool) {
-        followup = "There are no incomplete words in the text originally in the triple tildes, apply the user command to the entire text in the triple tildes."
-      }
-      else if (startBool && !endBool) {
-        followup = `Since ${endWord} is an incomplete word, your output should end exactly with ${endWord} and the user request should only be applied to the text before ${endWord} from the previous system message.`
-      }
-      else if (!startBool && endBool) {
-        followup = `Since ${startWord} is an incomplete word, your output should start with exactly ${startWord} and the user request should only be applied to the text after ${startWord} from the previous system message.`
-      }
-      else {
-        followup = `Since ${startWord} and ${endWord} are incomplete words, your output should start with exactly ${startWord} and end in ${endWord} and the user request should only be applied to the text after ${startWord} and before ${endWord} from the previous system message.`
-      }
+      // if (startBool && endBool) {
+      //   followup = "There are no incomplete words in the text originally in the triple tildes, apply the user command to the entire text in the triple tildes."
+      // }
+      // else if (startBool && !endBool) {
+      //   followup = `Since ${endWord} is an incomplete word, your output should end exactly with ${endWord} and the user request should only be applied to the text before ${endWord} from the previous system message.`
+      // }
+      // else if (!startBool && endBool) {
+      //   followup = `Since ${startWord} is an incomplete word, your output should start with exactly ${startWord} and the user request should only be applied to the text after ${startWord} from the previous system message.`
+      // }
+      // else {
+      //   followup = `Since ${startWord} and ${endWord} are incomplete words, your output should start with exactly ${startWord} and end in ${endWord} and the user request should only be applied to the text after ${startWord} and before ${endWord} from the previous system message.`
+      // }
 
-      if (element.innerText.length > 0 && /[A-Z]/.test(element.innerText[0])) {
-        followup += " Be sure to start your output with a capital letter."
-      }
-      else if (element.innerText.length > 0 && /[a-z]/.test(element.innerText[0])) {
-        followup += " Be sure to start your output with a lowercase letter."
-      }
-      if (/.*[.,;:!?]$/.test(element.innerText)) {
-        punctiation = element.innerText[element.innerText.length - 1];
-      }
-      if (punctiation.length > 0) {
-        followup += ` Make sure your output ends in the punctuation mark: ${punctiation}`
-      }
-      else {
-        followup += " Make sure your output DOES NOT end in a punctuation mark."
-      }
+      // if (element.innerText.length > 0 && /[A-Z]/.test(element.innerText[0])) {
+      //   followup += " Be sure to start your output with a capital letter."
+      // }
+      // else if (element.innerText.length > 0 && /[a-z]/.test(element.innerText[0])) {
+      //   followup += " Be sure to start your output with a lowercase letter."
+      // }
+      // if (/.*[.,;:!?]$/.test(element.innerText)) {
+      //   punctiation = element.innerText[element.innerText.length - 1];
+      // }
+      // if (punctiation.length > 0) {
+      //   followup += ` Make sure your output ends in the punctuation mark: ${punctiation}`
+      // }
+      // else {
+      //   followup += " Make sure your output DOES NOT end in a punctuation mark."
+      // }
 
-      console.log("FOLLOWUP:");
-      console.log(followup);
+      // console.log("FOLLOWUP:");
+      // console.log(followup);
 
-      await fetchEventSource(`${backendUrl}/chatGPT/chat`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        openWhenHidden: true,
-        body: JSON.stringify({
-          prompt: `You are given three types of information in YAML, original text, a modification requirement and additional requirements. Apply the modification to the input text and print the output while considering the additional instructions. Maintain the source language of the input text in the output\n
-          - text: ${element.innerHTML}\n
-          - modification: ${prompt}\n
-          - additional requirements: ${followup}
-          - output:`
-          
-        }),
-        async onopen(response) {
-          // just remove the generating... text.
-          setDisablePopupToolbar(true);
-          tinymce.activeEditor.dom.setHTML(element, "");
-        },
-        onmessage(message) {
-          console.log(`generating version. Snippet received: ${message.data}`);
+      await chatgptClient.post('/generate', {
+        model: "nous-hermes2:latest",
+        stream: false,
+        prompt: `You are given two types of information in YAML, original text and a modification requirement. Apply the modification to the input text and print the output. Do not provide anything else in the output. Maintain the source language of the input text in the output\n
+        - text: ${element.innerHTML}\n
+        - modification: ${prompt}\n
+        - output:`
+      }).then(response => {
+        // conso
+        console.log(response.data.response)
+          const message = response.data.response.toString();
+          console.log(`generating version. Snippet received: ${message}`);
+      
+          // if (message.includes("><") || message.includes("></")) {
+          //   console.log("CASE 1");
+          //   htmlText += message.slice(0, message.indexOf(">") + 1);
+          //   console.log(htmlText);
+          //   tinymce.activeEditor.dom.setHTML(
+          //     element,
+          //     element.innerHTML + htmlText
+          //   );
+          //   if (htmlText.includes("</")) {
+          //     element = element.parentElement;
+          //   } else {
+          //     element = element.children[element.children.length - 1];
+          //   }
+          //   htmlText = message.slice(message.indexOf(">") + 1)
+          // } else if (/^.*<(\/?\w*)?$/.test(message.trim())) {
+          //   console.log("CASE 2");
+          //   htmlText += message;
+          // } else if (/.*\/?>/.test(message.trim())) {
+          //   console.log("CASE 3");
+          //   htmlText += message;
+          //   console.log(htmlText);
+          //   tinymce.activeEditor.dom.setHTML(
+          //     element,
+          //     element.innerHTML + htmlText,
+          //   );
+          //   if (htmlText.includes("</")) {
+          //     element = element.parentElement;
+          //   } else {
+          //     element = element.children[element.children.length - 1];
+          //   }
+          //   console.log(element.children[element.children.length - 1]);
+          //   htmlText = "";
+          // } else {
+          //   if (htmlText.length > 0) {
+          //     console.log("CASE 5");
+          //     htmlText += message;
+          //   } else {
+          //     console.log("CASE 6");
+          //     tinymce.activeEditor.dom.setHTML(
+          //       element,
+          //       element.innerHTML + message
+          //     );
+          //     console.log(element.innerHTML);
+          //   }
+          // }
 
-          if (message.data.includes("><") || message.data.includes("></")) {
-            console.log("CASE 1");
-            htmlText += message.data.slice(0, message.data.indexOf(">") + 1);
-            console.log(htmlText);
-            tinymce.activeEditor.dom.setHTML(
-              element,
-              element.innerHTML + htmlText
-            );
-            if (htmlText.includes("</")) {
-              element = element.parentElement;
-            }
-            else {
-              element = element.children[element.children.length - 1];
-            }
-            htmlText = message.data.slice(message.data.indexOf(">") + 1)
-          }
-          else if (/^.*<(\/?\w*)?$/.test(message.data.trim())) {
-            console.log("CASE 2");
-            htmlText += message.data;
-          }
-          else if (/.*\/?>/.test(message.data.trim())) {
-            console.log("CASE 3");
-            htmlText += message.data;
-            console.log(htmlText);
-            tinymce.activeEditor.dom.setHTML(
-              element,
-              element.innerHTML + htmlText,
-            );
-            if (htmlText.includes("</")) {
-              element = element.parentElement;
-            }
-            else {
-              element = element.children[element.children.length - 1];
-            }
-            console.log(element.children[element.children.length - 1]);
-            htmlText = "";
-          }
-          else {
-            if (htmlText.length > 0) {
-              console.log("CASE 5");
-              htmlText += message.data
-            }
-            else {
-              console.log("CASE 6");
-              tinymce.activeEditor.dom.setHTML(
-                element,
-                element.innerHTML + message.data
-              );
-              console.log(element.innerHTML);
-            }
-          }
-        },
-        onclose() {
-          // Finishes updating the document with the generated content. Also does other teardown code to end the streaming process.
-          console.log("Closing generated version eventSource!");
+          tinymce.activeEditor.dom.setHTML(
+                  element,
+                  message
+                );
+      
+          console.log("Closing generated version stream!");
           setDisablePopupToolbar(false);
-
-          const current_version =
-            tinymce.activeEditor.dom.get(activeChunkid).innerHTML; // FIXME: for some reason leaving this name unimported is actually the way to keep the app working?
+      
+          const current_version = tinymce.activeEditor.dom.get(activeChunkid).innerHTML;
           const versionId = createVersion(chunkId, current_version);
           setCurrentDocument((prevDocument) => {
             const updatedChunks = prevDocument.chunks.map((chunk) => {
@@ -573,22 +609,37 @@ export default function DocumentContainer() {
                   }
                   return version;
                 });
-
+      
                 return { ...chunk, versions: updatedVersions };
               }
               return chunk;
             });
-
+      
             return {
               ...prevDocument,
               chunks: updatedChunks,
             };
           });
-        },
-        onerror(err) {
-          throw err;
-        },
+     
       });
+    
+      // Handle real-time updates using axios for streaming
+      // const response = await axios.get('/chatgpt_api/generate', {
+      //   responseType: 'stream',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      // });
+    
+      // const stream = postResponse.response;
+    
+      
+    
+      
+    
+     
+
+      
     } catch (error) {
       console.error("Something went wrong!", error);
     }

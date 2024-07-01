@@ -1,4 +1,4 @@
-import apiClient from "./abscribeAPI";
+import { apiClient } from "./abscribeAPI";
 
 const addVersion = async (documentId, chunk_index, version_data) => {
   const response = await apiClient.post(

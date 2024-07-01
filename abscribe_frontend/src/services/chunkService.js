@@ -1,5 +1,4 @@
-import apiClient from "./abscribeAPI";
-
+import { apiClient } from "./abscribeAPI";
 const getChunks = async (documentId) => {
   const response = await apiClient.get(`/documents/${documentId}/chunks`);
   return response.data;

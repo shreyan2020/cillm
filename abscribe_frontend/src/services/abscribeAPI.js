@@ -1,11 +1,20 @@
 import axios from "axios";
 
+// API client for general backend endpoints
 const apiClient = axios.create({
-  baseURL: process.env.VITE_BACKEND_URL || "http://145.38.194.189/api/",
-  // baseURL: "http://145.38.194.189/api/",
+  baseURL: "/api/",
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-export default apiClient;
+// API client for chatgpt endpoints
+const chatgptClient = axios.create({
+  baseURL: "/chatgpt_api/",
+  headers: {
+    "Content-Type": "application/json",
+    "responseType": 'stream',
+  },
+});
+
+export { apiClient, chatgptClient };

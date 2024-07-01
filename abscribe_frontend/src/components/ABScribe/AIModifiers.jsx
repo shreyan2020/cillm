@@ -17,6 +17,7 @@ import useLLM from "usellm";
 import "../../scss/aimodifiers.scss";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { useParams } from "react-router-dom";
+import { chatgptClient } from "../../services/abscribeAPI";
 
 export default function AIModifiers({
   selectVersions,
@@ -155,84 +156,65 @@ export default function AIModifiers({
 
   async function getRecipeNameFromPrompt(prompt) {
     let keyword = "";
-    try {
-      let messages = [];
-      await llm.chat({
-        messages: [
-            {
-              role: "system",
-              content: `Summarize the text in the angle brackets in 1 to 3 words. Make sure this summary best captures the meaning and essence of the text delimited by the angle brackets, so the output can easily be linked to the original text.
-                            Try to keep the output to as few words as possible, but prioritize the clarity of the output over everything else.
-                            However, if a verb is included in your output, try to keep the output at only 1 word.
-                            Some examples of ideal summaries are delimited by the triple hashtags:
-                            ###
-                            Angle bracket text: 'Translate into French'
-                            Output: 'French Translation'
 
-                            Angle bracket text: 'Make more formal'
-                            Output: 'Formalize'
-
-                            Angle bracket text: 'Add % to the start and end of the text'
-                            Output: 'Percent Delimination'
-                            ###
-                            DO NOT OUTPUT MORE THAN 3 WORDS AND DO NOT REOUTPUT ANYTHING THAT IS NOT IN THE ANGLE BRACEKTS!
-                            DO NOT INCLUDE ANY QUOTATION MARKS IN YOUR OUTPUT AT ALL!
-                            Make sure the output is capitalized and contains no punction marks.
-                            Before outputting, check to make sure nothing before this line of text is outputted!
-                            <${prompt}>
-                            `,
-            },
-          ],
-        stream: true,
-        onStream: ({message}) => {
-          setLlmStreaming(true);
-          keyword = message.content;
-        },
-      });
-      // await fetchEventSource("https://abtestingtools-backend.up.railway.app/chatGPT/chat", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   openWhenHidden: true,
-      //   body: JSON.stringify({
-      //     messages: [
-      //       {
-      //         role: "system",
-      //         content: `Summarize the text in the angle brackets in 1 to 3 words. Make sure this summary best captures the meaning and essence of the text delimited by the angle brackets, so the output can easily be linked to the original text.
-      //                       Try to keep the output to as few words as possible, but prioritize the clarity of the output over everything else.
-      //                       However, if a verb is included in your output, try to keep the output at only 1 word.
-      //                       Some examples of ideal summaries are delimited by the triple hashtags:
-      //                       ###
-      //                       Angle bracket text: 'Translate into French'
-      //                       Output: 'French Translation'
-      //
-      //                       Angle bracket text: 'Make more formal'
-      //                       Output: 'Formalize'
-      //
-      //                       Angle bracket text: 'Add % to the start and end of the text'
-      //                       Output: 'Percent Delimination'
-      //                       ###
-      //                       DO NOT OUTPUT MORE THAN 3 WORDS AND DO NOT REOUTPUT ANYTHING THAT IS NOT IN THE ANGLE BRACEKTS!
-      //                       DO NOT INCLUDE ANY QUOTATION MARKS IN YOUR OUTPUT AT ALL!
-      //                       Make sure the output is capitalized and contains no punction marks.
-      //                       Before outputting, check to make sure nothing before this line of text is outputted!
-      //                       <${prompt}>
-      //                       `,
-      //       },
-      //     ],
-      //   }),
-      //   onmessage(message) {
-      //     keyword += message.data;
-      //   },
-      //   onclose() {
-      //     // Finishes updating the document with the generated content. Also does other teardown code to end the streaming process.
-      //     console.log(`Keyword found: ${keyword}`);
-      //   },
+    // Initial POST request using axios
+    
+    try{
+    console.log('keyword is', keyword)
+      await chatgptClient.post('/generate', {
+      model: "nous-hermes2:latest",
+      prompt: `Summarize the text in the angle brackets in 1 to 3 words. Make sure this summary best captures the meaning and essence of the text delimited by the angle brackets, so the output can easily be linked to the original text.
+                      Try to keep the output to as few words as possible, but prioritize the clarity of the output over everything else.
+                      However, if a verb is included in your output, try to keep the output at only 1 word.
+                      Some examples of ideal summaries are delimited by the triple hashtags:
+                      ###
+                      Angle bracket text: 'Translate into French'
+                      Output: 'French Translation'
+    
+                      Angle bracket text: 'Make more formal'
+                      Output: 'Formalize'
+    
+                      Angle bracket text: 'Add % to the start and end of the text'
+                      Output: 'Percent Delimination'
+                      ###
+                      DO NOT OUTPUT MORE THAN 3 WORDS AND DO NOT REOUTPUT ANYTHING THAT IS NOT IN THE ANGLE BRACEKTS!
+                      DO NOT INCLUDE ANY QUOTATION MARKS IN YOUR OUTPUT AT ALL!
+                      Make sure the output is capitalized and contains no punctuation marks.
+                      Before outputting, check to make sure nothing before this line of text is outputted!
+                      <${prompt}>
+                      `,
+      stream: false,
+    }).then(response => {
+      // response.response.on('data', (chunk) => {
+      //   console.log('message is', message)
+      //   keyword += message;
+      // })
+      // stream.on('end', () => {
+      //   console.log(`Keyword found: ${keyword}`);
       // });
-    } catch (error) {
-      console.error("Something went wrong!", error);
-    }
+      // stream.on('error', (error) => {
+      //   console.error("Error occurred during streaming:", error);
+      // });
+      
+      keyword += response.data.response;
+      console.log('message is', keyword)
+
+    });
+  
+    // const stream = response.response;
+  
+    // stream.on('data', (chunk) => {
+    //   const message = chunk.toString();
+    //   console.log('message is', message)
+    //   keyword += message;
+    // });
+  
+  
+  } catch (error) {
+    console.error("Something went wrong!", error);
+  }
+
+    
     const result = removeQuotations(keyword);
     return result;
   }

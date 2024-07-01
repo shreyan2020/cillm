@@ -1,4 +1,4 @@
-import apiClient from "./abscribeAPI";
+import { apiClient } from "./abscribeAPI";
 import data from "bootstrap/js/src/dom/data";
 export let recipeService = {
     async getRecipe(recipeId) {

@@ -74,16 +74,16 @@ export default function Home() {
     "hover-buttons": hoverButtonsGif,
     "variation-component": variationComponentGif,
   });
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const prolificID = params.get("prolific_id");
-    console.log('prolific_id', prolificID)
-    if (prolificID) {
-      setProlificID(prolificID);
-    }
-  }, [location.search, setProlificID]);
-
+  console.log('Backend URL:', import.meta.env.REACT_APP_VITE_BACKEND_URL);
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   const prolificID = params.get("prolific_id");
+  //   console.log('prolific_id', prolificID)
+  //   if (prolificID) {
+  //     setProlificID(prolificID);
+  //   }
+  // }, [location.search, setProlificID]);
+  console.log('prolific_id', prolificID)
 
   useEffect(() => {
     const nextTaskIndex = completedTasks.length;
@@ -167,15 +167,15 @@ export default function Home() {
             </div>
           </div> */}
 
-          <div className="row mt-4">
+          {/* <div className="row mt-4">
             <div className="col-md-12">
               <YoutubeEmbed embedId="Bpg4EVIKeEs" />
             </div>
-          </div>
+          </div> */}
 
           <div className="card mt-4">
             <div className="card-body">
-              <h2 className="card-title">Instruction</h2>
+              {/* <h2 className="card-title">Instruction</h2> */}
               <p className="card-text">
                 { currentTask.name }
               </p>

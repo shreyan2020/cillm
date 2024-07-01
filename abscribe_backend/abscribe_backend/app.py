@@ -3,10 +3,12 @@ import json
 import os
 from typing import Optional, List
 from dotenv import load_dotenv
+import re
 
 from flask import Flask, request, Response, jsonify
-
-import abscribe_backend.services.gpt4all_service as gpt_service
+# import torch
+# from transformers import AutoTokenizer, AutoModelForCausalLM
+# import abscribe_backend.services.gpt4all_service as gpt_service
 import abscribe_backend.services.recipe_service as recipe_service
 
 from abscribe_backend.models.document import Document
@@ -87,6 +89,18 @@ CORS(
         r"/*": {"origins": "*"}
     }
 )
+
+#load models
+
+# model_name = "NousResearch/Hermes-2-Theta-Llama-3-70B-GGUF"  # Adjust model name as needed
+# model_id = "TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF"
+# filename = "tinyllama-1.1b-chat-v1.0.Q6_K.gguf"
+# tokenizer = AutoTokenizer.from_pretrained(model_id, gguf_file=filename)
+# model = AutoModelForCausalLM.from_pretrained(model_id, gguf_file=filename)
+# # model = None
+# # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# device = "cuda"
+# model.to(device)
 
 db.init_app(app)
 
@@ -278,40 +292,73 @@ def remove_version_route(
         return jsonify({"error": "Version not found"}), 404
 
 
-@app.route("/api/chatGPT/chat", methods=['POST'])
-def generate_text():
-    data = request.get_json()
-    prompt = data['prompt']
-    print('hello',prompt)
-    chat_stream = gpt_service.get_chat(prompt)
-    print(chat_stream)
-    def stream_chat():
-        for chunk in chat_stream:
-            try:
-                # content = chunk['choices'][0]['delta']['content']
-                content = chunk
-                newline = "\n"
-            except KeyError:
-                content = ''
-            # 'data:' and newlines format each text block as a new server sent event. See the documentation on MDN.
-            yield f"data: {content}\n\n"
-            # Start a new paragraph if we see a newline.
-            # if '\n' in content:
-            #     if not tab and not lst:
-            #         yield f"data: <br/><br/>\n\n"
-            #     else:
-            #         yield f"data: \n\n"
+# @app.route("/api/chatGPT/chat", methods=['POST'])
+# def generate_text():
+#     data = request.get_json()
+#     prompt = data['prompt']
+#     print('hello',prompt)
+#     chat_stream = gpt_service.get_chat(prompt)
+#     print(chat_stream)
+#     def stream_chat():
+#         for chunk in chat_stream:
+#             try:
+#                 # content = chunk['choices'][0]['delta']['content']
+#                 content = chunk
+#                 newline = "\n"
+#             except KeyError:
+#                 content = ''
+#             # 'data:' and newlines format each text block as a new server sent event. See the documentation on MDN.
+#             yield f"data: {content}\n\n"
+#             # Start a new paragraph if we see a newline.
+#             # if '\n' in content:
+#             #     if not tab and not lst:
+#             #         yield f"data: <br/><br/>\n\n"
+#             #     else:
+#             #         yield f"data: \n\n"
 
-    return app.response_class(stream_chat(), mimetype="text/event-stream")
+#     return app.response_class(stream_chat(), mimetype="text/event-stream")
 
-@app.route("/api/chatGPT/suggestions", methods=['POST'])
-def suggest_texts():
-    data = request.get_json()
-    prompt = data['prompt']
-    print('hello', prompt)
-    chat_stream = gpt_service.get_chat(prompt,'suggest')
-    # chat_stream = 'temp replacements'
-    print(chat_stream)
+# def extract_relevant_text(output_text):
+#     pattern = re.compile(r'\[\/INST\](.*?)<\/s>', re.DOTALL)
+#     match = pattern.search(output_text)
+#     return match.group(1).strip() if match else "No relevant text found"
+
+
+# @app.route("/api/chatGPT/suggestions", methods=['POST'])
+# def suggest_texts():
+#     data = request.get_json()
+#     prompt = data['prompt']
+#     # print('Received prompt:', prompt)
+#     try:
+#         # suggestion = gpt_service.get_chat(tokenizer, prompt, 'suggest')
+#         # prompt = f"{messages}"  # Construct the prompt based on the messages
+#         # inputs = tokenizer(prompt, return_tensors="pt").to(device)
+#         # generated_ids = model.generate(inputs['input_ids'], max_new_tokens=50, do_sample=True)
+#         # generated_text = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
+#         # suggestions = extract_relevant_text(generate_text)
+#         # return generated_text.strip()
+        
+#         inputs = tokenizer(prompt, return_tensors="pt")
+#         outputs = model.generate(**inputs, max_new_tokens=20)
+#         suggestions = tokenizer.decode(outputs[0], skip_special_tokens=True)
+#         print('Generated suggestion:', suggestions)
+#         return jsonify({'suggestion': suggestions.strip()})
+    
+#     except Exception as e:
+#         print('Error generating text:', e)
+#         return jsonify({'error': str(e)}), 500
+
+
+
+
+
+# def suggest_texts():
+#     data = request.get_json()
+#     prompt = data['prompt']
+#     print('hello', prompt)
+#     chat_stream = gpt_service.get_chat(prompt,'suggest')
+#     # chat_stream = 'temp replacements'
+#     print(chat_stream)
 
     # Collect all the chunks into a single string
     # response_text = ''
@@ -323,7 +370,7 @@ def suggest_texts():
     #         continue
 
     # Return the collected text as a JSON response
-    return jsonify({'suggestion': chat_stream})
+    # return jsonify({'suggestion': chat_stream})
 
 @app.route("/api/recipes/", defaults={'recipe_id': None}, methods=['GET']) # I think this is necessary because there are several routes pointing here so there will be a redirect to the backslash.
 @app.route("/api/recipes/<string:recipe_id>", methods=['GET'])

@@ -12,7 +12,7 @@ import { fetchEventSource } from "@microsoft/fetch-event-source";
 import PlaceHolder from "../../resources/placeHolderImg.png";
 import { TaskContext } from "../../context/TaskContext";
 import "../../scss/editor.scss";
-import apiClient from "../../services/abscribeAPI";
+import { apiClient } from "../../services/abscribeAPI";
 import {
   getChunks,
   addChunk,
@@ -257,6 +257,7 @@ const handleClick = (e) => {
   const handleSaveButtonClick = async (documentID) => {
     // console.log('keylogger hello?', keylog)
     console.log('task id', taskID, 'prolific id', prolificID)
+
     const activityData = {
       document_id: documentID, 
       task_id: taskID,
@@ -272,7 +273,7 @@ const handleClick = (e) => {
       await apiClient.post("/log_activity", activityData);
       console.log("Activity logged successfully");
       addCompletedTask(taskID)
-      navigate(`/?prolific_id=${prolificID}`);
+      navigate(`/#/home`);
     } catch (error) {
       console.error("Failed to log activity:", error);
     }
@@ -963,9 +964,9 @@ const handleClick = (e) => {
                   //   "alignright alignjustify | bullist numlist outdent indent | " +
                   //   "removeformat | ideabucket",
                   toolbar:
-                    "blocks fontfamily fontsize |variationsidebar recipes @ai-Templates|" +
+                    "blocks fontfamily fontsize |variationsidebar recipes save|" +
                     "bold italic forecolor hilitecolor | alignleft aligncenter " +
-                    "alignright alignjustify | bullist numlist | save",
+                    "alignright alignjustify | bullist numlist",
 
                   setup: (editor) => {
 

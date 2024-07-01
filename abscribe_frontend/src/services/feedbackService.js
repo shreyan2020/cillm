@@ -1,4 +1,4 @@
-import apiClient from "./abscribeAPI";
+import { apiClient } from "./abscribeAPI";
 
 export const addDocumentFeedback = async (documentId, feedbackData) => {
   const response = await apiClient.post(`/documents/${documentId}/feedback`, feedbackData);
