@@ -273,7 +273,7 @@ const handleClick = (e) => {
       await apiClient.post("/log_activity", activityData);
       console.log("Activity logged successfully");
       addCompletedTask(taskID)
-      navigate(`/#/home`);
+      navigate(`/home`);
     } catch (error) {
       console.error("Failed to log activity:", error);
     }
@@ -811,6 +811,7 @@ const handleClick = (e) => {
   // };
 
   return (
+    
     <Container fluid className="p-0">
       <Row>
         <Col md={12} className="full-height">
@@ -1119,6 +1120,7 @@ const handleClick = (e) => {
                             //   clickLog: clickLogRef.current
                             // };
                             // console.log('activity data', activityData)
+                            handleSaveButtonClick(currentDocument._id)
 
                           updateDocument(currentDocument._id, newContent)
                             .then(() => {
@@ -1144,7 +1146,7 @@ const handleClick = (e) => {
                               );
                             });
                             
-                            handleSaveButtonClick(currentDocument._id)
+                           
                         },
                       });
                     editor.ui.registry.addButton("insertAITextButton", {

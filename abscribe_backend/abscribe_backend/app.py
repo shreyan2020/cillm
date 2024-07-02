@@ -126,7 +126,7 @@ def log_activity_route() -> Response:
 
     activity_log = log_keylogger_activity(document_id, prolific_id, task_id, key_log, click_log)
 
-    return Response(activity_log.to_json(), status=201, content_type="application/json")
+    return Response("Saved", status=201, content_type="application/json")
 
 # Document endpoints
 

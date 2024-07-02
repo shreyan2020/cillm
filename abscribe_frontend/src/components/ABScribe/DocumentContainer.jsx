@@ -12,7 +12,7 @@ import Collapse from "react-bootstrap/Collapse";
 import VanillaEditor from "./VanillaEditor";
 import { chatgptClient } from "../../services/abscribeAPI";
 import "../../scss/documentcontainer.scss";
-
+import NavHeader from "../Header/NavHeader";
 import {
   getChunks,
   addChunk,
@@ -829,10 +829,14 @@ export default function DocumentContainer() {
               variant="tabs"
               className="flex-row justify-content-between align-items-center"
             >
+              <div className="d-flex align-items-center ml-auto">
+      <NavHeader />
+    </div>
               <div className="d-flex align-items-center">
-                <Button variant="light" href="/#/">
+              {/* <NavHeader /> */}
+                {/* <Button variant="light" href="/#/">
                   <FontAwesomeIcon icon={faFilePen} />
-                </Button>
+                </Button> */}
                 <Form.Control
                   className="document-name text-truncate"
                   type="text"

@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from "react";
 import EasyEdit from "react-easy-edit";
 import CloseButton from "react-bootstrap/CloseButton";
 import Collapse from "react-bootstrap/Collapse";
-
 import TextareaAutosize from "react-textarea-autosize";
 import { recipeService } from "../../services/recipeService";
 import { Button, Card, Badge, ListGroup } from "react-bootstrap";
@@ -18,6 +17,16 @@ import "../../scss/aimodifiers.scss";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { useParams } from "react-router-dom";
 import { chatgptClient } from "../../services/abscribeAPI";
+
+const PopUp = ({ message, onNext, onPrev }) => {
+  return (
+    <div className="popup">
+      <p>{message}</p>
+      <button onClick={onPrev}>Previous</button>
+      <button onClick={onNext}>Next</button>
+    </div>
+  );
+};
 
 export default function AIModifiers({
   selectVersions,
@@ -49,6 +58,21 @@ export default function AIModifiers({
 
   const [allowRecipeEdit, setAllowRecipeEdit] = useState(false);
   const [showRecipes, setShowRecipes] = useState(true);
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const popUpSteps = [
+    { message: "Click on the first button", buttonIndex: 0 },
+    { message: "Now click on the second button", buttonIndex: 1 },
+    // Add more steps as needed
+  ];
+
+  const handleNextStep = () => {
+    setCurrentStep((prevStep) => prevStep + 1);
+  };
+
+  const handlePrevStep = () => {
+    setCurrentStep((prevStep) => (prevStep > 0 ? prevStep - 1 : 0));
+  };
 
   useEffect(() => {
     if (!allowRecipeEdit) {
@@ -59,6 +83,7 @@ export default function AIModifiers({
   const scrollToBottom = () => {
     recipesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
   const createRecipe = (name, prompt) => {
     const recipeId = "recipe_" + makeid(5);
     let recipeObject = { frontend_id: recipeId, name: name, prompt: prompt };
@@ -264,8 +289,6 @@ export default function AIModifiers({
     setLlmResult("");
   };
 
-  // Fetch all the recipes we have from the database before initialising.
-
   return activeChunkid && activeVersionIds[activeChunkid] ? (
     <Card className="border-0">
       <div className="d-grid gap-2 px-3 pt-3">
@@ -400,17 +423,30 @@ export default function AIModifiers({
                 ) : (
                   <>
                     {llmRecipes.map((recipe, index) => (
-                      <Button
-                        className="text-truncate me-1 mb-1"
-                        style={{ maxWidth: "150px" }}
-                        size="sm"
-                        variant="outline-dark"
-                        onClick={() => {
-                          generateVersion(activeChunkid, recipe.prompt);
-                        }}
-                      >
-                        {recipe.name}
-                      </Button>
+                      <div key={index} style={{ position: "relative" }}>
+                        {currentStep < popUpSteps.length &&
+                          popUpSteps[currentStep].buttonIndex === index && (
+                            <PopUp
+                              message={popUpSteps[currentStep].message}
+                              onNext={handleNextStep}
+                              onPrev={handlePrevStep}
+                            />
+                          )}
+                        <Button
+                          className="text-truncate me-1 mb-1"
+                          style={{ maxWidth: "150px" }}
+                          size="sm"
+                          variant="outline-dark"
+                          onClick={() => {
+                            generateVersion(activeChunkid, recipe.prompt);
+                            if (popUpSteps[currentStep].buttonIndex === index) {
+                              handleNextStep();
+                            }
+                          }}
+                        >
+                          {recipe.name}
+                        </Button>
+                      </div>
                     ))}
                   </>
                 )}

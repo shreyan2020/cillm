@@ -116,7 +116,7 @@ export default function Home() {
       setValidationError(null);
       const newTaskID = currentTask.id;
       console.log("Prolific ID:", prolificID, "task_id", newTaskID); 
-      createDocument("", newTaskID, prolificID)
+      createDocument(currentTask.tutorial, newTaskID, prolificID)
       .then((document) => {
         console.log("Document created in backend");
         navigate(`/document/${document._id["$oid"]}`);

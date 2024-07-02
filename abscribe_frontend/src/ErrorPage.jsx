@@ -1,7 +1,9 @@
 import { useRouteError } from "react-router-dom";
 import { Link } from "react-router-dom";
-
+import { TaskContext } from "./context/TaskContext";
 export default function ErrorPage() {
+  const { taskID, setTaskID, completedTasks, addCompletedTask, prolificID, setProlificID } = useContext(TaskContext);
+
   const error = useRouteError();
   console.error(error);
 
@@ -21,7 +23,7 @@ export default function ErrorPage() {
             <div className="d-flex align-items-center justify-content-center">
               <Link
                 className="btn btn-outline-dark btn-lg"
-                to="/"
+                to="`/instruction/?${prolificId}`"
                 role="button"
               >
                 Return Home
