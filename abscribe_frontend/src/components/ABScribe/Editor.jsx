@@ -148,6 +148,23 @@ export default function Editor({
   // }, [keylog]);
 
   useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        const newLogEntry = { key: e.key, timestamp: new Date() };
+        keylogRef.current = [...keylogRef.current, newLogEntry];
+        console.log('Updated keylogRef:', keylogRef.current);
+        alert("You are leaving the writing environment. Please return to continue working on your document.");
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
     if (activeChunkid === "") {
       setEditingMode(false);
     } else {
@@ -273,7 +290,7 @@ const handleClick = (e) => {
       await apiClient.post("/log_activity", activityData);
       console.log("Activity logged successfully");
       addCompletedTask(taskID)
-      navigate(`/home`);
+      navigate(`/questionnaire`);
     } catch (error) {
       console.error("Failed to log activity:", error);
     }
@@ -931,10 +948,10 @@ const handleClick = (e) => {
                     "wordcount",
                     
                   ],
-                  text_patterns: [
-                    { start: "@ai", cmd: "reply", value: { color: "red" } },
-                    //{start: '*', end:'*', format:'interject'},
-                  ],
+                  // text_patterns: [
+                  //   { start: "@ai", cmd: "reply", value: { color: "red" } },
+                  //   //{start: '*', end:'*', format:'interject'},
+                  // ],
                   formats: {
                     factor: {
                       inline: "span",

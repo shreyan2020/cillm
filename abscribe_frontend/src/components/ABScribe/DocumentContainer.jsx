@@ -91,6 +91,35 @@ export default function DocumentContainer() {
 
   const [disablePopupToolbar, setDisablePopupToolbar] = useState(false);
 
+  // useEffect(() => {
+  //   const handleBeforeUnload = (e) => {
+  //     const message = "You have unsaved changes. Are you sure you want to leave?";
+  //     e.returnValue = message;
+  //     return message;
+  //   };
+
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        alert("You are leaving the writing environment. Please return to continue working on your document.");
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  
   useEffect(() => {
     fetchDocument(documentId);
   }, []);

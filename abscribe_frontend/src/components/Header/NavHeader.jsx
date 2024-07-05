@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePen } from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import Instructions from "../Home/Instructions"; // Adjust the import path as necessary
+import Tutorial from "../Home/Tutorial"; // Adjust the import path as necessary
 
 export default function NavHeader() {
   const [showModal, setShowModal] = useState(false);
@@ -40,7 +40,7 @@ export default function NavHeader() {
           <Modal.Title>Instructions</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Instructions showCheckbox={false} />
+          <Tutorial showButton={false} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

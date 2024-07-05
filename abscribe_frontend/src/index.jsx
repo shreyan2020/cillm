@@ -4,9 +4,11 @@ import Root from "./routes/Root";
 import ErrorPage from "./ErrorPage";
 import Editor from "./components/ABScribe/Editor";
 import Viewer from "./components/ABScribe/Viewer";
-import Home from "./components/Home/Home";
+import Tutorial from "./components/Home/Tutorial";
 import Docs from "./components/Docs/docs";
-import Instructions from "./components/Home/Instructions"
+import Welcome from "./components/Home/Welcome";
+import Task from "./components/Home/Task";
+import Questionnaire from "./components/Home/Questionnaire";
 import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
@@ -19,6 +21,7 @@ import DocumentContainer from "./components/ABScribe/DocumentContainer";
 import { TaskProvider } from "./context/TaskContext"; 
 
 
+
 const router = createHashRouter([
   {
     path: "/",
@@ -26,17 +29,26 @@ const router = createHashRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/home",
-        element: <Home />,
+        path: "/tutorial",
+        element: <Tutorial />,
       },
       {
-        path: "/instruction",
-        element: <Instructions />,
+        path: "/welcome",
+        element: <Welcome />,
+      },
+      {
+        path: "/task",
+        element: <Task />,
+      },
+      {
+        path: "/questionnaire",
+        element: <Questionnaire />,
       },
       {
         path: "/editor",
         element: <Editor />,
       },
+
       {
         path: "/document/:documentId",
         element: <DocumentContainer />,

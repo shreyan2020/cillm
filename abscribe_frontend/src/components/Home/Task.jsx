@@ -57,7 +57,7 @@ import tasksConfig from "../../taskConfig";
 import { TaskContext } from "../../context/TaskContext"; 
 // import "../scss/home.scss";
 
-export default function Home() {
+export default function Task() {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -74,7 +74,7 @@ export default function Home() {
     "hover-buttons": hoverButtonsGif,
     "variation-component": variationComponentGif,
   });
-  console.log('Backend URL:', import.meta.env.REACT_APP_VITE_BACKEND_URL);
+  // console.log('Backend URL:', import.meta.env.REACT_APP_VITE_BACKEND_URL);
   // useEffect(() => {
   //   const params = new URLSearchParams(location.search);
   //   const prolificID = params.get("prolific_id");
@@ -83,7 +83,7 @@ export default function Home() {
   //     setProlificID(prolificID);
   //   }
   // }, [location.search, setProlificID]);
-  console.log('prolific_id', prolificID)
+  console.log('prolific_id and task id', prolificID, taskID)
 
   useEffect(() => {
     const nextTaskIndex = completedTasks.length;
@@ -156,6 +156,9 @@ export default function Home() {
       <NavHeader />
       <div className="jumbotron m-3">
         <div className="container">
+           {/* <div className="col-md-12">
+              <YoutubeEmbed embedId="Bpg4EVIKeEs" />
+            </div> */}
           {/* <div className="row">
             <div className="col-md-12">
               <h1 className="display-4">Persuasive Text Writing for Chairty</h1>
@@ -179,10 +182,14 @@ export default function Home() {
               <p className="card-text">
                 { currentTask.name }
               </p>
-              <p className="card-text">
-                Before starting, please take some time to understand the
-                charity name.
-              </p>
+              {/* <p className="card-text">
+              Instead of writing the advertisement on your own, you will be able to utilize an AI-based writing assistant called ABScribe. Note that you do not have to use it in order to complete the task. This decision is entirely up to you.
+
+ABScribe is [...]
+
+You can familiarize yourself with the program using a short tutorial video on the next page. Furthermore, you will go through a very short mandatory tutorial before writing your ad. You will first complete the tutorial in English [Spanish], then complete your English [Spanish] advertisement, then complete the tutorial in Spanish [English], and finally complete your second advertisement in Spanish [English].
+
+              </p> */}
               <h5>Mission Statement:</h5>
               <p>
               { currentTask.missionStatement }
