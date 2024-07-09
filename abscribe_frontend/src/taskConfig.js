@@ -1,7 +1,7 @@
 const tasksConfig = {
     tasks: [
       {
-        id: "task1",
+        id: "SV_er3uBhbIgrGyQ1E",
         name: "Task One",
         missionStatement: "At Helping Hands Food Bank, our mission is to ensure that every individual and family in the Netherlands has access to nutritious food, free from the fear of hunger and the challenges of food insecurity. In the pursuit of this mission, we are proud to have redistributed over 5 million meals last year alone, thanks to the generosity of our donors and the dedication of our volunteers. We strive to mobilize the power of our community to end hunger through food distribution, education, and advocacy. Our efforts focus on sustainability, with a commitment to reducing food waste by rescuing surplus food equivalent to 2,000 tons of produce that would otherwise go to landfills. By providing support that upholds dignity, we nurture hope and foster self-sufficiency among all members of our society.",
         instructions: "Please write an essay on climate change.",
@@ -20,7 +20,7 @@ const tasksConfig = {
         ],
       },
       {
-        id: "task2",
+        id: "SV_by0FLSWM0gVjYuW",
         name: "Task Two",
         missionStatement: "Complete the second task.",
         instructions: "Please summarize the importance of renewable energy.",
@@ -43,8 +43,9 @@ const tasksConfig = {
         ],
       },
     ],
-    order: ["task1", "task2"], // Task order
+    order: ["SV_er3uBhbIgrGyQ1E", "SV_by0FLSWM0gVjYuW"], // Task order
   };
-  
+  // https://tudelft.fra1.qualtrics.com/jfe/form/SV_er3uBhbIgrGyQ1E
+  // https://tudelft.fra1.qualtrics.com/jfe/form/SV_by0FLSWM0gVjYuW
   export default tasksConfig;
   

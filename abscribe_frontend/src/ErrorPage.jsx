@@ -1,6 +1,8 @@
+import React, { useContext } from "react";
 import { useRouteError } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { TaskContext } from "./context/TaskContext";
+
 export default function ErrorPage() {
   const { taskID, setTaskID, completedTasks, addCompletedTask, prolificID, setProlificID } = useContext(TaskContext);
 

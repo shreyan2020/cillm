@@ -423,30 +423,17 @@ export default function AIModifiers({
                 ) : (
                   <>
                     {llmRecipes.map((recipe, index) => (
-                      <div key={index} style={{ position: "relative" }}>
-                        {currentStep < popUpSteps.length &&
-                          popUpSteps[currentStep].buttonIndex === index && (
-                            <PopUp
-                              message={popUpSteps[currentStep].message}
-                              onNext={handleNextStep}
-                              onPrev={handlePrevStep}
-                            />
-                          )}
-                        <Button
-                          className="text-truncate me-1 mb-1"
-                          style={{ maxWidth: "150px" }}
-                          size="sm"
-                          variant="outline-dark"
-                          onClick={() => {
-                            generateVersion(activeChunkid, recipe.prompt);
-                            if (popUpSteps[currentStep].buttonIndex === index) {
-                              handleNextStep();
-                            }
-                          }}
-                        >
-                          {recipe.name}
-                        </Button>
-                      </div>
+                      <Button
+                        className="text-truncate me-1 mb-1"
+                        // style={{ maxWidth: "150px" }}
+                        size="sm"
+                        variant="outline-dark"
+                        onClick={() => {
+                          generateVersion(activeChunkid, recipe.prompt);
+                        }}
+                      >
+                        {recipe.name}
+                      </Button>
                     ))}
                   </>
                 )}

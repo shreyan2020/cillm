@@ -105,21 +105,9 @@ export default function DocumentContainer() {
   //   };
   // }, []);
 
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        alert("You are leaving the writing environment. Please return to continue working on your document.");
-      }
-    };
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, []);
 
-  
   useEffect(() => {
     fetchDocument(documentId);
   }, []);
