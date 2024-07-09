@@ -11,7 +11,7 @@ const apiClient = axios.create({
 
 // API client for chatgpt endpoints
 const chatgptClient = axios.create({
-  // baseURL: "/chatgpt_api/",
+  // baseURL: "http://localhost:11434/api/",
   baseURL: "/chatgpt_api/" || "http://localhost:11434/api/",
   headers: {
     "Content-Type": "application/json",

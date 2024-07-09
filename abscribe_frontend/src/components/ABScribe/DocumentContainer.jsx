@@ -494,19 +494,19 @@ export default function DocumentContainer() {
     }
 
     let entireText = tinymce.activeEditor.getContent();
-    console.log(recipes);
+    // console.log(recipes);
     let element = tinymce.activeEditor.dom.get(chunkId);
-    console.log("Element looks like:");
-    console.log(element);
+    // console.log("Element looks like:");
+    // console.log(element);
     let htmlText = "";
 
     try {
-      console.log("START INDEX");
-      console.log(checkCompletenessStart());
-      console.log("END INDEX");
-      console.log(checkCompletenessEnd());
-      console.log(getStartWord());
-      console.log(getEndWord());
+      // console.log("START INDEX");
+      // console.log(checkCompletenessStart());
+      // console.log("END INDEX");
+      // console.log(checkCompletenessEnd());
+      // console.log(getStartWord());
+      // console.log(getEndWord());
 
       // const startBool = checkCompletenessStart();
       // const endBool = checkCompletenessEnd();
