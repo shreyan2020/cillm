@@ -10,9 +10,11 @@ import PopupToolbar from "./PopupToolbar";
 import useLLM from "usellm";
 import Collapse from "react-bootstrap/Collapse";
 import VanillaEditor from "./VanillaEditor";
-import { chatgptClient } from "../../services/abscribeAPI";
+// import { chatgptClient } from "../../services/abscribeAPI";
+// import { apiClient } from "../../services/abscribeAPI";
 import "../../scss/documentcontainer.scss";
 import NavHeader from "../Header/NavHeader";
+// import { Ollama } from 'ollama';
 import {
   getChunks,
   addChunk,
@@ -37,6 +39,7 @@ import Experimentor from "./Experimentor";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { recipeService } from "../../services/recipeService";
 import ChatbotEditor from "./ChatbotEditor";
+// import { chatgptClient } from "../../services/abscribeAPI";
 
 export default function DocumentContainer() {
   //Refs for positioning AB Toolbar
@@ -78,6 +81,9 @@ export default function DocumentContainer() {
   // const llm = useLLM({ serviceUrl: "https://usellm.org/api/llm" });
   // const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://145.38.194.189/api/";
   // console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL + "chatGPT/chat"
+  // console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL);
+  // const ollama = new Ollama({ host: import.meta.env.VITE_OLLAMA_URL });
 
   // States for LLM Recipes
   const [recipeResult, setRecipeResult] = useState("");
@@ -230,82 +236,25 @@ export default function DocumentContainer() {
         });
         setActiveFactorId(factorId);
       };
-
-      const createChunksFromFactor = async (factorId, genType) => {
+      const createChunksFromFactor = (factorId) => {
         const factorChunks = getChunksFromFactorId(factorId);
         const newChunks = [];
         for (const chunk of factorChunks) {
           const chunkId = "chunk_" + makeid(5);
           chunk.setAttribute("id", chunkId);
           const content = chunk.innerHTML;
-          let message = ""
-          let versions = [
-            {
-              frontend_id: "version_" + makeid(5),
-              text: content,
-            }
-          ];
-          if (genType === "continuation") {
-            console.log('fetching suggestions', genType);
-            // fetchSuggestions(content).then(response => {
-            //   console.log('Received suggestion:', response);
-            //   versions.push({
-            //     frontend_id: "version_" + makeid(5),
-            //     text: content+" "+response,
-            //   })
-            await chatgptClient.post('/generate', {
-              model: "nous-hermes2:latest",
-              stream: false,
-              prompt: `You are given a text input in YAML, generate the continuation for it in MAX 3 WORDS. Maintain the source language of the input text in the output\n
-              - text: ${content}\n
-              - output:`
-            }).then(response => {
-              console.log(response)
-              versions.push({
-                    frontend_id: "version_" + makeid(5),
-                    text: content+" "+response.data.response,
-                  });
-              // console.log('is it working?', response.data)
-              // response.on('data', (chunk) => {
-              //   message += chunk.data.response;
-
-              // });
-
-              // response.on('end', () => {
-              //   // logic for stream complete
-              //   versions.push({
-              //     frontend_id: "version_" + makeid(5),
-              //     text: content+" "+message,
-              //   });
-              //   console.log(versions)
-              // });
-
-            });
-
-            // }).catch(error => console.error('Error fetching suggestion:', error));
-            // const suggestion = await fetchSuggestion(content);
-            // if (suggestion) {
-            //   versions.push({
-            //     frontend_id: "version_" + makeid(5),
-            //     text: content+" "+suggestion,
-            //   });
-            // }
-
-          }
-
           const newChunk = {
             frontend_id: chunkId,
-            versions: versions,
-            // [
-            //   {
-            //     frontend_id: "version_" + makeid(5),
-            //     text: content,
-            //   },
+            versions: [
+              {
+                frontend_id: "version_" + makeid(5),
+                text: content,
+              },
               // {
               //   frontend_id: "version_" + makeid(5),
               //   text: content,
               // },
-            // ],
+            ],
           };
           setCurrentDocument((prevDocument) => {
             return {
@@ -328,9 +277,179 @@ export default function DocumentContainer() {
         setActiveChunkid(newChunks[0].frontend_id);
         console.log(newChunks.length + " Chunks Created");
       };
+      
+      const createChunksFromFactorCont = async(factorId) => {
+        const factorChunks = getChunksFromFactorId(factorId);
+        const newChunks = [];
+        // let maintext = "";
+        for (const chunk of factorChunks) {
+          const chunkId = "chunk_" + makeid(5);
+          chunk.setAttribute("id", chunkId);
+          const content = chunk.innerHTML;
+         
+          const newChunk = {
+            frontend_id: chunkId,
+            versions: [
+              {
+                frontend_id: "version_" + makeid(5),
+                text: content,
+              },
+              // {
+              //   frontend_id: "version_" + makeid(5),
+              //   text: content,
+              // },
+            ],
+          };
+          setCurrentDocument((prevDocument) => {
+            return {
+              ...prevDocument,
+              chunks: [...prevDocument.chunks, newChunk],
+            };
+          });
+          const versionAIndex = 0; //A=0, B=1 in the versions array
+          setActiveVersionIds((prevActiveVersionIds) => ({
+            ...prevActiveVersionIds,
+            [chunkId]: newChunk.versions[versionAIndex].frontend_id,
+          }));
+          
+          newChunks.push(newChunk);
+        }
+        const chunkId = newChunks[0].frontend_id;
+
+        // if (genType === "continuation") {
+        //   console.log('fetching suggestions', genType);
+      
+          let maintext = newChunks[0].versions[0].text + " ";
+      
+          fetchEventSource(backendUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              prompt: `You are given a text input in YAML, generate the continuation for it in MAX 3-5 WORDS. Maintain the source language of the input text in the output\n
+              - text: ${newChunks[0].versions[0].text}\n
+              - output:`,
+              stream: true,
+            }),
+            onopen(response) {
+              console.log("Connection opened.");
+            },
+            onmessage(event) {
+              // console.log(`Received data: ${event.data}`);
+              maintext += event.data;
+              tinymce.activeEditor.dom.setHTML(newChunks[0].frontend_id, maintext);
+            },
+            onclose() {
+              console.log("Stream ended.");
+              const chunkIndex = newChunks.findIndex(chunk => chunk.frontend_id === newChunks[0].frontend_id);
+              const newVersionId = "version_" + makeid(5);
+              if (chunkIndex !== -1) {
+                newChunks[chunkIndex].versions.push({
+                  frontend_id: newVersionId,
+                  text: maintext,
+                });
+
+                
+              } else {
+                // If the chunk doesn't exist, create a new one with the new version
+                newChunks.push({
+                  frontend_id: newChunks[0].frontend_id,
+                  versions: [
+                    {
+                      frontend_id: newVersionId,
+                      text: maintext,
+                    },
+                  ],
+                });
+              }
+              // const versionAIndex = 1; //A=0, B=1 in the versions array
+              setActiveVersionIds((prevActiveVersionIds) => ({
+                ...prevActiveVersionIds,
+                [chunkId]: newVersionId,
+              }));
+          addChunks(currentDocument._id, newChunks)
+          .then(() => console.log("Chunk created in backend"))
+          .catch((error) =>
+            console.error("Failed to create chunk in backend:", error)
+          );
+        setActiveChunkid(newChunks[0].frontend_id);
+        console.log(newChunks.length + " Chunks Created");
+            },
+            onerror(err) {
+              console.error("Error occurred:", err);
+            },
+          });
+        // }
+
+
+        // if (genType === "continuation") {
+        //   console.log('fetching suggestions', genType);
+        //   const response = await apiClient.post("/chatGPT/chat", {
+        //     // model: "nous-hermes2:latest",
+        //     // stream: true,
+        //     prompt: `You are given a text input in YAML, generate the continuation for it in MAX 3-5 WORDS. Maintain the source language of the input text in the output\n
+        //     - text: ${newChunks[0].versions[0].text}\n
+        //     - output:`
+        //   },
+        //   {
+        //     responseType: 'stream'
+        //   });
+        //   let maintext = newChunks[0].versions[0].text + " ";
+        //   response.data.on('data', (data) => {
+        //     console.log(`Received data: ${data}`);
+        //     maintext += part.response;
+        //     tinymce.activeEditor.dom.setHTML(newChunks[0].frontend_id, maintext);
+        //     // Process the data as needed
+        //   });
+        //   response.data.on('end', () => {
+        //     console.log("Stream ended.");
+        //     const chunkIndex = newChunks.findIndex(chunk => chunk.frontend_id === newChunks[0].frontend_id);
+        //   if (chunkIndex !== -1) {
+        //     newChunks[chunkIndex].versions.push({
+        //       frontend_id: "version_" + makeid(5),
+        //       text: maintext,
+        //     });
+        //   } else {
+        //     // If the chunk doesn't exist, create a new one with the new version
+        //     newChunks.push({
+        //       frontend_id: chunkId,
+        //       versions: [
+        //         {
+        //           frontend_id: "version_" + makeid(5),
+        //           text: maintext,
+        //         },
+        //       ],
+        //     });
+        //   }
+        //   });
+        //   response.data.on('error', (err) => {
+        //     console.error("Error occurred:", err);
+        //   });
+          
+        //   // for await (const part of response) {
+        //   //   maintext += part.response;
+        //   //   // console.log(maintext);
+
+        //   //   // Update the DOM in real-time
+        //   //   tinymce.activeEditor.dom.setHTML(newChunks[0].frontend_id, maintext);
+        //   // }
+          
+        // }
+        
+        
+      };
       const factorId = "factor_" + makeid(5);
       createFactor(factorId);
-      createChunksFromFactor(factorId, genType);
+      if(genType === "continuation"){
+        console.log('called')
+        createChunksFromFactorCont(factorId);
+      }
+      else{
+        console.log('call?')
+        createChunksFromFactor(factorId);
+      }
+      
       // Update the document content with the new span
       const newContent = tinymce.activeEditor.getContent();
 
@@ -355,45 +474,7 @@ export default function DocumentContainer() {
     setChunksVisbleInDocument(getVisibleChunkIds());
   };
 
-  const fetchSuggestion = async (text) => {
-    try {
-      console.log('fetching suggestions2');
-
-      const response = await chatgptClient.post('/generate', {
-        model: "nous-hermes2:latest",
-        stream: false,
-        prompt: `You are given a text input in YAML, generate the continuation for it in MAX 3 WORDS. Maintain the source language of the input text in the output\n
-        - text: ${text}\n
-        - output:`
-      }, {
-        responseType: 'stream',
-      });
   
-      const stream = response.response;
-      let suggestion = '';
-  
-      stream.on('data', (chunk) => {
-        const message = chunk.toString();
-        console.log('message suggestion:', message);
-        suggestion += message;
-      });
-  
-      stream.on('end', () => {
-        console.log('Suggestionssss:', suggestion);
-        return suggestion; // Assuming the backend sends the suggestion in the 'suggestion' field
-      });
-  
-      stream.on('error', (error) => {
-        console.error("Error occurred during streaming:", error);
-        throw error;
-      });
-  
-      
-    } catch (error) {
-      console.error("Error fetching suggestion:", error);
-      return null;
-    }
-  };
 
   const getVisibleChunkIds = () => {
     let visibleChunkIds = [];
@@ -547,19 +628,110 @@ export default function DocumentContainer() {
 
       // console.log("FOLLOWUP:");
       // console.log(followup);
+    //   let responseText = ""
+    //   const response = await ollama.generate({
+    //     model: "nous-hermes2:latest",
+    //     stream: true,
+    //     prompt: `You are given two types of information in YAML, original text and a modification requirement. Apply the modification to the input text and print the output. Do not provide anything else in the output. Maintain the source language of the input text in the output\n
+    //     - text: ${element.innerHTML}\n
+    //     - modification: ${prompt}\n
+    //     - output:`
+    //   })
+    //   // .then(response => {
+    //     // conso
+    //     for await (const part of response) {
+    //       responseText += part.response;
+    //       tinymce.activeEditor.dom.setHTML(
+    //         element,
+    //         responseText
+    //       );
 
-      await chatgptClient.post('/generate', {
-        model: "nous-hermes2:latest",
-        stream: false,
+    // // console.log("Closing generated version stream!");
+    
+    //     }
+    let responseText = ""
+    fetchEventSource(backendUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         prompt: `You are given two types of information in YAML, original text and a modification requirement. Apply the modification to the input text and print the output. Do not provide anything else in the output. Maintain the source language of the input text in the output\n
-        - text: ${element.innerHTML}\n
-        - modification: ${prompt}\n
-        - output:`
-      }).then(response => {
-        // conso
-        console.log(response.data.response)
-          const message = response.data.response.toString();
-          console.log(`generating version. Snippet received: ${message}`);
+         - text: ${element.innerHTML}\n
+         - modification: ${prompt}\n
+         - output:`,
+         stream: true,
+      }),
+      onopen(response) {
+        console.log("Connection opened.");
+      },
+      onmessage(event) {
+        // console.log(`Received data: ${event.data}`);
+        responseText += event.data;
+          tinymce.activeEditor.dom.setHTML(
+            element,
+            responseText
+          );
+      },
+      onclose() {
+        setDisablePopupToolbar(false);
+
+          const current_version =
+            tinymce.activeEditor.dom.get(activeChunkid).innerHTML; // FIXME: for some reason leaving this name unimported is actually the way to keep the app working?
+          const versionId = createVersion(chunkId, current_version);
+          setCurrentDocument((prevDocument) => {
+            const updatedChunks = prevDocument.chunks.map((chunk) => {
+              if (chunk.frontend_id === activeChunkid) {
+                const updatedVersions = chunk.versions.map((version) => {
+                  if (version.frontend_id === versionId) {
+                    return { ...version, text: current_version };
+                  }
+                  return version;
+                });
+
+                return { ...chunk, versions: updatedVersions };
+              }
+              return chunk;
+            });
+
+            return {
+              ...prevDocument,
+              chunks: updatedChunks,
+            };
+          });
+
+      },
+      onerror(err) {
+        console.error("Error occurred:", err);
+        throw err;
+      },
+    });
+    //     setDisablePopupToolbar(false);
+
+    // const current_version = tinymce.activeEditor.dom.get(activeChunkid).innerHTML;
+    // const versionId = createVersion(chunkId, current_version);
+    // setCurrentDocument((prevDocument) => {
+    //   const updatedChunks = prevDocument.chunks.map((chunk) => {
+    //     if (chunk.frontend_id === activeChunkid) {
+    //       const updatedVersions = chunk.versions.map((version) => {
+    //         if (version.frontend_id === versionId) {
+    //           return { ...version, text: current_version };
+    //         }
+    //         return version;
+    //       });
+
+    //       return { ...chunk, versions: updatedVersions };
+    //     }
+    //     return chunk;
+    //   });
+
+    //   return {
+    //     ...prevDocument,
+    //     chunks: updatedChunks,
+    //   };
+    // });
+          // const message = response.response.toString();
+          // console.log(`generating version. Snippet received: ${message}`);
       
           // if (message.includes("><") || message.includes("></")) {
           //   console.log("CASE 1");
@@ -607,38 +779,9 @@ export default function DocumentContainer() {
           //   }
           // }
 
-          tinymce.activeEditor.dom.setHTML(
-                  element,
-                  message
-                );
-      
-          console.log("Closing generated version stream!");
-          setDisablePopupToolbar(false);
-      
-          const current_version = tinymce.activeEditor.dom.get(activeChunkid).innerHTML;
-          const versionId = createVersion(chunkId, current_version);
-          setCurrentDocument((prevDocument) => {
-            const updatedChunks = prevDocument.chunks.map((chunk) => {
-              if (chunk.frontend_id === activeChunkid) {
-                const updatedVersions = chunk.versions.map((version) => {
-                  if (version.frontend_id === versionId) {
-                    return { ...version, text: current_version };
-                  }
-                  return version;
-                });
-      
-                return { ...chunk, versions: updatedVersions };
-              }
-              return chunk;
-            });
-      
-            return {
-              ...prevDocument,
-              chunks: updatedChunks,
-            };
-          });
+          
      
-      });
+      // });
     
       // Handle real-time updates using axios for streaming
       // const response = await axios.get('/chatgpt_api/generate', {

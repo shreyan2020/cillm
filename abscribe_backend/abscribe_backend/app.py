@@ -17,6 +17,10 @@ from flask_cors import CORS
 from abscribe_backend.database.mongo_connection import db
 from abscribe_backend.models.chunk import Chunk
 from abscribe_backend.models.document import Document
+
+import abscribe_backend.services.chatgpt_service as chatgpt_service
+
+
 # from abscribe_backend.models.keylogger import KeyloggerActivity
 
 
@@ -291,32 +295,62 @@ def remove_version_route(
     else:
         return jsonify({"error": "Version not found"}), 404
 
-
 # @app.route("/api/chatGPT/chat", methods=['POST'])
 # def generate_text():
 #     data = request.get_json()
 #     prompt = data['prompt']
-#     print('hello',prompt)
-#     chat_stream = gpt_service.get_chat(prompt)
-#     print(chat_stream)
-#     def stream_chat():
-#         for chunk in chat_stream:
-#             try:
-#                 # content = chunk['choices'][0]['delta']['content']
-#                 content = chunk
-#                 newline = "\n"
-#             except KeyError:
-#                 content = ''
-#             # 'data:' and newlines format each text block as a new server sent event. See the documentation on MDN.
-#             yield f"data: {content}\n\n"
-#             # Start a new paragraph if we see a newline.
-#             # if '\n' in content:
-#             #     if not tab and not lst:
-#             #         yield f"data: <br/><br/>\n\n"
-#             #     else:
-#             #         yield f"data: \n\n"
+#     messages = [
+#         {
+#             'role': 'user',
+#             'content': prompt,
+#         }
+#     ]
 
-#     return app.response_class(stream_chat(), mimetype="text/event-stream")
+#     async def async_stream_chat():
+#         async for part in ollamaClient.chat(model='llama3', messages=messages, stream=True):
+#             content = part['message']['content']
+#             yield f"data: {content}\n\n"
+
+#     def sync_stream_chat():
+#         loop = asyncio.new_event_loop()
+#         asyncio.set_event_loop(loop)
+#         async_gen = async_stream_chat()
+#         try:
+#             while True:
+#                 yield loop.run_until_complete(async_gen.__anext__())
+#         except StopAsyncIteration:
+#             pass
+
+#     return Response(sync_stream_chat(), mimetype="text/event-stream")
+
+# @app.route("/api/chatGPT/chat", methods=['POST'])
+@app.route("/api/chatGPT/chat", methods=['POST'])
+def generate_text():
+    data = request.get_json()
+    prompt = data.get('prompt')
+    stream = data.get('stream', False)
+    print('hello', stream)
+    chat_stream = chatgpt_service.get_chat(prompt, stream)
+    
+    if stream:
+        def stream_chat():
+            for chunk in chat_stream:
+                try:
+                    content = chunk['response']
+                except KeyError:
+                    content = ''
+                yield f"data: {content}\n\n"
+                if '\n' in content:
+                    yield f"data: \n\n"
+        return app.response_class(stream_chat(), mimetype="text/event-stream")
+    else:
+        # content = ""
+        # for chunk in chat_stream:
+        #     try:
+        #         content += chunk['response']
+        #     except KeyError:
+        #         continue
+        return jsonify({'response': chat_stream['response']})
 
 # def extract_relevant_text(output_text):
 #     pattern = re.compile(r'\[\/INST\](.*?)<\/s>', re.DOTALL)

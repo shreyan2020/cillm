@@ -13,9 +13,12 @@ services:
     environment:
       - MONGO_PORT=27017
       - MONGO_HOST=mongodb
-      - FLASK_ENV=production # Set Flask environment to production
+      - FLASK_ENV=production
+      - OLLAMA_HOST=http://ollama:11434 # Set Flask environment to production
     ports:
       - "8080:8080"
+    depends_on:
+      - ollama
 
   ollama:
     container_name: ollama

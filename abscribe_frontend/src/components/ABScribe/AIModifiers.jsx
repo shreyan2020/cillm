@@ -16,7 +16,7 @@ import useLLM from "usellm";
 import "../../scss/aimodifiers.scss";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { useParams } from "react-router-dom";
-import { chatgptClient } from "../../services/abscribeAPI";
+import { apiClient } from "../../services/abscribeAPI";
 
 const PopUp = ({ message, onNext, onPrev }) => {
   return (
@@ -49,22 +49,37 @@ export default function AIModifiers({
   setLlmStreaming,
   generateVersion,
 }) {
-  let currentDocumentId = useParams();
+  let { documentId: currentDocumentId } = useParams();
 
-  //LLM Integration
-  const llm = useLLM({ serviceUrl: "https://usellm.org/api/llm" });
+  const backendUrl = import.meta.env.VITE_BACKEND_URL + "chatGPT/chat";
+
   const aiInputRef = useRef(null);
   const recipesEndRef = useRef(null);
 
   const [allowRecipeEdit, setAllowRecipeEdit] = useState(false);
   const [showRecipes, setShowRecipes] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
+  // const [filteredRecipes, setFilteredRecipes] = useState([]);
 
   const popUpSteps = [
     { message: "Click on the first button", buttonIndex: 0 },
     { message: "Now click on the second button", buttonIndex: 1 },
     // Add more steps as needed
   ];
+
+  const defaultHomeDocumentId = '664fbacdb138bf10f0025813';
+
+  // useEffect(() => {
+  //   const filterRecipes = () => {
+  //     const filtered = llmRecipes.filter(recipe => {
+  //       const homeDocumentIdObj = JSON.parse(recipe.home_document_id.replace(/'/g, '"'));
+  //       return homeDocumentIdObj.documentId === defaultHomeDocumentId || homeDocumentIdObj.documentId === currentDocumentId;
+  //     });
+  //     setFilteredRecipes(filtered);
+  //   };
+
+  //   filterRecipes();
+  // }, [llmRecipes, currentDocumentId]);
 
   const handleNextStep = () => {
     setCurrentStep((prevStep) => prevStep + 1);
@@ -88,7 +103,6 @@ export default function AIModifiers({
     const recipeId = "recipe_" + makeid(5);
     let recipeObject = { frontend_id: recipeId, name: name, prompt: prompt };
     setLlmRecipes((prevState) => {
-      console.log(`prevstate is: ${prevState}`);
       return [...prevState, recipeObject];
     });
     recipeService.createRecipe(recipeId, name, prompt, currentDocumentId); // actually put this stuff in the back-end.
@@ -98,11 +112,9 @@ export default function AIModifiers({
   const editRecipe = (recipeId, name, prompt) => {
     const editedRecipes = llmRecipes.map((recipe) => {
       if (recipe.frontend_id === recipeId) {
-        // Edit recipe with recipeId
         recipeService.updateRecipe(recipeId, name, prompt);
         return { frontend_id: recipeId, name: name, prompt: prompt };
       } else {
-        // The rest haven't changed
         return recipe;
       }
     });
@@ -149,7 +161,6 @@ export default function AIModifiers({
     if (recipeIndex !== -1) {
       return llmRecipes[recipeIndex];
     } else {
-      // If it's not in local memory, it's probably in the database.
       return recipeService.getRecipe(recipeId);
     }
   };
@@ -157,10 +168,13 @@ export default function AIModifiers({
   const saveRecipeNameChange = (newName, recipe) => {
     editRecipe(recipe.frontend_id, newName, recipe.prompt);
   };
+
   const cancelRecipeNameChange = () => {};
+
   const saveRecipePromptChange = (newPrompt, recipe) => {
     editRecipe(recipe.frontend_id, recipe.name, newPrompt);
   };
+
   const cancelRecipePromptChange = () => {};
 
   function removeQuotations(text) {
@@ -182,13 +196,9 @@ export default function AIModifiers({
   async function getRecipeNameFromPrompt(prompt) {
     let keyword = "";
 
-    // Initial POST request using axios
-    
-    try{
-    console.log('keyword is', keyword)
-      await chatgptClient.post('/generate', {
-      model: "nous-hermes2:latest",
-      prompt: `Summarize the text in the angle brackets in 1 to 3 words. Make sure this summary best captures the meaning and essence of the text delimited by the angle brackets, so the output can easily be linked to the original text.
+    try {
+      const response = await apiClient.post("chatGPT/chat", {
+        prompt: `Summarize the text in the angle brackets in 1 to 3 words. Make sure this summary best captures the meaning and essence of the text delimited by the angle brackets, so the output can easily be linked to the original text.
                       Try to keep the output to as few words as possible, but prioritize the clarity of the output over everything else.
                       However, if a verb is included in your output, try to keep the output at only 1 word.
                       Some examples of ideal summaries are delimited by the triple hashtags:
@@ -208,38 +218,15 @@ export default function AIModifiers({
                       Before outputting, check to make sure nothing before this line of text is outputted!
                       <${prompt}>
                       `,
-      stream: false,
-    }).then(response => {
-      // response.response.on('data', (chunk) => {
-      //   console.log('message is', message)
-      //   keyword += message;
-      // })
-      // stream.on('end', () => {
-      //   console.log(`Keyword found: ${keyword}`);
-      // });
-      // stream.on('error', (error) => {
-      //   console.error("Error occurred during streaming:", error);
-      // });
-      
-      keyword += response.data.response;
-      console.log('message is', keyword)
+        stream: false,
+      });
 
-    });
-  
-    // const stream = response.response;
-  
-    // stream.on('data', (chunk) => {
-    //   const message = chunk.toString();
-    //   console.log('message is', message)
-    //   keyword += message;
-    // });
-  
-  
-  } catch (error) {
-    console.error("Something went wrong!", error);
-  }
+      keyword = response.data.response;
+      console.log('Keyword found:', keyword);
+    } catch (error) {
+      console.error("Something went wrong!", error);
+    }
 
-    
     const result = removeQuotations(keyword);
     return result;
   }
@@ -344,15 +331,13 @@ export default function AIModifiers({
                                   allowEdit={allowRecipeEdit}
                                   type="text"
                                   onSave={(newName) => {
-                                    if (newName != "") {
+                                    if (newName !== "") {
                                       saveRecipeNameChange(newName, recipe);
                                     }
                                   }}
                                   onCancel={cancelRecipeNameChange}
                                   saveButtonLabel="Save"
                                   cancelButtonLabel="Cancel"
-                                  // hideSaveButton={true}
-                                  // hideCancelButton={true}
                                   value={recipe.name}
                                   placeholder={"recipe name"}
                                   buttonsPosition={"after"}
@@ -374,8 +359,6 @@ export default function AIModifiers({
                                   onCancel={cancelRecipePromptChange}
                                   saveButtonLabel="Save"
                                   cancelButtonLabel="Cancel"
-                                  // hideSaveButton={true}
-                                  // hideCancelButton={true}
                                   value={recipe.prompt}
                                   buttonsPosition={"after"}
                                   placeholder={"recipe prompt"}
@@ -402,7 +385,7 @@ export default function AIModifiers({
                                   size="sm"
                                   onClick={() => {
                                     deleteRecipe(recipe.frontend_id);
-                                    if (activeLlmRecipe == recipe.frontend_id) {
+                                    if (activeLlmRecipe === recipe.frontend_id) {
                                       setActiveLlmRecipe("");
                                       setLlmPrompt("");
                                     }
@@ -425,7 +408,7 @@ export default function AIModifiers({
                     {llmRecipes.map((recipe, index) => (
                       <Button
                         className="text-truncate me-1 mb-1"
-                        // style={{ maxWidth: "150px" }}
+                        key={index}
                         size="sm"
                         variant="outline-dark"
                         onClick={() => {
@@ -440,7 +423,6 @@ export default function AIModifiers({
                 {allowRecipeEdit ? (
                   <>
                     <div className="text-center">
-                      {" "}
                       <Button
                         variant="light"
                         className="mb-1"
