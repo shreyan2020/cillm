@@ -1,0 +1,16 @@
+/* src/scss/carousel-custom.css */
+.carousel-caption-top {
+    position: absolute;
+    // top: 0;
+    // bottom: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    text-align: center;
+    z-index: 10;
+  }
+  
+  .carousel-img {
+    max-height: 500px;
+    object-fit: contain;
+  }
+  

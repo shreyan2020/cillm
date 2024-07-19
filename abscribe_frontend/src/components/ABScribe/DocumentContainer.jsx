@@ -14,7 +14,6 @@ import VanillaEditor from "./VanillaEditor";
 // import { apiClient } from "../../services/abscribeAPI";
 import "../../scss/documentcontainer.scss";
 import NavHeader from "../Header/NavHeader";
-// import { Ollama } from 'ollama';
 import {
   getChunks,
   addChunk,
@@ -83,7 +82,7 @@ export default function DocumentContainer() {
   // console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL);
   const backendUrl = import.meta.env.VITE_BACKEND_URL + "chatGPT/chat"
   // console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL);
-  // const ollama = new Ollama({ host: import.meta.env.VITE_OLLAMA_URL });
+
 
   // States for LLM Recipes
   const [recipeResult, setRecipeResult] = useState("");
@@ -582,73 +581,7 @@ export default function DocumentContainer() {
     let htmlText = "";
 
     try {
-      // console.log("START INDEX");
-      // console.log(checkCompletenessStart());
-      // console.log("END INDEX");
-      // console.log(checkCompletenessEnd());
-      // console.log(getStartWord());
-      // console.log(getEndWord());
-
-      // const startBool = checkCompletenessStart();
-      // const endBool = checkCompletenessEnd();
-      // const startWord = getStartWord();
-      // const endWord = getEndWord();
-
-      // let followup = "";
-      // let punctiation = "";
-
-      // if (startBool && endBool) {
-      //   followup = "There are no incomplete words in the text originally in the triple tildes, apply the user command to the entire text in the triple tildes."
-      // }
-      // else if (startBool && !endBool) {
-      //   followup = `Since ${endWord} is an incomplete word, your output should end exactly with ${endWord} and the user request should only be applied to the text before ${endWord} from the previous system message.`
-      // }
-      // else if (!startBool && endBool) {
-      //   followup = `Since ${startWord} is an incomplete word, your output should start with exactly ${startWord} and the user request should only be applied to the text after ${startWord} from the previous system message.`
-      // }
-      // else {
-      //   followup = `Since ${startWord} and ${endWord} are incomplete words, your output should start with exactly ${startWord} and end in ${endWord} and the user request should only be applied to the text after ${startWord} and before ${endWord} from the previous system message.`
-      // }
-
-      // if (element.innerText.length > 0 && /[A-Z]/.test(element.innerText[0])) {
-      //   followup += " Be sure to start your output with a capital letter."
-      // }
-      // else if (element.innerText.length > 0 && /[a-z]/.test(element.innerText[0])) {
-      //   followup += " Be sure to start your output with a lowercase letter."
-      // }
-      // if (/.*[.,;:!?]$/.test(element.innerText)) {
-      //   punctiation = element.innerText[element.innerText.length - 1];
-      // }
-      // if (punctiation.length > 0) {
-      //   followup += ` Make sure your output ends in the punctuation mark: ${punctiation}`
-      // }
-      // else {
-      //   followup += " Make sure your output DOES NOT end in a punctuation mark."
-      // }
-
-      // console.log("FOLLOWUP:");
-      // console.log(followup);
-    //   let responseText = ""
-    //   const response = await ollama.generate({
-    //     model: "nous-hermes2:latest",
-    //     stream: true,
-    //     prompt: `You are given two types of information in YAML, original text and a modification requirement. Apply the modification to the input text and print the output. Do not provide anything else in the output. Maintain the source language of the input text in the output\n
-    //     - text: ${element.innerHTML}\n
-    //     - modification: ${prompt}\n
-    //     - output:`
-    //   })
-    //   // .then(response => {
-    //     // conso
-    //     for await (const part of response) {
-    //       responseText += part.response;
-    //       tinymce.activeEditor.dom.setHTML(
-    //         element,
-    //         responseText
-    //       );
-
-    // // console.log("Closing generated version stream!");
-    
-    //     }
+      
     let responseText = ""
     fetchEventSource(backendUrl, {
       method: "POST",
