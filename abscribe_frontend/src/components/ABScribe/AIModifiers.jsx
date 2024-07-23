@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import EasyEdit from "react-easy-edit";
 import CloseButton from "react-bootstrap/CloseButton";
 import Collapse from "react-bootstrap/Collapse";
@@ -6,6 +6,10 @@ import TextareaAutosize from "react-textarea-autosize";
 import { recipeService } from "../../services/recipeService";
 import { Button, Card, Badge, ListGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Steps } from 'intro.js-react';
+import 'intro.js/introjs.css';
+
+
 import {
   faMagicWandSparkles,
   faTrashAlt,
@@ -17,16 +21,8 @@ import "../../scss/aimodifiers.scss";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { useParams } from "react-router-dom";
 import { apiClient } from "../../services/abscribeAPI";
+import { TaskContext } from '../../context/TaskContext';
 
-const PopUp = ({ message, onNext, onPrev }) => {
-  return (
-    <div className="popup">
-      <p>{message}</p>
-      <button onClick={onPrev}>Previous</button>
-      <button onClick={onNext}>Next</button>
-    </div>
-  );
-};
 
 export default function AIModifiers({
   selectVersions,
@@ -48,8 +44,13 @@ export default function AIModifiers({
   llmStreaming,
   setLlmStreaming,
   generateVersion,
+  currentDocument,
+  stepsEnabled
 }) {
+
   let { documentId: currentDocumentId } = useParams();
+  // const [stepsEnabled, setStepsEnabled] = useState(false);
+
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL + "chatGPT/chat";
 
@@ -59,41 +60,74 @@ export default function AIModifiers({
   const [allowRecipeEdit, setAllowRecipeEdit] = useState(false);
   const [showRecipes, setShowRecipes] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
-  // const [filteredRecipes, setFilteredRecipes] = useState([]);
-
-  const popUpSteps = [
-    { message: "Click on the first button", buttonIndex: 0 },
-    { message: "Now click on the second button", buttonIndex: 1 },
-    // Add more steps as needed
+  const [filteredRecipes, setFilteredRecipes] = useState([]);
+  const { logButtonClick, logGeneratedContent } = useContext(TaskContext);
+  const steps = [
+    {
+      element: '.intro-step1',
+      intro: 'Click this button to generate the first version.',
+      position: 'right'
+    },
+    {
+      element: '.intro-step2',
+      intro: 'Click this button to generate the second version.',
+      position: 'right'
+    },
+    {
+      element: '.intro-step3',
+      intro: 'Click this button to generate the third version.',
+      position: 'right'
+    },
+    {
+      element: '.intro-step4',
+      intro: 'Click this button to generate the fourth version.',
+      position: 'right'
+    },
+    {
+      element: '.intro-step5',
+      intro: 'Click this button to generate the fifth version.',
+      position: 'right'
+    },
+    {
+      element: '.intro-step6',
+      intro: 'Click this button to generate the sixth version.',
+      position: 'right'
+    }
   ];
-
+  // useEffect(() => {
+  //   console.log('Current Document:', currentDocument);
+  //   if (currentDocument?.task_id === "sandbox") {
+  //     setStepsEnabled(true);
+  //   } else {
+  //     setStepsEnabled(false);
+  //   }
+  //   console.log('setsds', stepsEnabled)
+  // }, [currentDocument]);
+  
   const defaultHomeDocumentId = '664fbacdb138bf10f0025813';
 
-  // useEffect(() => {
-  //   const filterRecipes = () => {
-  //     const filtered = llmRecipes.filter(recipe => {
-  //       const homeDocumentIdObj = JSON.parse(recipe.home_document_id.replace(/'/g, '"'));
-  //       return homeDocumentIdObj.documentId === defaultHomeDocumentId || homeDocumentIdObj.documentId === currentDocumentId;
-  //     });
-  //     setFilteredRecipes(filtered);
-  //   };
+  useEffect(() => {
+    const filterRecipes = () => {
+      const filtered = llmRecipes.filter(recipe => {
+        const homeDocumentIdObj = JSON.parse(recipe.home_document_id.replace(/'/g, '"'));
+        return homeDocumentIdObj.documentId === defaultHomeDocumentId || homeDocumentIdObj.documentId === currentDocumentId;
+      });
+      setFilteredRecipes(filtered);
+      console.log(filteredRecipes)
+    };
 
-  //   filterRecipes();
-  // }, [llmRecipes, currentDocumentId]);
+    filterRecipes();
+  }, [llmRecipes, currentDocumentId]);
 
-  const handleNextStep = () => {
-    setCurrentStep((prevStep) => prevStep + 1);
-  };
 
-  const handlePrevStep = () => {
-    setCurrentStep((prevStep) => (prevStep > 0 ? prevStep - 1 : 0));
-  };
 
   useEffect(() => {
     if (!allowRecipeEdit) {
       scrollToBottom();
     }
   }, [llmRecipes]);
+
+// console.log('asdsds',stepsEnabled)
 
   const scrollToBottom = () => {
     recipesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -255,15 +289,22 @@ export default function AIModifiers({
     if (!activeLlmRecipe) {
       getRecipeNameFromPrompt(llmPrompt).then((name) => {
         createRecipe(name, llmPrompt).frontend_id;
+        logButtonClick(`Recipe Created: ${recipeId}`);
       });
     }
-
-    generateVersion(activeChunkid, llmPrompt);
+    logButtonClick(`${llmPrompt}`);
+    generateVersion(activeChunkid, llmPrompt, "newly created recipe");
     setLlmStreaming(false);
     setLlmPrompt("");
     setActiveLlmRecipe("");
     setShowRecipes(true);
   }
+
+  const handleRecipeButtonClick = (recipeId, prompt, name) => {
+    // Update the clicked recipes state
+    logClickedRecipe(recipeId);  // Use the context method to log the click
+    generateVersion(activeChunkid, prompt, name);
+  };
 
   const handleAddLLMVersionClick = () => {
     const versionId = createVersion(activeChunkid, llmResult);
@@ -278,6 +319,14 @@ export default function AIModifiers({
 
   return activeChunkid && activeVersionIds[activeChunkid] ? (
     <Card className="border-0">
+      {stepsEnabled && (
+        <Steps
+          enabled={stepsEnabled}
+          steps={steps}
+          initialStep={0}
+          onExit={() => setStepsEnabled(false)}
+        />
+      )}
       <div className="d-grid gap-2 px-3 pt-3">
         {selectVersions ? (
           <>
@@ -407,12 +456,14 @@ export default function AIModifiers({
                   <>
                     {llmRecipes.map((recipe, index) => (
                       <Button
-                        className="text-truncate me-1 mb-1"
+                        className={`text-truncate me-1 mb-1 intro-step${index + 1}`}
                         key={index}
                         size="sm"
                         variant="outline-dark"
                         onClick={() => {
-                          generateVersion(activeChunkid, recipe.prompt);
+                          generateVersion(activeChunkid, recipe.prompt, recipe.name);
+                          logButtonClick(`${recipe.frontend_id}`);
+                          // handleRecipeButtonClick(recipe.frontend_id, recipe.prompt, recipe.name)
                         }}
                       >
                         {recipe.name}
@@ -420,7 +471,7 @@ export default function AIModifiers({
                     ))}
                   </>
                 )}
-                {allowRecipeEdit ? (
+                {/* {allowRecipeEdit ? (
                   <>
                     <div className="text-center">
                       <Button
@@ -464,7 +515,7 @@ export default function AIModifiers({
                       )}
                     </Button>
                   </>
-                )}
+                )} */}
               </div>
             </Collapse>
           </>
@@ -500,6 +551,7 @@ export default function AIModifiers({
             <FontAwesomeIcon icon={faMagicWandSparkles} />
           </Button>
         </div>
+        
       </Card.Footer>
     </Card>
   ) : (

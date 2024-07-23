@@ -5,10 +5,14 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
+import TutorialModal from "./TutorialModal";
+import { Button } from "react-bootstrap";
+
+import { ButtonGroup } from "react-bootstrap";
 
 import { Editor as TinyEditor } from "@tinymce/tinymce-react";
-import useLLM from "usellm";
-import parse from "html-react-parser";
+// import useLLM from "usellm";
+// import parse from "html-react-parser";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import PlaceHolder from "../../resources/placeHolderImg.png";
 import { apiClient } from "../../services/abscribeAPI";
@@ -34,7 +38,7 @@ import {
   updateVersion,
   removeVersion,
 } from "../../services/versionService";
-import { ButtonGroup } from "react-bootstrap";
+
 
 function AIVisor({ llmOutput }) {
   return (
@@ -100,11 +104,16 @@ export default function Editor({
   const { documentId } = useParams();
 
   //LLM Integration
-  const llm = useLLM({ serviceUrl: "https://usellm.org/api/llm" });
+  // const llm = useLLM({ serviceUrl: "https://usellm.org/api/llm" });
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL + "chatGPT/chat"
   //Task Context
-  const { taskID, prolificID, addCompletedTask } = useContext(TaskContext);
+  const { taskID, prolificID, activityLog, addCompletedTask, logKeyPress, saveActivityLog } = useContext(TaskContext);
+  const activityLogRef = useRef(activityLog);
+  const [showModal, setShowModal] = useState(false);
+  const [missingButtons, setMissingButtons] = useState([]);
+  const handleModalClose = () => setShowModal(false);
+
   //Refs
   const editorRef = useRef(null); //TinyMCE Editor
 
@@ -126,21 +135,39 @@ export default function Editor({
   const [inline, SetInline] = useState(true);
 
   const [value, setValue] = useState(currentDocument?.content ?? "");
-
-  const keylogRef = useRef([]);
-  const clickLogRef = useRef([]);
   
 
+  const keylogRef = useRef([]);
+  // const clickLogRef = useRef([]);
+  const requiredActions = [
+    { id: "CREATE VARIATION", name: "Create Variation" },
+    { id: "CREATE CONTINUATION", name: "Create Continuation" },
+    { id: "recipe_Gain_Anecdotal", name: "Gain Framing with Anecdotal Information" },
+    { id: "recipe_Loss_Anecdotal", name: "Loss Framing with Anecdotal Information" },
+    { id: "recipe_Gain_Statistics", name: "Gain Framing with Statistics" },
+    { id: "recipe_Loss_Statistics", name: "Loss Framing with Statistics" },
+    { id: "recipe_LongTerm", name: "Long-term Temporal Framing" },
+    { id: "recipe_ShortTerm", name: "Short-term Temporal Framing" }
+  ];
+  
 
-  const [items, setItems] = useState([
-    {
-      type: "menuitem",
-      text: "Menu item 1",
-      onAction: function () {
-        editor.insertContent(" <em>You clicked menu item 1!</em>");
-      },
-    },
-  ]);
+  useEffect(() => {
+    console.log('Editor mounted, context values:', { taskID, prolificID, activityLog });
+  }, [taskID, prolificID, activityLog]);
+
+  // Update the ref whenever activityLog changes
+  useEffect(() => {
+    activityLogRef.current = activityLog;
+  }, [activityLog]);
+  // const [items, setItems] = useState([
+  //   {
+  //     type: "menuitem",
+  //     text: "Menu item 1",
+  //     onAction: function () {
+  //       editor.insertContent(" <em>You clicked menu item 1!</em>");
+  //     },
+  //   },
+  // ]);
 
   useEffect(() => {
     if (activeChunkid === "") {
@@ -152,15 +179,16 @@ export default function Editor({
   }, [activeChunkid]);
 
   const handleKeydown = (e) => {
-    const newLogEntry = { key: e.key, timestamp: new Date() };
-    keylogRef.current = [...keylogRef.current, newLogEntry];
-    console.log('Updated keylogRef:', keylogRef.current);
+    // const newLogEntry = { key: e.key, timestamp: new Date() };
+    // keylogRef.current = [...keylogRef.current, newLogEntry];
+    logKeyPress(e.key);
+    // console.log('Updated keylogRef:', keylogRef.current);
   };
-  const handleClick = (e) => {
-    const newClickEntry = { element: e.target.tagName, id: e.target.id, className: e.target.className, timestamp: new Date() };
-    clickLogRef.current = [...clickLogRef.current, newClickEntry];
-    console.log('Updated clickLogRef:', clickLogRef.current);
-  };
+  // const handleClick = (e) => {
+  //   const newClickEntry = { element: e.target.tagName, id: e.target.id, className: e.target.className, timestamp: new Date() };
+  //   clickLogRef.current = [...clickLogRef.current, newClickEntry];
+  //   console.log('Updated clickLogRef:', clickLogRef.current);
+  // };
 
   useEffect(() => {
     if (llmStreaming && llmContinue && editorRef !== "") {
@@ -186,61 +214,6 @@ export default function Editor({
     }
   }, [llmResult, llmStreaming, llmContinue]);
 
-  // useEffect(() => {
-  //   if (
-  //     editorRef.current !== null &&
-  //     editorRef.current.editor !== undefined &&
-  //     inline
-  //   ) {
-  //     SetInline(false);
-  //     console.log(inline);
-  //     editorRef.current.editor.on("keydown", function (event) {
-  //       console.log(event.keyCode);
-  //       if (event.keyCode == "16") {
-  //         // 16 is for Shift, for TAB change to 9
-  //         let highlightedText = "";
-  //         const selectedText =
-  //           editorRef.current.editor.selection.getNode().innerHTML;
-  //         const match = selectedText.match(/\*(.*?)\*/g);
-  //         //console.log(selectedText)
-  //         //console.log(match)
-  //         if (match) {
-  //           highlightedText = match[0];
-  //           console.log(highlightedText);
-  //           console.log(highlightedText.replace(/<\/?[^>]+(>|$)/g, ""));
-  //           const node = editorRef.current.editor.selection.getNode();
-  //           const originalContent =
-  //             editorRef.current.editor.selection.getNode().innerHTML;
-  //           const modifiedText = highlightedText.replace(/<\/?[^>]+(>|$)/g, "");
-  //           const modifiedOriginalContent = originalContent.replace(
-  //             highlightedText,
-  //             modifiedText
-  //           );
-  //           console.log(modifiedOriginalContent);
-  //           const newContent = modifiedOriginalContent.replace(
-  //             modifiedText,
-  //             `<span class='inline-prompt'>${modifiedText.replace(
-  //               /\*/g,
-  //               ""
-  //             )}</span>`
-  //           );
-  //           console.log(newContent);
-  //           node.innerHTML = newContent;
-  //           //console.log(node)
-  //           const promptNode = node.querySelector(".inline-prompt");
-  //           const promptText = promptNode.textContent;
-  //           //console.log(promptText)
-  //           //console.log(promptNode)
-  //           getLLMResult(promptText, promptNode);
-
-  //           //event.preventDefault();
-  //         } else {
-  //           highlightedText = null;
-  //         }
-  //       }
-  //     });
-  //   }
-  // });
 
   useEffect(() => {
     if (llmImage !== "") {
@@ -251,26 +224,58 @@ export default function Editor({
       editorRef.current.editor.dom.remove("placeHolder");
     }
   }, [llmImage]);
+  // console.log('act',activityLog)
+  
 
   const handleSaveButtonClick = async (documentID) => {
+    const currentActivityLog = activityLogRef.current;
     console.log('task id', taskID, 'prolific id', prolificID);
-    const activityData = {
-      document_id: documentID, 
-      task_id: taskID,
-      prolific_id: prolificID,
-      key_log: keylogRef.current,
-      click_log: clickLogRef.current
-    };
-    console.log("Activity Data:", activityData);
+    console.log('Inside handleSaveButtonClick - activityLog:', currentActivityLog);
+  
     try {
-      await apiClient.post("/log_activity", activityData);
-      console.log("Activity logged successfully");
-      addCompletedTask(taskID);
-      navigate(`/questionnaire`);
+      if (currentDocument.task_id.startsWith("sandbox_task")) {
+        const missingActions = requiredActions.filter(
+          action => !currentActivityLog.buttonClicks.some(log => log.action === action.id)
+        );
+        const missingButtons = missingActions.map(action => action.name);
+        console.log(missingButtons);
+        // if (missingButtons.length > 0) {
+        //   setMissingButtons(missingButtons);
+        //   setShowModal(true);
+        //   return;
+        // }
+        const activityData = {
+          document_id: documentID,
+          task_id: currentDocument.task_id,
+          prolific_id: currentDocument.prolific_id,
+          activity_log: currentActivityLog // This includes all button clicks and generated content logs
+        };
+        console.log("Activity Data:", activityData);
+        await apiClient.post("/log_activity", activityData);
+        console.log("Activity logged successfully");
+        addCompletedTask(currentDocument.task_id);
+        setMissingButtons([]); // Reset missing buttons after successful save
+        navigate(`/task`);
+      } else {
+        const activityData = {
+          document_id: documentID,
+          task_id: currentDocument.task_id,
+          prolific_id: currentDocument.prolific_id,
+          activity_log: currentActivityLog // This includes all button clicks and generated content logs
+        };
+        console.log("Activity Data:", activityData);
+        await apiClient.post("/log_activity", activityData);
+        console.log("Activity logged successfully");
+        addCompletedTask(currentDocument.task_id);
+        navigate(`/questionnaire`);
+      }
     } catch (error) {
       console.error("Failed to log activity:", error);
     }
   };
+  
+  
+  
 
   const handleEditorClick = () => {
     const node = editorRef.current.editor.selection.getNode();
@@ -397,7 +402,7 @@ export default function Editor({
   };
 
 
-  async function getLLMResult(promptText, promptNode) {
+  async function getLLMResult(promptText, promptNode) {  
     function countTags(text) {
       var count = 0;
       var inTag = false;
@@ -405,17 +410,18 @@ export default function Editor({
         if (text[char] === '<') {
           inTag = true;
         }
-
+  
         if (inTag === false) {
           count = count + 1;
         }
-
+  
         if (text[char] === '>') {
           inTag = false;
         }
       }
       return count + 1;
     }
+    
     if (editorRef !== "") {
       try {
         console.log("Inside getLLMResult");
@@ -424,7 +430,7 @@ export default function Editor({
         const currPrompts = llmPromptsList;
         currPrompts.push(promptText);
         setLlmPromptsList(currPrompts);
-
+  
         const idArray = llmId;
         console.log(idArray);
         let index = -1;
@@ -437,7 +443,7 @@ export default function Editor({
         }
         llmId.push(index + 1);
         setLlmId(llmId);
-
+  
         if (promptText.includes("image") || promptText.includes("picture")) {
           editorRef.current.editor.selection.setContent(
             `<img id= 'placeHolder' src=${PlaceHolder} width="256" height="256">`
@@ -449,7 +455,7 @@ export default function Editor({
           setLlmImage("");
           setLlmContinue(true);
           setLlmResult("");
-
+  
           console.log(`PromptText before streaming: ${promptText}`);
           let entireText = tinymce.activeEditor.getContent();
           let cleanText = tinymce.activeEditor.getContent({ format: 'text' })
@@ -505,7 +511,7 @@ export default function Editor({
             },
              { role: "user", content: promptText}]
           }
-
+  
           // Set up an SSE Receiver, to prepare to get the stream.
           setLlmStreaming(true);
         
@@ -517,6 +523,10 @@ export default function Editor({
             body: JSON.stringify({
               prompt: promptText,
               stream: true,
+              feature: "@ai generation",
+              task_id: taskID,
+              original_text: promptText,
+              prolific_id: prolificID,
             }),
             // onopen(response) {
             //   console.log("Connection opened.");
@@ -531,91 +541,37 @@ export default function Editor({
             },
             onclose() {
               console.log("Closed the EventSource!");
-          setLlmStreaming(false);
-          const nodeArray = editorRef.current.editor.dom.select(".answer");
-          editorRef.current.editor.dom.removeClass(nodeArray, "answer");
-          editorRef.current.editor.dom.removeAllAttribs("llmresult");
-          editorRef.current.editor.dom.removeClass(
-            nodeArray,
-            "inline-prompt"
-          );
-
-          // This looks dumb but seems critical to the editor internal state updating correctly.
-          editorRef.current.editor.setContent(
-            editorRef.current.editor.getContent()
-          );
-
-          setLlmPrompt(promptText);
-          SetInline(true);
-          setLlmStopButtonVisible(false);
-          console.log(
-            `ChatGPT state when message was closed: ${llmResult}`
-          ); // this doesn't work.
-          console.log("Closed the message connection!");
-          console.log(inline);
-            
+              setLlmStreaming(false);
+              const nodeArray = editorRef.current.editor.dom.select(".answer");
+              editorRef.current.editor.dom.removeClass(nodeArray, "answer");
+              editorRef.current.editor.dom.removeAllAttribs("llmresult");
+              editorRef.current.editor.dom.removeClass(
+                nodeArray,
+                "inline-prompt"
+              );
+  
+              // This looks dumb but seems critical to the editor internal state updating correctly.
+              editorRef.current.editor.setContent(
+                editorRef.current.editor.getContent()
+              );
+  
+              setLlmPrompt(promptText);
+              SetInline(true);
+              setLlmStopButtonVisible(false);
+              console.log(
+                `ChatGPT state when message was closed: ${llmResult}`
+              ); // this doesn't work.
+              console.log("Closed the message connection!");
+              console.log(inline);
+  
+              // Log the generated content
+              logGeneratedContent("@ai generation", promptText, tinymce.activeEditor.dom.get('llmresult').innerHTML);
+                
             },
             onerror(err) {
               console.error("Error occurred:", err);
             },
           });
-          
-
-
-          // await fetchEventSource(`http://127.0.0.1:8080/chatGPT/chat`, {
-          //   method: "POST",
-          //   headers: {
-          //     "Content-Type": "application/json",
-          //   },
-          //   body: JSON.stringify({
-          //     messages: contextText,
-          //   }),
-          //   openWhenHidden: true, // Keep the stream going even if the document gets hidden for a second.
-          //   onmessage(message) {
-          //     console.log(`Received a snippet from chatGPT: ${message.data}`);
-          //     // console.log(tinymce.activeEditor.getContent());
-          //     // console.log(tinymce.activeEditor.dom.get('llmresult'));
-          //     if (promptText.includes("table") || promptText.includes("list")) {
-          //       setLlmResult((prev) => {
-          //         const gptState = prev + message.data;
-          //         console.log(`ChatGPT state: ${gptState}`);
-          //         return gptState;
-          //       });
-          //     }
-          //     else {
-          //       tinymce.activeEditor.dom.setHTML(
-          //         tinymce.activeEditor.dom.get('llmresult'),
-          //         tinymce.activeEditor.dom.get('llmresult').innerHTML + message.data
-          //       );
-          //     }
-          //   },
-          //   onclose() {
-          //     // Finishes updating the document with the generated content. Also does other teardown code to end the streaming process.
-          //     console.log("Closed the EventSource!");
-          //     setLlmStreaming(false);
-          //     const nodeArray = editorRef.current.editor.dom.select(".answer");
-          //     editorRef.current.editor.dom.removeClass(nodeArray, "answer");
-          //     editorRef.current.editor.dom.removeAllAttribs("llmresult");
-          //     editorRef.current.editor.dom.removeClass(
-          //       nodeArray,
-          //       "inline-prompt"
-          //     );
-
-          //     // This looks dumb but seems critical to the editor internal state updating correctly.
-          //     editorRef.current.editor.setContent(
-          //       editorRef.current.editor.getContent()
-          //     );
-
-          //     setLlmPrompt(promptText);
-          //     SetInline(true);
-          //     setLlmStopButtonVisible(false);
-          //     console.log(
-          //       `ChatGPT state when message was closed: ${llmResult}`
-          //     ); // this doesn't work.
-          //     console.log("Closed the message connection!");
-          //     console.log(inline);
-          //   },
-          // });
         }
       } catch (error) {
         console.error("Something went wrong!", error);
@@ -883,7 +839,7 @@ export default function Editor({
                   setup: (editor) => {
                     //adding custom icons
                     editor.on('keydown', (e) => { handleKeydown(e) });
-                    editor.on('click', (e) => { handleClick(e) });
+                    // editor.on('click', (e) => { handleClick(e) });
                     editor.on("ExecCommand", function (e) {
                       if ("mceNewDocument" == e.command) {
                         // e.preventDefault();
@@ -935,16 +891,15 @@ export default function Editor({
                       },
                       onSetup: (buttonApi) => {
                         const editorEventCallback = (eventApi) => {
-                          buttonApi.setEnabled(
-                            eventApi.element.classList.contains("chunk") &&
-                              editorRef.current.props.recipes.length > 0
-                          );
+                          if (editorRef.current) {
+                            buttonApi.setEnabled(
+                              eventApi.element.classList.contains("chunk") &&
+                              recipes.length > 0
+                            );
+                          }
                         };
                         editor.on("NodeChange", editorEventCallback);
-
-                        /* onSetup should always return the unbind handlers */
-                        return () =>
-                          editor.off("NodeChange", editorEventCallback);
+                        return () => editor.off("NodeChange", editorEventCallback);
                       },
                     });
 
@@ -1005,37 +960,30 @@ export default function Editor({
                       setLlmPrompt(promptText);
                       getLLMResult(promptText, promptNode);
                     }),
-                      editor.ui.registry.addButton("save", {
-                        icon: "save",
-                        text: "Save and Continue",
-                        onAction: () => {
-                          const newContent = editorRef.current.editor.getContent();
-                          handleSaveButtonClick(currentDocument._id);
-                          updateDocument(currentDocument._id, newContent)
-                            .then(() => {
-                              editorRef.current.editor.notificationManager.open(
-                                {
-                                  text: "Document saved.",
-                                  type: "success",
-                                  timeout: 1000,
-                                }
-                              );
-                            })
-                            .catch((error) => {
-                              console.error(
-                                "Failed to save document in backend:",
-                                error
-                              );
-                              editorRef.current.editor.notificationManager.open(
-                                {
-                                  text: "Failed to save document to backend.",
-                                  type: "error",
-                                  timeout: 1000,
-                                }
-                              );
+                    editor.ui.registry.addButton("save", {
+                      icon: "save",
+                      text: "Save and Continue",
+                      onAction: () => {
+                        const newContent = editorRef.current.editor.getContent();
+                        handleSaveButtonClick(currentDocument._id);
+                        updateDocument(currentDocument._id, newContent)
+                          .then(() => {
+                            editorRef.current.editor.notificationManager.open({
+                              text: "Document saved.",
+                              type: "success",
+                              timeout: 1000,
                             });
-                        },
-                      });
+                          })
+                          .catch((error) => {
+                            console.error("Failed to save document in backend:", error);
+                            editorRef.current.editor.notificationManager.open({
+                              text: "Failed to save document to backend.",
+                              type: "error",
+                              timeout: 1000,
+                            });
+                          });
+                      },
+                    });
                     editor.ui.registry.addButton("insertAITextButton", {
                       icon: "checkmark",
                       tooltip: "Insert AI Generated Text",
@@ -1207,6 +1155,12 @@ export default function Editor({
           )}
         </Col>
       </Row>
+      <TutorialModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        missingButtons={missingButtons}
+        requiredButtons={requiredActions}
+      />
     </Container>
   );
 }

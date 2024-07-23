@@ -16,7 +16,7 @@ export default function Welcome() {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const prolific_id = params.get("prolific_id");
-    console.log('prolific_id', prolific_id);
+    // console.log('prolific_id', prolific_id);
     if (prolific_id) {
       setProlificID(prolific_id);
     }
@@ -39,7 +39,7 @@ export default function Welcome() {
           </div>
           <div className="card mt-4">
             <div className="card-body">
-              <h2 className="card-title">Instruction</h2>
+              <h2 className="card-title">Consent Form</h2>
               <p>
         We are a group of researchers at the Technical University of Delft in The Netherlands. In this research project, we aim to investigate [Insert project summary]. As such, you are invited to participate in our research study.
     </p>
