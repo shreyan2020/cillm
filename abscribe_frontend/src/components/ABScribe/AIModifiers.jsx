@@ -110,7 +110,7 @@ export default function AIModifiers({
       const filtered = llmRecipes.filter(recipe => {
         // console.log(recipe)
         const homeDocumentIdObj = recipe.home_document_id;
-        console.log('hello', recipe.home_document_id ,currentDocument._id, currentDocumentId )
+        // console.log('hello', recipe.home_document_id ,currentDocument._id, currentDocumentId )
         return homeDocumentIdObj === defaultHomeDocumentId || homeDocumentIdObj === currentDocument._id;
       });
       setFilteredRecipes(filtered);

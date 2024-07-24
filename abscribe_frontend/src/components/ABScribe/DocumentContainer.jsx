@@ -329,11 +329,11 @@ export default function DocumentContainer() {
             prompt: `You are given a text input in YAML, generate the continuation for it in MAX 3-5 WORDS. Maintain the source language of the input text in the output\n
             - text: ${newChunks[0].versions[0].text}\n
             - output:`,
-            original_text: newChunks[0].versions[0].text,
-            stream: true,
-            feature: "continuation",
-            task_id: taskID,
-            prolific_id: prolificID,
+            // original_text: newChunks[0].versions[0].text,
+            // stream: true,
+            // feature: "continuation",
+            // task_id: taskID,
+            // prolific_id: prolificID,
           }),
           onopen(response) {
             console.log("Connection opened.");
@@ -531,11 +531,11 @@ export default function DocumentContainer() {
                  - text: ${element.innerHTML}\n
                  - modification: ${prompt}\n
                  - output:`,
-                original_text: prompt,
+                // original_text: prompt,
                 stream: true,
-                feature: recipename,
-                task_id: taskID,
-                prolific_id: prolificID,
+                // feature: recipename,
+                // task_id: taskID,
+                // prolific_id: prolificID,
             }),
             onopen(response) {
                 console.log("Connection opened.");
@@ -650,7 +650,7 @@ export default function DocumentContainer() {
                 console.error("Failed to remove version from backend:", error)
               );
           }
-dddds
+// dddds
           return { ...chunk, versions: updatedVersions };
         }
         return chunk;

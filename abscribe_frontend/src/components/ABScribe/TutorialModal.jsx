@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
-const TutorialModal = ({ show, onHide, missingButtons, requiredButtons }) => (
+const TutorialModal = ({ show, onHide, missingButtons, requiredButtons, onWaiveValidation }) => (
   <Modal show={show} onHide={onHide}>
     <Modal.Header closeButton>
       <Modal.Title>Required Actions</Modal.Title>
@@ -23,6 +23,9 @@ const TutorialModal = ({ show, onHide, missingButtons, requiredButtons }) => (
     <Modal.Footer>
       <Button variant="secondary" onClick={onHide}>
         Close
+      </Button>
+      <Button variant="primary" onClick={onWaiveValidation}>
+        Waive Validation
       </Button>
     </Modal.Footer>
   </Modal>

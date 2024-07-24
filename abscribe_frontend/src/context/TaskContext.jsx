@@ -13,9 +13,9 @@ export const TaskProvider = ({ children }) => {
   });
   const [completedTasks, setCompletedTasks] = useState([]);
 
-  useEffect(() => {
-    console.log('Activity log updated:', activityLog);
-  }, [activityLog]);
+  // useEffect(() => {
+  //   console.log('Activity log updated:', activityLog);
+  // }, [activityLog]);
 
   const logButtonClick = (action) => {
     const logEntry = {
@@ -52,30 +52,33 @@ export const TaskProvider = ({ children }) => {
     console.log('Key press logged:', logEntry);
   };
 
-  const saveActivityLog = async (documentID) => {
+  const saveActivityLog = async (currentDocument) => {
     try {
       const activityData = {
-        document_id: documentID,
-        prolific_id: prolificID,
-        task_id: taskID,
-        activity_log: activityLogs[taskID] || { buttonClicks: [], generatedContent: [], keyLogs: [] },
+        document_id: currentDocument._id,
+        prolific_id: currentDocument.prolific_id,
+        task_id: currentDocument.task_id,
+        activity_log: activityLog,
       };
       await apiClient.post("/log_activity", activityData);
       console.log("Activity log saved successfully");
+      addCompletedTask(currentDocument.task_id);
+      clearActivityLog();
       // clearActivityLog(taskID); // Clear the activity log after saving
     } catch (error) {
       console.error("Failed to save activity log:", error);
     }
   };
 
-  const clearActivityLog = (taskID) => {
-    setActivityLogs((prevLogs) => {
-      const newLogs = { ...prevLogs };
-      delete newLogs[taskID];
-      return newLogs;
+  const clearActivityLog = () => {
+    setActivityLog({
+      buttonClicks: [],
+      generatedContent: [],
+      keyLogs: []
     });
-    console.log(`Activity log for task ${taskID} cleared.`);
+    console.log('Activity log cleared');
   };
+
   const addCompletedTask = (taskID) => {
     setCompletedTasks((prevCompletedTasks) => [...prevCompletedTasks, taskID]);
   };
