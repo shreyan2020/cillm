@@ -97,8 +97,7 @@ export default function DocumentContainer() {
 
   const [disablePopupToolbar, setDisablePopupToolbar] = useState(false);
 
-  const { taskID, prolificID, logGeneratedContent } = useContext(TaskContext);
-
+  const { taskID, prolificID, logGeneratedContent, logButtonClick } = useContext(TaskContext);
   // useEffect(() => {
   //   const handleBeforeUnload = (e) => {
   //     const message = "You have unsaved changes. Are you sure you want to leave?";
@@ -635,6 +634,7 @@ export default function DocumentContainer() {
           } else {
             removeVersion(currentDocument._id, chunkIndex, versionIndex)
               .then(() => {
+                logButtonClick(`DELETE CHUNK`);
                 console.log("Version removed from backend");
                 let newActiveVersionId =
                   updatedVersions[updatedVersions.length - 1].frontend_id;
@@ -650,7 +650,7 @@ export default function DocumentContainer() {
                 console.error("Failed to remove version from backend:", error)
               );
           }
-
+dddds
           return { ...chunk, versions: updatedVersions };
         }
         return chunk;

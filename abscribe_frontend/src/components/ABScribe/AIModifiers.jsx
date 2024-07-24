@@ -105,15 +105,15 @@ export default function AIModifiers({
   // }, [currentDocument]);
   
   const defaultHomeDocumentId = '664fbacdb138bf10f0025813';
-
   useEffect(() => {
     const filterRecipes = () => {
       const filtered = llmRecipes.filter(recipe => {
-        const homeDocumentIdObj = JSON.parse(recipe.home_document_id.replace(/'/g, '"'));
-        return homeDocumentIdObj.documentId === defaultHomeDocumentId || homeDocumentIdObj.documentId === currentDocumentId;
+        // console.log(recipe)
+        const homeDocumentIdObj = recipe.home_document_id;
+        console.log('hello', recipe.home_document_id ,currentDocument._id, currentDocumentId )
+        return homeDocumentIdObj === defaultHomeDocumentId || homeDocumentIdObj === currentDocument._id;
       });
       setFilteredRecipes(filtered);
-      console.log(filteredRecipes)
     };
 
     filterRecipes();
@@ -137,7 +137,9 @@ export default function AIModifiers({
     const recipeId = "recipe_" + makeid(5);
     let recipeObject = { frontend_id: recipeId, name: name, prompt: prompt };
     setLlmRecipes((prevState) => {
-      return [...prevState, recipeObject];
+      const newRecipes = [...prevState, recipeObject];
+      setFilteredRecipes(filterRecipes(newRecipes));
+      return newRecipes;
     });
     recipeService.createRecipe(recipeId, name, prompt, currentDocumentId); // actually put this stuff in the back-end.
     return recipeObject;
@@ -288,7 +290,7 @@ export default function AIModifiers({
 
     if (!activeLlmRecipe) {
       getRecipeNameFromPrompt(llmPrompt).then((name) => {
-        createRecipe(name, llmPrompt).frontend_id;
+        const recipeId = createRecipe(name, llmPrompt).frontend_id;
         logButtonClick(`Recipe Created: ${recipeId}`);
       });
     }
@@ -347,7 +349,7 @@ export default function AIModifiers({
       </div>
 
       <Card.Footer className="p-2">
-        {llmRecipes.length > 0 ? (
+        {filteredRecipes.length > 0 ? (
           <>
             <div className="text-center text-muted divider">
               <small>
@@ -372,7 +374,7 @@ export default function AIModifiers({
                         variant="flush"
                         style={{ maxHeight: "250px", overflow: "auto" }}
                       >
-                        {llmRecipes.map((recipe, index) => (
+                        {filteredRecipes.map((recipe, index) => (
                           <ListGroup.Item key={index}>
                             <div className="me-3">
                               <div className="fw-bold">
@@ -454,7 +456,7 @@ export default function AIModifiers({
                   </>
                 ) : (
                   <>
-                    {llmRecipes.map((recipe, index) => (
+                    {filteredRecipes.map((recipe, index) => (
                       <Button
                         className={`text-truncate me-1 mb-1 intro-step${index + 1}`}
                         key={index}
