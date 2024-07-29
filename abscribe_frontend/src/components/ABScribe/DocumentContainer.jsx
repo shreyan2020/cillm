@@ -39,6 +39,7 @@ import Experimentor from "./Experimentor";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { recipeService } from "../../services/recipeService";
 import ChatbotEditor from "./ChatbotEditor";
+import { main } from "@popperjs/core";
 // import { chatgptClient } from "../../services/abscribeAPI";
 
 export default function DocumentContainer() {
@@ -330,7 +331,7 @@ export default function DocumentContainer() {
             - text: ${newChunks[0].versions[0].text}\n
             - output:`,
             // original_text: newChunks[0].versions[0].text,
-            // stream: true,
+            stream: true,
             // feature: "continuation",
             // task_id: taskID,
             // prolific_id: prolificID,
@@ -341,6 +342,7 @@ export default function DocumentContainer() {
           onmessage(event) {
             maintext += event.data;
             tinymce.activeEditor.dom.setHTML(newChunks[0].frontend_id, maintext);
+            // console.log('receivie messae', maintext);
           },
           onclose() {
             console.log("Stream ended.");
@@ -599,7 +601,7 @@ export default function DocumentContainer() {
   };
 
   const deleteChunk = (chunkId, versionId) => {
-    console.log("Chunk ID: " + chunkId + "|| Version ID: " + versionId);
+    // console.log("Chunk ID: " + chunkId + "|| Version ID: " + versionId);
 
     setCurrentDocument((prevDocument) => {
       const updatedChunks = prevDocument.chunks.map((chunk) => {
@@ -608,7 +610,7 @@ export default function DocumentContainer() {
             (version) => version.frontend_id !== versionId
           );
           // so the issue is that we need index not id
-          console.log("Updated Versions;");
+          // console.log("Updated Versions;");
 
           // console.log(updatedVersions);
           const chunkIndex = getChunkIndexFromId(chunkId);
@@ -622,6 +624,7 @@ export default function DocumentContainer() {
             removeChunk(currentDocument._id, chunkIndex)
               .then(() => {
                 console.log("Chunk removed from backend");
+                logButtonClick(`DELETE CHUNK`);
                 const element = tinymce.activeEditor.dom.get(chunkId);
                 // console.log(element);
                 // tinymce.activeEditor.formatter.remove("factor", {}, element);
@@ -634,7 +637,7 @@ export default function DocumentContainer() {
           } else {
             removeVersion(currentDocument._id, chunkIndex, versionIndex)
               .then(() => {
-                logButtonClick(`DELETE CHUNK`);
+                logButtonClick(`DELETE VERSION`);
                 console.log("Version removed from backend");
                 let newActiveVersionId =
                   updatedVersions[updatedVersions.length - 1].frontend_id;
@@ -642,7 +645,7 @@ export default function DocumentContainer() {
                   ...prevState,
                   [chunkId]: newActiveVersionId,
                 }));
-                console.log("active version ids");
+                // console.log("active version ids");
                 // console.log(activeVersionIds);
                 updateChunk(chunkId, newActiveVersionId);
               })

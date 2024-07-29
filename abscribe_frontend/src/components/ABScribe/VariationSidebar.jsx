@@ -71,7 +71,7 @@ export default function VariationSidebar({
   // console.log(visibleChunks.length, currentDocument.task_id)
   useEffect(() => {
     if (currentDocument) {
-      console.log(visibleChunks.length, currentDocument.task_id);
+      // console.log(visibleChunks.length, currentDocument.task_id);
       if (visibleChunks.length > 0 && currentDocument.task_id.startsWith("sandbox_task")) {
         setStepsEnabled(false);
         // console.log('from vsudebar if', stepsEnabled);

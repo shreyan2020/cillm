@@ -61,8 +61,8 @@ const tasksConfig = {
     },
   ],
   order: [
-    "sandbox_task_1", "SV_er3uBhbIgrGyQ1E", // Sandbox task before Task One
-    "sandbox_task_2", "SV_by0FLSWM0gVjYuW"  // Sandbox task before Task Two
+    "sandbox_task_1", "SV_by0FLSWM0gVjYuW", // Sandbox task before Task One
+    "sandbox_task_2", "SV_er3uBhbIgrGyQ1E"  // Sandbox task before Task Two
   ],
 };
 

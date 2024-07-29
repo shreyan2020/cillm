@@ -226,16 +226,26 @@ export default function Editor({
     }
   }, [llmImage]);
   // console.log('act',activityLog)
-  const handleWaiveValidation = () => {
-    setBypassValidation(true);
-    setShowModal(false);
-    addCompletedTask(currentDocument.task_id);
-    navigate(`/task`);
+  const handleWaiveValidation = async () => {
+    try {
+      setBypassValidation(true);
+      setShowModal(false);
+      // addCompletedTask(currentDocument.task_id);
+      // Call the async function and wait for it to complete
+      await saveActivityLog(currentDocument);
+      // handleSaveButtonClick
+      navigate(`/task`);
+      // Proceed with other synchronous actions
+      
+    } catch (error) {
+      console.error("Error occurred while handling waive validation:", error);
+      // Handle error (e.g., show a notification to the user)
+    }
   };
 
   const handleSaveButtonClick = async (documentID) => {
     const currentActivityLog = activityLogRef.current;
-    console.log('task id', taskID, 'prolific id', prolificID);
+    // console.log('task id', taskID, 'prolific id', prolificID);
     console.log('Inside handleSaveButtonClick - activityLog:', currentActivityLog);
   
     try {
@@ -244,7 +254,7 @@ export default function Editor({
           action => !currentActivityLog.buttonClicks.some(log => log.action === action.id)
         );
         const missingButtons = missingActions.map(action => action.name);
-        console.log(missingButtons);
+        // console.log(missingButtons);
         if (missingButtons.length > 0) {
           setMissingButtons(missingButtons);
           setShowModal(true);
@@ -293,11 +303,11 @@ export default function Editor({
     const chunk = editorRef.current.editor.dom.getParent(node, "span.chunk");
     const chunkClass = editorRef.current.editor.dom.getAttrib(chunk, "class");
     const factorId = chunkClass.match(/factor_.....*/);
-    console.log("Factor ID: " + factorId);
+    // console.log("Factor ID: " + factorId);
     if (factorId) {
       setActiveFactorId(factorId[0]);
       console.log(factorColors);
-      console.log("Factor Id Updated to " + factorId);
+      // console.log("Factor Id Updated to " + factorId);
     }
     if (chunk) {
       const chunkid = editorRef.current.editor.dom.getAttrib(chunk, "id");
@@ -346,7 +356,7 @@ export default function Editor({
   };
 
   const handleEditorOnChange = () => {
-    console.log("handleEditorOnChange");
+    // console.log("handleEditorOnChange");
     if (editingMode) {
       const chunk = currentDocument.chunks.find(
         (chunk) => chunk.frontend_id === activeChunkid
@@ -380,8 +390,8 @@ export default function Editor({
       });
     }
 
-    console.log("Editor Current Document Looks Like:");
-    console.log(currentDocument._id);
+    // console.log("Editor Current Document Looks Like:");
+    // console.log(currentDocument._id);
     const newContent = editorRef.current.editor.getContent();
 
     clearTimeout(documentContentUpdateTimer);
@@ -395,7 +405,7 @@ export default function Editor({
     }, 500);
 
     setChunksVisbleInDocument(getVisibleChunkIds());
-    console.log(chunksVisibleInDocument);
+    // console.log(chunksVisibleInDocument);
 
     setDocumentContentUpdateTimer(newTimer);
   };

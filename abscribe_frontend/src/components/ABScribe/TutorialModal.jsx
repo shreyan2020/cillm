@@ -18,14 +18,14 @@ const TutorialModal = ({ show, onHide, missingButtons, requiredButtons, onWaiveV
           />
         ))}
       </Form>
-      <p>Please click on all the buttons before proceeding.</p>
+      <p>You still have not explored all features. Do you want to explore more or continue to the main task?</p>
     </Modal.Body>
     <Modal.Footer>
       <Button variant="secondary" onClick={onHide}>
-        Close
+        Stay and Explore More
       </Button>
       <Button variant="primary" onClick={onWaiveValidation}>
-        Waive Validation
+        Continue to Main Task
       </Button>
     </Modal.Footer>
   </Modal>

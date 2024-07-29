@@ -112,8 +112,8 @@ const PopupToolbar = forwardRef(function MyInput(props, ref) {
                         }}
                         onMouseLeave={() => {
                           if (!disable) {
-                            console.log(activeVersionIds);
-                            console.log(activeChunkid, activeVersionIds);
+                            // console.log(activeVersionIds);
+                            // console.log(activeChunkid, activeVersionIds);
                             updateChunk(
                               activeChunkid,
                               activeVersionIds[activeChunkid]
@@ -154,7 +154,7 @@ const PopupToolbar = forwardRef(function MyInput(props, ref) {
                                 : "light"
                             }
                             onClick={() => {
-                              console.log("i have been clicked");
+                              // console.log("i have been clicked");
                               logButtonClick(`DELETE CHUNK`);
                               deleteChunk(activeChunkid, version.frontend_id);
                             }}

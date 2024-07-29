@@ -135,13 +135,12 @@ export default function AIModifiers({
 
   const createRecipe = (name, prompt) => {
     const recipeId = "recipe_" + makeid(5);
-    let recipeObject = { frontend_id: recipeId, name: name, prompt: prompt };
+    let recipeObject = { frontend_id: recipeId, name: name, prompt: prompt, home_document_id: currentDocumentId };
     setLlmRecipes((prevState) => {
-      const newRecipes = [...prevState, recipeObject];
-      setFilteredRecipes(filterRecipes(newRecipes));
-      return newRecipes;
+      return [...prevState, recipeObject];
     });
     recipeService.createRecipe(recipeId, name, prompt, currentDocumentId); // actually put this stuff in the back-end.
+
     return recipeObject;
   };
 

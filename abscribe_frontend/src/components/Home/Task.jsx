@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Prism from "prismjs";
 import "prismjs/themes/prism.css";
 import YoutubeEmbed from "./YoutubeEmbed";
@@ -41,17 +41,18 @@ import aiButtonsGif from "../../resources/ai_buttons_new.gif";
 import aiInsertGif from "../../resources/abscribe_ai_insert_new.gif";
 import hoverButtonsGif from "../../resources/hover_buttons_new.gif";
 import variationComponentGif from "../../resources/variations_new.gif";
-import tasksConfig from "../../taskConfig";
+// import tasksConfig from "../../configs/taskConfigA.js";
 import { TaskContext } from "../../context/TaskContext";
 import "../../scss/home.scss";
 
 export default function Task() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { taskID, setTaskID, completedTasks, addCompletedTask, prolificID, setProlificID } = useContext(TaskContext);
+  const { taskID, setTaskID, studyID, setStudyID, completedTasks, addCompletedTask, prolificID, setProlificID, setQuestionnaireID } = useContext(TaskContext);
   const [currentTask, setCurrentTask] = useState(null);
   const [userAnswers, setUserAnswers] = useState({});
   const [validationError, setValidationError] = useState(null);
+  const [tasksConfig, setTasksConfig] = useState(null);
 
   const [demo, setDemo] = useState("video");
   const [gif, setGif] = useState({
@@ -61,18 +62,64 @@ export default function Task() {
     "variation-component": variationComponentGif,
   });
 
+
   useEffect(() => {
-    const nextTaskIndex = completedTasks.length;
-    if (nextTaskIndex < tasksConfig.order.length) {
-      const nextTaskID = tasksConfig.order[nextTaskIndex];
-      const task = tasksConfig.tasks.find((task) => task.id === nextTaskID);
-      setTaskID(nextTaskID);
-      setCurrentTask(task);
-      setUserAnswers({}); // Reset user answers for the new task
-    } else {
-      window.location.href = "https://www.prolific.com";
+    // Dynamically import the task configuration based on the taskType
+    const loadTaskConfig = async () => {
+      try {
+        let configModule;
+        console.log('sads',studyID)
+        switch (studyID) {
+          case 'A':
+            configModule = await import('../../configs/taskConfigC1C2Eng.js');
+            break;
+          case 'B':
+            configModule = await import('../../configs/taskConfigC1C2Esp.js');
+            break;
+          default:
+            configModule = await import('../../configs/taskConfigC1C2Eng.js');
+            break;
+        }
+        setTasksConfig(configModule.default);
+        // console.log('taskType', tasksConfig.order)
+      } catch (error) {
+        console.error('Error loading task configuration:', error);
+      }
+    };
+
+    if (studyID) {
+      loadTaskConfig();
     }
-  }, [completedTasks, setTaskID, navigate]);
+  }, [studyID]);
+
+  useEffect(() => {
+    if (tasksConfig) {
+      const nextTaskIndex = completedTasks.length;
+      if (nextTaskIndex < tasksConfig.order.length) {
+        const nextTaskID = tasksConfig.order[nextTaskIndex];
+        const task = tasksConfig.tasks.find((task) => task.id === nextTaskID);
+        setQuestionnaireID(task.questionnaire_id);
+        setTaskID(nextTaskID);
+        setCurrentTask(task);
+        setUserAnswers({}); // Reset user answers for the new task
+      } else {
+        window.location.href = "https://www.prolific.com";
+      }
+    }
+  }, [tasksConfig, completedTasks, setTaskID, navigate]);
+
+  // useEffect(() => {
+  //   const nextTaskIndex = completedTasks.length;
+  //   if (nextTaskIndex < tasksConfig.order.length) {
+  //     const nextTaskID = tasksConfig.order[nextTaskIndex];
+  //     const task = tasksConfig.tasks.find((task) => task.id === nextTaskID);
+  //     setTaskID(nextTaskID);
+  //     setCurrentTask(task);
+  //     setUserAnswers({}); // Reset user answers for the new task
+  //   } else {
+  //     window.location.href = "https://www.prolific.com";
+  //   }
+  // }, [completedTasks, setTaskID, navigate]);
 
   const handleAnswerChange = (questionIndex, option) => {
     setUserAnswers((prev) => ({ ...prev, [questionIndex]: option }));
@@ -81,7 +128,7 @@ export default function Task() {
   const handleStartTask = () => {
     if (currentTask.id.startsWith("sandbox_task")) {
       // For sandbox tasks, no need to validate answers, directly create the document
-      createDocument(currentTask.tutorial, currentTask.id, prolificID)
+      createDocument(currentTask.tutorial, currentTask.id+"_"+studyID, prolificID)
         .then((document) => {
           console.log("Document created in backend");
           navigate(`/document/${document._id["$oid"]}`);

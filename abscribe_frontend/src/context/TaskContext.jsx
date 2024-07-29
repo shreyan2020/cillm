@@ -6,6 +6,8 @@ export const TaskContext = createContext();
 export const TaskProvider = ({ children }) => {
   const [taskID, setTaskID] = useState(null);
   const [prolificID, setProlificID] = useState(null);
+  const [studyID, setStudyID] = useState(null);
+  const [questionnaireID, setQuestionnaireID] = useState(null);
   const [activityLog, setActivityLog] = useState({
     buttonClicks: [],
     generatedContent: [],
@@ -26,7 +28,7 @@ export const TaskProvider = ({ children }) => {
       ...prevLog,
       buttonClicks: [...prevLog.buttonClicks, logEntry],
     }));
-    console.log('Button click logged:', logEntry);
+    // console.log('Button click logged:', logEntry);
   };
 
   const logGeneratedContent = (feature, prompt, response) => {
@@ -40,7 +42,7 @@ export const TaskProvider = ({ children }) => {
       ...prevLog,
       generatedContent: [...prevLog.generatedContent, logEntry],
     }));
-    console.log('Generated content logged:', logEntry);
+    // console.log('Generated content logged:', logEntry);
   };
 
   const logKeyPress = (key) => {
@@ -49,7 +51,7 @@ export const TaskProvider = ({ children }) => {
       ...prevLog,
       keyLogs: [...prevLog.keyLogs, logEntry],
     }));
-    console.log('Key press logged:', logEntry);
+    // console.log('Key press logged:', logEntry);
   };
 
   const saveActivityLog = async (currentDocument) => {
@@ -88,8 +90,12 @@ export const TaskProvider = ({ children }) => {
       value={{
         taskID,
         setTaskID,
+        studyID,
+        setStudyID,
         prolificID,
         setProlificID,
+        questionnaireID,
+        setQuestionnaireID,
         activityLog,
         logButtonClick,
         logGeneratedContent,

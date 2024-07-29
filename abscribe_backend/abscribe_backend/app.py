@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 import re
 from datetime import datetime, timezone
 from flask import Flask, request, Response, jsonify
+
+
 # import torch
 # from transformers import AutoTokenizer, AutoModelForCausalLM
 # import abscribe_backend.services.gpt4all_service as gpt_service
@@ -20,6 +22,7 @@ from flask_cors import CORS
 from abscribe_backend.database.mongo_connection import db
 from abscribe_backend.models.chunk import Chunk
 from abscribe_backend.models.document import Document
+from abscribe_backend.models.particiapnt_info import ParticipantInfo
 
 import abscribe_backend.services.chatgpt_service as chatgpt_service
 
@@ -145,6 +148,36 @@ def log_activity():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/api/save_participant_info", methods=["POST"])
+def save_participant_info():
+    data = request.get_json()
+    print("Received participant data:", data)  # Debugging
+
+    prolific_id = data.get("prolific_id")
+    study_id = data.get("study_id")
+    age = data.get("age")
+    gender = data.get("gender")
+    english_proficiency = data.get("english_proficiency")
+    spanish_proficiency = data.get("spanish_proficiency")
+
+    if not all([prolific_id, study_id, age, gender]):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    try:
+        participant_info = ParticipantInfo(
+            prolific_id=prolific_id,
+            study_id=study_id,
+            age=age,
+            gender=gender,
+            english_proficiency=english_proficiency,
+            spanish_proficiency=spanish_proficiency,
+        )
+        participant_info.save()
+
+        return jsonify({"message": "Participant info saved successfully"}), 200
+    except Exception as e:
+        print("Error saving participant info:", e)  # Debugging
+        return jsonify({"error": str(e)}), 500
 
 # Document endpoints
 
@@ -343,18 +376,16 @@ def generate_text():
     data = request.get_json()
     prompt = data.get('prompt')
     stream = data.get('stream', False)
-    feature = data.get('feature', "")
-    task_id = data.get('task_id', "")
-    prolific_id = data.get('prolific_id', "")
-    original_text = data.get("original_text", "")
+    # feature = data.get('feature', "")
+    # task_id = data.get('task_id', "")
+    # prolific_id = data.get('prolific_id', "")
+    # original_text = data.get("original_text", "")
     print('hello', stream)
     chat_stream = chatgpt_service.get_chat(prompt, stream)
     
     if stream:
         def stream_chat():
-            accumulated_content = ""
             for chunk in chat_stream:
-                
                 try:
                     content = chunk['response']
                 except KeyError:
@@ -362,9 +393,6 @@ def generate_text():
                 yield f"data: {content}\n\n"
                 if '\n' in content:
                     yield f"data: \n\n"
-                accumulated_content += content
-            # if accumulated_content:
-                # log_gpt_response(prolific_id, task_id, feature, original_text, accumulated_content)
         return app.response_class(stream_chat(), mimetype="text/event-stream")
     else:
         # content = ""
@@ -373,7 +401,6 @@ def generate_text():
         #         content += chunk['response']
         #     except KeyError:
         #         continue
-        # log_gpt_response(prolific_id, task_id, feature, original_text, chat_stream)
         return jsonify({'response': chat_stream['response']})
     
 # def extract_relevant_text(output_text):
