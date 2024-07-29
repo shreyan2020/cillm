@@ -1,31 +1,30 @@
-# Use official Node.js image as base
+# Stage 1: Build the React application
 FROM node:20.12.0 AS build
 
 # Set working directory
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Copy package.json and install dependencies
 COPY package*.json ./
 RUN npm ci
 
-# Copy application code and build the app
+# Copy the rest of the application code
 COPY . .
 
-# ARG REACT_APP_VITE_BACKEND_URL
-# ENV REACT_APP_VITE_BACKEND_URL=$REACT_APP_VITE_BACKEND_URL
-
-# COPY .env .env
+# Build the application
 RUN npm run build
 
-# Use a minimal server to serve static files
+# Stage 2: Serve the application with Nginx
 FROM nginx:stable-alpine
 
-# Copy built files to NGINX
+# Copy the build output to the Nginx web server directory
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Copy custom NGINX configuration
-# COPY ../nginx/nginx.conf /etc/nginx/conf.d/default.conf
+# Copy the Nginx configuration file
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80 and start NGINX
+# Expose port 80
 EXPOSE 80
+
+# Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]
