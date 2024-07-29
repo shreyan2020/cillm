@@ -1,5 +1,5 @@
 import React from "react";
-import { createHashRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./routes/Root";
 import ErrorPage from "./ErrorPage";
 import Editor from "./components/ABScribe/Editor";
@@ -20,9 +20,7 @@ import DocumentList from "./components/DocumentsView/DocumentList";
 import DocumentContainer from "./components/ABScribe/DocumentContainer";
 import { TaskProvider } from "./context/TaskContext"; 
 
-
-
-const router = createHashRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
@@ -76,13 +74,10 @@ const router = createHashRouter([
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-     <TaskProvider>
-    <RouterProvider router={router} />
+    <TaskProvider>
+      <RouterProvider router={router} />
     </TaskProvider>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
