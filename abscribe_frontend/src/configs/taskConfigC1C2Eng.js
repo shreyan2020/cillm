@@ -4,15 +4,15 @@ const tasksConfigV3 = {
   tasks: [
     {
       id: "sandbox_task_1_eng",
-      name: "Sandbox Task 1 (English)",
-      missionStatement: "This is a sandbox task where you can play around with the features before starting your main task.",
+      name: "Tutorial",
+      missionStatement: "This is a tutorial where you can play around with the features of the tool before starting your main task. We encourage you to get familiar with the tool to ensure your writing can utilize full capabilities of the tool.",
       instructions: "Feel free to play around with the features before you begin your new task.",
       tutorial: `
         <p>Feel free to play around with the features before you begin your new task.</p>
         <p>Here are some steps you may want to go through:</p>
         <h3>Below this type @ai followed by some text to ask AI to write a piece of text</h3>
-        <h3>Select the paragraph, right-click, and select <b>Generate variation</b>.</h3>
-        <h3>Select the paragraph, right-click, and select <b>Generate continuation</b>.</h3>
+        <h3>Select the paragraph, right-click, and select <b>Create variation</b>.</h3>
+        <h3>Select the paragraph, right-click, and select <b>Create continuation</b>.</h3>
         <h3>Select all the recipes.</h3>
         <p><b>Note:</b> Instructions can be found in the top left corner.</p>
         <p><b>Note:</b> Click save and continue once you have explored the tool's features.</p>`,
@@ -27,8 +27,8 @@ const tasksConfigV3 = {
         <p>Feel free to play around with the features before you begin your new task.</p>
         <p>Here are some steps you may want to go through:</p>
         <h3>Below this type @ai followed by some text to ask AI to write a piece of text</h3>
-        <h3>Select the paragraph, right-click, and select <b>Generate variation</b>.</h3>
-        <h3>Select the paragraph, right-click, and select <b>Generate continuation</b>.</h3>
+         <h3>Select the paragraph, right-click, and select <b>Create variation</b>.</h3>
+        <h3>Select the paragraph, right-click, and select <b>Create continuation</b>.</h3>
         <h3>Select all the recipes.</h3>
         <p><b>Note:</b> Instructions can be found in the top left corner.</p>
         <p><b>Note:</b> Click save and continue once you have explored the tool's features.</p>`,
@@ -37,8 +37,8 @@ const tasksConfigV3 = {
     {
       id: "main_task_1",
       questionnaire_id: "SV_6sAAZH7qj0jogRw",
-      name: "Task One (English) - WWF",
-      missionStatement: "At World Wildlife Fund (WWF), our mission is to conserve nature and reduce the most pressing threats to the diversity of life on Earth. With the support of more than five million members worldwide, we work in more than 100 countries to protect species and their habitats, advocate for sustainable policies, and educate communities about the importance of biodiversity. Our efforts last year helped protect critical habitats for endangered species, like tigers and rhinos, and reduced human impact on the environment. Together, we can build a future where people live in harmony with nature.",
+      name: "Task One (English) - WWF: This is the main task. Read the mission statement of the charity carefully and then utilize the Abscribe tool to write your advertisement",
+      missionStatement: "The mission of the World Wildlife Fund (WWF) is to conserve nature and reduce the most pressing threats to the diversity of life on Earth. Our vision is to build a future in which people live in harmony with nature. We aim to save a planet rich with biodiversity by reconciling the needs of human beings with the needs of other species. We strive to practice humane conservation, instilling a reverence for nature and balancing it with a belief in human potential. From local communities to global organizations, we inspire and support those advancing the cause of conservation. As a voice for the voiceless creatures of our world, we dedicate our talents, knowledge, and passion to enriching life, spirit, and the wonder of nature.",
       instructions: "Please write an essay on the importance of biodiversity and wildlife conservation.",
       tutorial: "Supporting wildlife conservation helps maintain the balance of our ecosystems.",
       questionSet: [
@@ -53,7 +53,7 @@ const tasksConfigV3 = {
           correctAnswer: "Sustainable policies advocacy",
         },
       ],
-    },
+    },    
     {
       id: "main_task_2",
       questionnaire_id: "SV_6sAAZH7qj0jogRw",

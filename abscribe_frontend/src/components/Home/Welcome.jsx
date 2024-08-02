@@ -52,7 +52,7 @@ export default function Welcome() {
         spanish_proficiency: spanishProficiency,
       };
       saveParticipantInfo(participantData);
-      navigate("/tutorial");
+      navigate("/task");
     } else {
       setValidationError("You must agree before proceeding.");
     }
