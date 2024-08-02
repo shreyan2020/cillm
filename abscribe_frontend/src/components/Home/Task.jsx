@@ -3,7 +3,6 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Prism from "prismjs";
 import "prismjs/themes/prism.css";
 import YoutubeEmbed from "./YoutubeEmbed";
-import "../../scss/home.scss";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import {
@@ -45,6 +44,12 @@ import variationComponentGif from "../../resources/variations_new.gif";
 import { TaskContext } from "../../context/TaskContext";
 import "../../scss/home.scss";
 
+
+import aicont from "../../resources/ai_cont.gif";
+import aicreaterecipe from "../../resources/ai_create_recipe.gif";
+import aihelp from "../../resources/ai_help.gif";
+import airecipe from "../../resources/ai_recipe.gif";
+
 export default function Task() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -53,15 +58,37 @@ export default function Task() {
   const [userAnswers, setUserAnswers] = useState({});
   const [validationError, setValidationError] = useState(null);
   const [tasksConfig, setTasksConfig] = useState(null);
+  const [currentGif, setCurrentGif] = useState(aihelp);
 
-  const [demo, setDemo] = useState("video");
-  const [gif, setGif] = useState({
-    "ai-insert": aiInsertGif,
-    "ai-buttons": aiButtonsGif,
-    "hover-buttons": hoverButtonsGif,
-    "variation-component": variationComponentGif,
-  });
-
+  // const [demo, setDemo] = useState("video");
+  const gifData = {
+    "ai-help": aihelp,
+    "ai-cont": aicont,
+    "ai-create-recipe": aicreaterecipe,
+    "ai-recipe": airecipe,
+  };
+  const featureDescriptions = {
+    "ai-help": {
+      title: "Generate text with AI Insert",
+      description:
+        "ABScribe makes it easy to stream text from AI directly into the document. Simply type @ai followed by a prompt and press enter.",
+    },
+    "ai-recipe": {
+      title: "Generate variations with AI Buttons",
+      description:
+        "Create variations by first clicking create variations and then clicking on one of the pre-defined variation buttons",
+    },
+    "ai-create-recipe": {
+      title: "Create new variations",
+      description:
+        "You can either use existing variation or create your own",
+    },
+    "ai-cont": {
+      title: "Generate continuation for your written text",
+      description:
+        "If you are stuck on a text, you can ask AI to write it's continuation",
+    },
+  };
 
   useEffect(() => {
     // Dynamically import the task configuration based on the taskType
@@ -71,13 +98,13 @@ export default function Task() {
         console.log('sads',studyID)
         switch (studyID) {
           case 'A':
-            configModule = await import('../../configs/taskConfigC1C2Eng.js');
+            configModule = await import('../../configs/stage1study1EN.js');
             break;
           case 'B':
-            configModule = await import('../../configs/taskConfigC1C2Esp.js');
+            configModule = await import('../../configs/stage1study1ES.js');
             break;
           default:
-            configModule = await import('../../configs/taskConfigC1C2Eng.js');
+            configModule = await import('../../configs/stage1study1EN.js');
             break;
         }
         setTasksConfig(configModule.default);
@@ -125,6 +152,10 @@ export default function Task() {
     setUserAnswers((prev) => ({ ...prev, [questionIndex]: option }));
   };
 
+  const handleFeatureClick = (featureKey) => {
+    setCurrentGif(gifData[featureKey]);
+  };
+
   const handleStartTask = () => {
     if (currentTask.id.startsWith("sandbox_task")) {
       // For sandbox tasks, no need to validate answers, directly create the document
@@ -164,15 +195,19 @@ export default function Task() {
 
   return (
     <>
-      <NavHeader />
+      {/* <NavHeader /> */}
       <div className="jumbotron m-3">
         <div className="container">
           <div className="card mt-4">
             <div className="card-body">
               <p className="card-text">
-                {currentTask.name}
+                <h4>{currentTask.name}</h4>
               </p>
-              <h5>Mission Statement:</h5>
+              {!currentTask.id.startsWith("sandbox_task") && (
+                <>
+                <h5>{currentTask.hoverText}</h5>
+                </>
+              )}
               <p>
                 {currentTask.missionStatement}
               </p>
@@ -206,14 +241,51 @@ export default function Task() {
                   )}
                 </>
               )}
+  {/* Conditional rendering for sandbox tasks */}
+  {currentTask.id.startsWith("sandbox_task") && (
+                <div>
+                  <p>{currentTask.hoverText}</p>
+                  <div className="row row-cols-1 row-cols-md-4 mt-2">
+                    {Object.keys(featureDescriptions).map((key) => (
+                      <div className="col mb-2" key={key}>
+                        <div
+                          className="feature-card card h-100"
+                          onMouseOver={() => handleFeatureClick(key)}
+                          onClick={() => handleFeatureClick(key)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <div className="card-body" style={{ padding: "10px" }}>
+                            <h5 className="card-title" style={{ fontSize: "16px" }}>
+                              {featureDescriptions[key].title}
+                            </h5>
+                            <p className="card-text" style={{ fontSize: "14px" }}>
+                              {featureDescriptions[key].description}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="card-body d-flex justify-content-center">
+                    <img
+                      src={currentGif}
+                      className="img-fluid"
+                      alt="Feature GIF"
+                      style={{ maxHeight: "400px", objectFit: "contain" }}
+                    />
+                  </div>
+                  <p> {currentTask.noteText} </p>
+                </div>
+              )}
+
               <Button
                 className="mt-4"
                 onClick={handleStartTask}
                 variant="outline-dark"
                 size="lg"
               >
-                Start Task
-              </Button>
+                {currentTask.id.startsWith("sandbox_task") ? "Start Tutorial" : "Start Writing Task"}
+                </Button>
             </div>
           </div>
         </div>
