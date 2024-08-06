@@ -247,7 +247,6 @@ export default function Editor({
     const currentActivityLog = activityLogRef.current;
     // console.log('task id', taskID, 'prolific id', prolificID);
     console.log('Inside handleSaveButtonClick - activityLog:', currentActivityLog);
-  
     try {
       if (currentDocument.task_id.startsWith("sandbox_task")) {
         const missingActions = requiredActions.filter(

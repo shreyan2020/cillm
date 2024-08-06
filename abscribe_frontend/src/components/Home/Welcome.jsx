@@ -18,6 +18,21 @@ export default function Welcome() {
   const [englishProficiency, setEnglishProficiency] = useState("");
   const [spanishProficiency, setSpanishProficiency] = useState("");
 
+  const config = {
+    '66aca63c781c99be382101f6': {
+      language: 'English',
+      time: '15 minutes'
+    },
+    '66aca69be884d495377c3f30': {
+      language: 'Spanish',
+      time: '20 minutes'
+    },
+    default: {
+      language: 'English',
+      time: '15 minutes'
+    }
+  };
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const prolific_id = params.get("PROLIFIC_PID");
@@ -42,6 +57,7 @@ export default function Welcome() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(englishProficiency, spanishProficiency)
     if (isChecked) {
       const participantData = {
         prolific_id: prolificID,
@@ -58,12 +74,19 @@ export default function Welcome() {
     }
   };
 
+  const getProficiencyLanguage = () => {
+    return config[studyID]?.language || config.default.language;
+  };
+
+  const getEstimatedTime = () => {
+    return config[studyID]?.time || config.default.time;
+  };
+
   return (
     <>
       <div className="jumbotron m-3">
         <div className="container">
-          <div className="row mt-4">
-          </div>
+          <div className="row mt-4"></div>
           <div className="card mt-4">
             <div className="card-body">
               <h2 className="card-title">Consent Form</h2>
@@ -128,66 +151,30 @@ export default function Welcome() {
                   />
                 </div>
                 
-                {studyID !== "C" && (
-                  <div className="form-group">
-                    <label htmlFor="proficiency">
-                      Language Proficiency 
-                      {studyID === "66aca63c781c99be382101f6" && " (English)"}
-                      {studyID === "66aca69be884d495377c3f30" && " (Spanish)"}
-                    </label>
-                    <select
-                      id="proficiency"
-                      className="form-control"
-                      value={studyID === "66aca63c781c99be382101f6" ? englishProficiency : spanishProficiency}
-                      onChange={(e) => studyID === "66aca69be884d495377c3f30" ? setEnglishProficiency(e.target.value) : setSpanishProficiency(e.target.value)}
-                      required
-                    >
-                      <option value="">Select your proficiency level</option>
-                      <option value="beginner">Beginner</option>
-                      <option value="intermediate">Intermediate</option>
-                      <option value="advanced">Advanced</option>
-                      <option value="native">Native</option>
-                    </select>
-                  </div>
-                )}
-
-                {studyID === "C" && (
-                  <>
-                    <div className="form-group">
-                      <label htmlFor="englishProficiency">English Proficiency</label>
-                      <select
-                        id="englishProficiency"
-                        className="form-control"
-                        value={englishProficiency}
-                        onChange={(e) => setEnglishProficiency(e.target.value)}
-                        required
-                      >
-                        <option value="">Select your proficiency level</option>
-                        <option value="beginner">Beginner</option>
-                        <option value="intermediate">Intermediate</option>
-                        <option value="advanced">Advanced</option>
-                        <option value="native">Native</option>
-                      </select>
-                    </div>
-                    
-                    <div className="form-group">
-                      <label htmlFor="spanishProficiency">Spanish Proficiency</label>
-                      <select
-                        id="spanishProficiency"
-                        className="form-control"
-                        value={spanishProficiency}
-                        onChange={(e) => setSpanishProficiency(e.target.value)}
-                        required
-                      >
-                        <option value="">Select your proficiency level</option>
-                        <option value="beginner">Beginner</option>
-                        <option value="intermediate">Intermediate</option>
-                        <option value="advanced">Advanced</option>
-                        <option value="native">Native</option>
-                      </select>
-                    </div>
-                  </>
-                )}
+                <div className="form-group">
+                  <label htmlFor="proficiency">
+                    Language Proficiency {studyID === "66aca63c781c99be382101f6" ? "(English)" : "(Spanish)"}
+                  </label>
+                  <select
+                    id="proficiency"
+                    className="form-control"
+                    value={studyID === "66aca63c781c99be382101f6" ? englishProficiency : spanishProficiency}
+                    onChange={(e) => {
+                      if (studyID === "66aca63c781c99be382101f6") {
+                        setEnglishProficiency(e.target.value);
+                      } else {
+                        setSpanishProficiency(e.target.value);
+                      }
+                    }}
+                    required
+                  >
+                    <option value="">Select your proficiency level</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                    <option value="native">Native</option>
+                  </select>
+                </div>
 
                 <div className="form-group">
                   <input

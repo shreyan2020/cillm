@@ -41,8 +41,9 @@ const JobDescription = () => {
         <div className="row mt-4"></div>
         <div className="card mt-4">
           <div className="card-body">
-            <h2 className="card-title">Task Details</h2>
-            <p>Thank you for considering this opportunity.</p>
+            {/* <h2 className="card-title">Task Details</h2> */}
+            <p>Thank you for considering this opportunity. You are selected because we believe you meet the following criteria. </p>
+
 
             <h3 className="card-subtitle">Eligibility Criteria</h3>
             <ul>
