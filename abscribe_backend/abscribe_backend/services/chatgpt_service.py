@@ -9,8 +9,8 @@ from ollama import Client
 
 
 
-# GPT_MODEL = "llama3.1:latest"
-GPT_MODEL = "nous-hermes2:latest"
+GPT_MODEL = "llama3.1:latest"
+# GPT_MODEL = "nous-hermes2:latest"
 # load_dotenv()
 # openai.api_key = os.environ["OPENAI_API_KEY"]
 

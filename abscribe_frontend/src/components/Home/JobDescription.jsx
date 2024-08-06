@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { TaskContext } from '../../context/TaskContext'; // Import TaskContext
 import '../../scss/job-description.scss'; // Import CSS for styling
 
-const JobDescription = () => {
+const JobDescription = ({ showButton = true }) => {
   const navigate = useNavigate();
   const { studyID } = useContext(TaskContext); // Get studyID from context
 
@@ -41,9 +41,8 @@ const JobDescription = () => {
         <div className="row mt-4"></div>
         <div className="card mt-4">
           <div className="card-body">
-            {/* <h2 className="card-title">Task Details</h2> */}
-            <p>Thank you for considering this opportunity. You are selected because we believe you meet the following criteria. </p>
-
+            <h2 className="card-title">Task Details</h2>
+            <p>Thank you for considering this opportunity.</p>
 
             <h3 className="card-subtitle">Eligibility Criteria</h3>
             <ul>
@@ -83,9 +82,11 @@ const JobDescription = () => {
             <h3 className="card-subtitle">Estimated Time</h3>
             <p>This task is estimated to take approximately {getEstimatedTime()}. If you are ready to complete the job without interruptions during this time, please click "Proceed" to start. Thank you for your interest!</p>
 
-            <Button className="mt-4" variant="outline-dark" size="lg" onClick={handleProceedClick}>
-              Proceed
-            </Button>
+            {showButton && (
+              <Button className="mt-4" variant="outline-dark" size="lg" onClick={handleProceedClick}>
+                Proceed
+              </Button>
+            )}
           </div>
         </div>
       </div>
