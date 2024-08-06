@@ -95,7 +95,8 @@ export default function Welcome() {
               </p>
               
               <p>
-                The following task is part of the research project described above. Upon accessing the web application, you will be presented with two tasks in two different languages, both pertaining to writing a persuasive text message for two charities using an AI-powered text editor. After each task, you will be asked to fill in a small questionnaire that relates to your experience with the editor.
+                The following task is part of the research project described above. Upon accessing the web application, you will be presented with the task of writing a persuasive message for WWF using an AI-powered text editor. 
+                After the task, you will be asked to fill in a small questionnaire that relates to your experience with the editor.
               </p>
               
               <p>
