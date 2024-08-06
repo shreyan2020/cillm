@@ -59,6 +59,7 @@ export default function VariationSidebar({
   generateVersion,
 }) {
   const [selectVersions, setSelectVersions] = useState(false);
+  const [stepsEnabled, setStepsEnabled] = useState(false);
   useState("");
 
   useEffect(() => {
@@ -66,7 +67,22 @@ export default function VariationSidebar({
       updateChunk(activeChunkid, activeVersionIds[activeChunkid]);
     }
   }, [activeVersionIds]);
-
+  
+  // console.log(visibleChunks.length, currentDocument.task_id)
+  useEffect(() => {
+    if (currentDocument) {
+      // console.log(visibleChunks.length, currentDocument.task_id);
+      if (visibleChunks.length > 0 && currentDocument.task_id.startsWith("sandbox_task")) {
+        setStepsEnabled(false);
+        // console.log('from vsudebar if', stepsEnabled);
+      } else {
+        setStepsEnabled(false);
+      }
+    }
+    // console.log('from vsudebar', stepsEnabled);
+  }, [visibleChunks, currentDocument]);
+  
+// console.log(currentDocument.task_id)
   const getChunkIdsFromEditorContent = () => {
     let chunkIds = [];
     const chunkElements = tinymce.activeEditor.dom.select(`span.chunk`);
@@ -269,6 +285,8 @@ export default function VariationSidebar({
             activeLlmRecipe={activeRecipe}
             setActiveLlmRecipe={setActiveRecipe}
             generateVersion={generateVersion}
+            currentDocument={currentDocument}
+            stepsEnabled={stepsEnabled}
           />
           {/* {activeChunkid && activeVersionIds[activeChunkid] ? (
               <>

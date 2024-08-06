@@ -8,7 +8,7 @@ export let recipeService = {
     async getRecipes()  {
         /** Get literally every recipe from the backend. **/
         let response = await(apiClient.get(`/recipes/`));
-        console.log("Our recipes retrieved:" + response.data);
+        // console.log("Our recipes retrieved:" + response.data);
         return response.data;
     },
     // We lowkey don't need to do anything with the promises. We're just signalling the back-end, I think.

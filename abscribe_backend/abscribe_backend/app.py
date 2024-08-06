@@ -4,22 +4,27 @@ import os
 from typing import Optional, List
 from dotenv import load_dotenv
 import re
-
+from datetime import datetime, timezone
 from flask import Flask, request, Response, jsonify
+
+
 # import torch
 # from transformers import AutoTokenizer, AutoModelForCausalLM
 # import abscribe_backend.services.gpt4all_service as gpt_service
 import abscribe_backend.services.recipe_service as recipe_service
 
 from abscribe_backend.models.document import Document
+from abscribe_backend.models.activity_log import ActivityLog
+
+
 from flask_cors import CORS
 
 from abscribe_backend.database.mongo_connection import db
 from abscribe_backend.models.chunk import Chunk
 from abscribe_backend.models.document import Document
+from abscribe_backend.models.particiapnt_info import ParticipantInfo
 
 import abscribe_backend.services.chatgpt_service as chatgpt_service
-
 
 # from abscribe_backend.models.keylogger import KeyloggerActivity
 
@@ -27,9 +32,10 @@ import abscribe_backend.services.chatgpt_service as chatgpt_service
 
 from abscribe_backend.models.version import Version
 
-from abscribe_backend.services.keylogger_service import (
-    log_keylogger_activity,
-)
+# from abscribe_backend.services.usage_service import (
+#     log_keylogger_activity,
+#     log_gpt_response,
+# )
 
 from abscribe_backend.services.chunk_service import (
     add_chunk,
@@ -113,24 +119,65 @@ db.init_app(app)
 def to_dict(obj):
     return obj.to_mongo().to_dict() if obj else None
 
-
-
 @app.route("/api/log_activity", methods=["POST"])
-def log_activity_route() -> Response:
+def log_activity():
+    data = request.get_json()
+    print("Received data:", data)  # Print incoming data for debugging
+
+    document_id = data.get("document_id")
+    task_id = data.get("task_id")
+    prolific_id = data.get("prolific_id")
+    activity_log = data.get("activity_log", {})
     
-    document_id = request.json.get("document_id")
-    prolific_id = request.json.get("prolific_id")
-    task_id = request.json.get("task_id")
-    key_log = request.json.get("key_log", [])
-    # mouseLog = request.json.get("mouseLog", [])
-    click_log = request.json.get("click_log", [])
+    if not all([document_id, task_id, prolific_id]):
+        return jsonify({"error": "Missing required fields"}), 400
 
-    if not prolific_id or not task_id:
-        return jsonify({"error": "prolific_id and task_id are required"}), 400
+    try:
+        activity_log_entry = ActivityLog(
+            document_id=document_id,
+            task_id=task_id,
+            prolific_id=prolific_id,
+            activity_log=activity_log,
+            timestamp=datetime.now(timezone.utc)
+        )
+        activity_log_entry.save()
 
-    activity_log = log_keylogger_activity(document_id, prolific_id, task_id, key_log, click_log)
+        return jsonify({"message": "Activity logged successfully"}), 200
+    except Exception as e:
+        print("Error saving activity log:", e)  # Print the exception for debugging
+        return jsonify({"error": str(e)}), 500
 
-    return Response("Saved", status=201, content_type="application/json")
+
+@app.route("/api/save_participant_info", methods=["POST"])
+def save_participant_info():
+    data = request.get_json()
+    print("Received participant data:", data)  # Debugging
+
+    prolific_id = data.get("prolific_id")
+    study_id = data.get("study_id")
+    age = data.get("age")
+    gender = data.get("gender")
+    english_proficiency = data.get("english_proficiency")
+    spanish_proficiency = data.get("spanish_proficiency")
+
+    if not all([prolific_id, study_id, age, gender]):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    try:
+        participant_info = ParticipantInfo(
+            prolific_id=prolific_id,
+            study_id=study_id,
+            age=age,
+            gender=gender,
+            english_proficiency=english_proficiency,
+            spanish_proficiency=spanish_proficiency,
+        )
+        participant_info.save()
+
+        return jsonify({"message": "Participant info saved successfully"}), 200
+    except Exception as e:
+        print("Error saving participant info:", e)  # Debugging
+        return jsonify({"error": str(e)}), 500
 
 # Document endpoints
 
@@ -329,6 +376,10 @@ def generate_text():
     data = request.get_json()
     prompt = data.get('prompt')
     stream = data.get('stream', False)
+    # feature = data.get('feature', "")
+    # task_id = data.get('task_id', "")
+    # prolific_id = data.get('prolific_id', "")
+    # original_text = data.get("original_text", "")
     print('hello', stream)
     chat_stream = chatgpt_service.get_chat(prompt, stream)
     
@@ -351,7 +402,7 @@ def generate_text():
         #     except KeyError:
         #         continue
         return jsonify({'response': chat_stream['response']})
-
+    
 # def extract_relevant_text(output_text):
 #     pattern = re.compile(r'\[\/INST\](.*?)<\/s>', re.DOTALL)
 #     match = pattern.search(output_text)

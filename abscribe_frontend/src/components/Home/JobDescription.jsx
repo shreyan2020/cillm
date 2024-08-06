@@ -8,28 +8,31 @@ const JobDescription = () => {
   const navigate = useNavigate();
   const { studyID } = useContext(TaskContext); // Get studyID from context
 
+  const config = {
+    '66aca63c781c99be382101f6': {
+      language: 'English',
+      time: '15 minutes'
+    },
+    '66aca69be884d495377c3f30': {
+      language: 'Spanish',
+      time: '20 minutes'
+    },
+    default: {
+      language: 'English',
+      time: '15 minutes'
+    }
+  };
+
   const handleProceedClick = () => {
     navigate('/task');
   };
 
   const getProficiencyLanguage = () => {
-    if (studyID === 'A') {
-      return 'English';
-    } else if (studyID === 'B') {
-      return 'Spanish';
-    } else {
-      return 'English'; // Default to English if no valid studyID is provided
-    }
+    return config[studyID]?.language || config.default.language;
   };
 
   const getEstimatedTime = () => {
-    if (studyID === 'A') {
-      return '15 minutes';
-    } else if (studyID === 'B') {
-      return '20 minutes';
-    } else {
-      return '15 minutes'; // Default to 15 minutes if no valid studyID is provided
-    }
+    return config[studyID]?.time || config.default.time;
   };
 
   return (

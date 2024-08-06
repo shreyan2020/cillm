@@ -5,10 +5,14 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
+import TutorialModal from "./TutorialModal";
+import { Button } from "react-bootstrap";
+
+import { ButtonGroup } from "react-bootstrap";
 
 import { Editor as TinyEditor } from "@tinymce/tinymce-react";
-import useLLM from "usellm";
-import parse from "html-react-parser";
+// import useLLM from "usellm";
+// import parse from "html-react-parser";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import PlaceHolder from "../../resources/placeHolderImg.png";
 import { apiClient } from "../../services/abscribeAPI";
@@ -34,7 +38,7 @@ import {
   updateVersion,
   removeVersion,
 } from "../../services/versionService";
-import { ButtonGroup } from "react-bootstrap";
+
 
 function AIVisor({ llmOutput }) {
   return (
@@ -100,11 +104,17 @@ export default function Editor({
   const { documentId } = useParams();
 
   //LLM Integration
-  const llm = useLLM({ serviceUrl: "https://usellm.org/api/llm" });
+  // const llm = useLLM({ serviceUrl: "https://usellm.org/api/llm" });
+  const [bypassValidation, setBypassValidation] = useState(false);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL + "chatGPT/chat"
   //Task Context
-  const { taskID, prolificID, addCompletedTask } = useContext(TaskContext);
+  const { taskID, prolificID, activityLog, addCompletedTask, logKeyPress, saveActivityLog, logGeneratedContent } = useContext(TaskContext);
+  const activityLogRef = useRef(activityLog);
+  const [showModal, setShowModal] = useState(false);
+  const [missingButtons, setMissingButtons] = useState([]);
+  const handleModalClose = () => setShowModal(false);
+
   //Refs
   const editorRef = useRef(null); //TinyMCE Editor
 
@@ -126,21 +136,39 @@ export default function Editor({
   const [inline, SetInline] = useState(true);
 
   const [value, setValue] = useState(currentDocument?.content ?? "");
-
-  const keylogRef = useRef([]);
-  const clickLogRef = useRef([]);
   
 
+  const keylogRef = useRef([]);
+  // const clickLogRef = useRef([]);
+  const requiredActions = [
+    { id: "CREATE VARIATION", name: "Create Variation" },
+    { id: "CREATE CONTINUATION", name: "Create Continuation" },
+    { id: "recipe_Gain_Anecdotal", name: "Gain Framing with Anecdotal Information" },
+    { id: "recipe_Loss_Anecdotal", name: "Loss Framing with Anecdotal Information" },
+    { id: "recipe_Gain_Statistics", name: "Gain Framing with Statistics" },
+    { id: "recipe_Loss_Statistics", name: "Loss Framing with Statistics" },
+    { id: "recipe_LongTerm", name: "Long-term Temporal Framing" },
+    { id: "recipe_ShortTerm", name: "Short-term Temporal Framing" }
+  ];
+  
 
-  const [items, setItems] = useState([
-    {
-      type: "menuitem",
-      text: "Menu item 1",
-      onAction: function () {
-        editor.insertContent(" <em>You clicked menu item 1!</em>");
-      },
-    },
-  ]);
+  // useEffect(() => {
+  //   console.log('Editor mounted, context values:', { taskID, prolificID, activityLog });
+  // }, [taskID, prolificID, activityLog]);
+
+  // Update the ref whenever activityLog changes
+  useEffect(() => {
+    activityLogRef.current = activityLog;
+  }, [activityLog]);
+  // const [items, setItems] = useState([
+  //   {
+  //     type: "menuitem",
+  //     text: "Menu item 1",
+  //     onAction: function () {
+  //       editor.insertContent(" <em>You clicked menu item 1!</em>");
+  //     },
+  //   },
+  // ]);
 
   useEffect(() => {
     if (activeChunkid === "") {
@@ -152,15 +180,16 @@ export default function Editor({
   }, [activeChunkid]);
 
   const handleKeydown = (e) => {
-    const newLogEntry = { key: e.key, timestamp: new Date() };
-    keylogRef.current = [...keylogRef.current, newLogEntry];
-    console.log('Updated keylogRef:', keylogRef.current);
+    // const newLogEntry = { key: e.key, timestamp: new Date() };
+    // keylogRef.current = [...keylogRef.current, newLogEntry];
+    logKeyPress(e.key);
+    // console.log('Updated keylogRef:', keylogRef.current);
   };
-  const handleClick = (e) => {
-    const newClickEntry = { element: e.target.tagName, id: e.target.id, className: e.target.className, timestamp: new Date() };
-    clickLogRef.current = [...clickLogRef.current, newClickEntry];
-    console.log('Updated clickLogRef:', clickLogRef.current);
-  };
+  // const handleClick = (e) => {
+  //   const newClickEntry = { element: e.target.tagName, id: e.target.id, className: e.target.className, timestamp: new Date() };
+  //   clickLogRef.current = [...clickLogRef.current, newClickEntry];
+  //   console.log('Updated clickLogRef:', clickLogRef.current);
+  // };
 
   useEffect(() => {
     if (llmStreaming && llmContinue && editorRef !== "") {
@@ -186,61 +215,6 @@ export default function Editor({
     }
   }, [llmResult, llmStreaming, llmContinue]);
 
-  // useEffect(() => {
-  //   if (
-  //     editorRef.current !== null &&
-  //     editorRef.current.editor !== undefined &&
-  //     inline
-  //   ) {
-  //     SetInline(false);
-  //     console.log(inline);
-  //     editorRef.current.editor.on("keydown", function (event) {
-  //       console.log(event.keyCode);
-  //       if (event.keyCode == "16") {
-  //         // 16 is for Shift, for TAB change to 9
-  //         let highlightedText = "";
-  //         const selectedText =
-  //           editorRef.current.editor.selection.getNode().innerHTML;
-  //         const match = selectedText.match(/\*(.*?)\*/g);
-  //         //console.log(selectedText)
-  //         //console.log(match)
-  //         if (match) {
-  //           highlightedText = match[0];
-  //           console.log(highlightedText);
-  //           console.log(highlightedText.replace(/<\/?[^>]+(>|$)/g, ""));
-  //           const node = editorRef.current.editor.selection.getNode();
-  //           const originalContent =
-  //             editorRef.current.editor.selection.getNode().innerHTML;
-  //           const modifiedText = highlightedText.replace(/<\/?[^>]+(>|$)/g, "");
-  //           const modifiedOriginalContent = originalContent.replace(
-  //             highlightedText,
-  //             modifiedText
-  //           );
-  //           console.log(modifiedOriginalContent);
-  //           const newContent = modifiedOriginalContent.replace(
-  //             modifiedText,
-  //             `<span class='inline-prompt'>${modifiedText.replace(
-  //               /\*/g,
-  //               ""
-  //             )}</span>`
-  //           );
-  //           console.log(newContent);
-  //           node.innerHTML = newContent;
-  //           //console.log(node)
-  //           const promptNode = node.querySelector(".inline-prompt");
-  //           const promptText = promptNode.textContent;
-  //           //console.log(promptText)
-  //           //console.log(promptNode)
-  //           getLLMResult(promptText, promptNode);
-
-  //           //event.preventDefault();
-  //         } else {
-  //           highlightedText = null;
-  //         }
-  //       }
-  //     });
-  //   }
-  // });
 
   useEffect(() => {
     if (llmImage !== "") {
@@ -251,37 +225,89 @@ export default function Editor({
       editorRef.current.editor.dom.remove("placeHolder");
     }
   }, [llmImage]);
+  // console.log('act',activityLog)
+  const handleWaiveValidation = async () => {
+    try {
+      setBypassValidation(true);
+      setShowModal(false);
+      // addCompletedTask(currentDocument.task_id);
+      // Call the async function and wait for it to complete
+      await saveActivityLog(currentDocument);
+      // handleSaveButtonClick
+      navigate(`/task`);
+      // Proceed with other synchronous actions
+      
+    } catch (error) {
+      console.error("Error occurred while handling waive validation:", error);
+      // Handle error (e.g., show a notification to the user)
+    }
+  };
 
   const handleSaveButtonClick = async (documentID) => {
-    console.log('task id', taskID, 'prolific id', prolificID);
-    const activityData = {
-      document_id: documentID, 
-      task_id: taskID,
-      prolific_id: prolificID,
-      key_log: keylogRef.current,
-      click_log: clickLogRef.current
-    };
-    console.log("Activity Data:", activityData);
+    const currentActivityLog = activityLogRef.current;
+    // console.log('task id', taskID, 'prolific id', prolificID);
+    console.log('Inside handleSaveButtonClick - activityLog:', currentActivityLog);
+  
     try {
-      await apiClient.post("/log_activity", activityData);
-      console.log("Activity logged successfully");
-      addCompletedTask(taskID);
-      navigate(`/questionnaire`);
+      if (currentDocument.task_id.startsWith("sandbox_task")) {
+        const missingActions = requiredActions.filter(
+          action => !currentActivityLog.buttonClicks.some(log => log.action === action.id)
+        );
+        const missingButtons = missingActions.map(action => action.name);
+        // console.log(missingButtons);
+        if (missingButtons.length > 0) {
+          setMissingButtons(missingButtons);
+          setShowModal(true);
+          return;
+        }
+        await saveActivityLog(currentDocument);
+        navigate(`/task`);
+        // const activityData = {
+        //   document_id: documentID,
+        //   task_id: currentDocument.task_id,
+        //   prolific_id: currentDocument.prolific_id,
+        //   activity_log: currentActivityLog // This includes all button clicks and generated content logs
+        // };
+        // console.log("Activity Data:", activityData);
+        // await apiClient.post("/log_activity", activityData);
+        
+        // console.log("Activity logged successfully");
+        
+        // setMissingButtons([]); // Reset missing buttons after successful save
+        
+      } else {
+        // const activityData = {
+        //   document_id: documentID,
+        //   task_id: currentDocument.task_id,
+        //   prolific_id: currentDocument.prolific_id,
+        //   activity_log: currentActivityLog // This includes all button clicks and generated content logs
+        // };
+        // console.log("Activity Data:", activityData);
+        // await apiClient.post("/log_activity", activityData);
+        // console.log("Activity logged successfully");
+        // addCompletedTask(currentDocument.task_id);
+        // navigate(`/questionnaire`);
+        await saveActivityLog(currentDocument);
+        navigate(`/questionnaire`);
+      }
     } catch (error) {
       console.error("Failed to log activity:", error);
     }
   };
+  
+  
+  
 
   const handleEditorClick = () => {
     const node = editorRef.current.editor.selection.getNode();
     const chunk = editorRef.current.editor.dom.getParent(node, "span.chunk");
     const chunkClass = editorRef.current.editor.dom.getAttrib(chunk, "class");
     const factorId = chunkClass.match(/factor_.....*/);
-    console.log("Factor ID: " + factorId);
+    // console.log("Factor ID: " + factorId);
     if (factorId) {
       setActiveFactorId(factorId[0]);
       console.log(factorColors);
-      console.log("Factor Id Updated to " + factorId);
+      // console.log("Factor Id Updated to " + factorId);
     }
     if (chunk) {
       const chunkid = editorRef.current.editor.dom.getAttrib(chunk, "id");
@@ -330,7 +356,7 @@ export default function Editor({
   };
 
   const handleEditorOnChange = () => {
-    console.log("handleEditorOnChange");
+    // console.log("handleEditorOnChange");
     if (editingMode) {
       const chunk = currentDocument.chunks.find(
         (chunk) => chunk.frontend_id === activeChunkid
@@ -364,8 +390,8 @@ export default function Editor({
       });
     }
 
-    console.log("Editor Current Document Looks Like:");
-    console.log(currentDocument._id);
+    // console.log("Editor Current Document Looks Like:");
+    // console.log(currentDocument._id);
     const newContent = editorRef.current.editor.getContent();
 
     clearTimeout(documentContentUpdateTimer);
@@ -379,7 +405,7 @@ export default function Editor({
     }, 500);
 
     setChunksVisbleInDocument(getVisibleChunkIds());
-    console.log(chunksVisibleInDocument);
+    // console.log(chunksVisibleInDocument);
 
     setDocumentContentUpdateTimer(newTimer);
   };
@@ -397,7 +423,7 @@ export default function Editor({
   };
 
 
-  async function getLLMResult(promptText, promptNode) {
+  async function getLLMResult(promptText, promptNode) {  
     function countTags(text) {
       var count = 0;
       var inTag = false;
@@ -405,17 +431,18 @@ export default function Editor({
         if (text[char] === '<') {
           inTag = true;
         }
-
+  
         if (inTag === false) {
           count = count + 1;
         }
-
+  
         if (text[char] === '>') {
           inTag = false;
         }
       }
       return count + 1;
     }
+    
     if (editorRef !== "") {
       try {
         console.log("Inside getLLMResult");
@@ -424,7 +451,7 @@ export default function Editor({
         const currPrompts = llmPromptsList;
         currPrompts.push(promptText);
         setLlmPromptsList(currPrompts);
-
+  
         const idArray = llmId;
         console.log(idArray);
         let index = -1;
@@ -437,75 +464,75 @@ export default function Editor({
         }
         llmId.push(index + 1);
         setLlmId(llmId);
-
-        if (promptText.includes("image") || promptText.includes("picture")) {
-          editorRef.current.editor.selection.setContent(
-            `<img id= 'placeHolder' src=${PlaceHolder} width="256" height="256">`
-          );
-          setLlmImage("");
-          const { images } = await llm.generateImage({ prompt: promptText });
-          setLlmImage(images[0]);
-        } else {
+  
+        // if (promptText.includes("image") || promptText.includes("picture")) {
+        //   editorRef.current.editor.selection.setContent(
+        //     `<img id= 'placeHolder' src=${PlaceHolder} width="256" height="256">`
+        //   );
+        //   setLlmImage("");
+        //   const { images } = await llm.generateImage({ prompt: promptText });
+        //   setLlmImage(images[0]);
+        // } else {
           setLlmImage("");
           setLlmContinue(true);
           setLlmResult("");
-
+  
           console.log(`PromptText before streaming: ${promptText}`);
-          let entireText = tinymce.activeEditor.getContent();
-          let cleanText = tinymce.activeEditor.getContent({ format: 'text' })
-          console.log("ENTIRE TEXT");
-          console.log(entireText);
-          const sections = entireText.split('<p class="answer">&nbsp;</p>');
-          console.log("PART 1");
-          console.log(sections[0]);
-          console.log(countTags(sections[0]));
-          console.log(cleanText.slice(0, countTags(sections[0])));
-          console.log("PART 2");
-          console.log(sections[1]);
-          console.log(cleanText.slice(countTags(sections[0])));
-          let contextText = [];
-          if ((sections[0] === "" || sections[1] === null) && (sections[0] === "" || sections[1] === null)) {
-            contextText = [{ role: "user", content: promptText}]
-          }
-          else {
-            contextText = [{role: "system", content: `You are given a version of text whose first part is delimited by the triple angle brackets, while the second part is delimited by the triple dollar signs.
-            <<<${cleanText.slice(0, countTags(sections[0]))}>>>
-            $$$${cleanText.slice(countTags(sections[0]))}$$$
-            Answer any future requests made by the user as normal but tailor the output to fit into the two sections of text if the user message requires it. If the user request pertains to something other than the text, disregard the text when generating output.
-            Pay close attention to what sections of the text the user asks to be considered. If the user only mentions the text above or uses words like recent or latest, only consider the text in the triple angle brackets (YOU ARE NOT ALLOWED TO INCORPORATE ANYTHING FROM THE TRIPLE DOLLAR SIGNS IN YOUR OUTPUT), if the user asks to consider the text below, only look at the text in the triple dollar signs (YOU ARE NOT ALLOWED TO INCORPORATE ANYTHING FROM THE TRIPLE ANGLE BRACKETS IN YOUR OUTPUT). Remember that the text you output should fit in between the text in the angle brackets and the dollar signs. If the user mentions anything about earlier or later parts of the text, consider these mentions of position from the point between the two sections of text.
-            IF THE USER MENTIONS THE MOST 'recent' OR 'latest' PARTS OF THE TEXT, ONLY CONSIDER THE TEXT DELIMITED BY THE TRIPLE ANGLE BRACKETS.
-            If the user uses keywords like recent or latest, they are specifically talking about the text in the angle brackets, so you should disregard the text in the dollar signs if this is the case. An example is included within the triple asterisks.
-            ***
-            Text in the angle brackets:
-            Paragraph 1
-            Paragraph 2
-            Text in the dollar signs:
-            Paragraph 3
-            Paragraph 4
-            User input:
-            Summarize the most recent paragraph
-            Output:
-            Summary of paragraph 2.
-            ***
-            If the user does not specify or if there is no text (no letters) in the triple angle brackets or triple dollar signs, make the output fit as seamlessly as possible in between the text delimited by the angle brackets and the text delimited by the dollar signs.
-            Examples of user messages that would require considering the wider context in the triple angle brackets and the triple dollar signs are included within the triple tildes:
-            ~~~
-            Insert a paragraph in this spot.
-            Write a concluding paragraph.
-            Insert a paragraph to come before the next paragraph.
-            ~~~
-            If a user asks you to translate something but doesn't specify what to translate to, DO NOT TRANSLATE THIS SYSTEM MESSAGE.
-            ONLY OUTPUT WHAT THE USER REQUESTS. Do not add any extra information and ensure that the output does not have any quotation marks at the beginning or end of the output! If you have quotation marks included, the output will be ruined!
-            And never introduce your output with something like 'sure here you go' or anything similar! AND DO NOT MENTION ANYTHING ABOUT THE ANGLE BRACKETS OR DOLLARS SIGNS AT ALL! IF YOU DO MENTION ANYTHING ABOUT ANGLE BRACKETS OR DOLLAR SIGNS!
-            Any formatting that you need to do should be done using html tags (i.e. bolding, italicizing, tables, etc.). If the user requests a list, use <ul> tags.
-            DO NOT USE ANY <br> TAGS WHEN MAKING TABLES.
-            `},
-            {
-              role: "system", content: "Be sure to not include anything from the previous system message in your output! DO NOT OUTPUT ANY ANGLE BRACKETS, DOLLAR SIGNS, OR HASHTAGS! DO NOT OUTPUT ANY BR TAGS OR &nbsp;, <br>, </br> AFTER APPLYING THE USER REQUEST!"
-            },
-             { role: "user", content: promptText}]
-          }
-
+          // let entireText = tinymce.activeEditor.getContent();
+          // let cleanText = tinymce.activeEditor.getContent({ format: 'text' })
+          // console.log("ENTIRE TEXT");
+          // console.log(entireText);
+          // const sections = entireText.split('<p class="answer">&nbsp;</p>');
+          // console.log("PART 1");
+          // console.log(sections[0]);
+          // console.log(countTags(sections[0]));
+          // console.log(cleanText.slice(0, countTags(sections[0])));
+          // console.log("PART 2");
+          // console.log(sections[1]);
+          // console.log(cleanText.slice(countTags(sections[0])));
+          // let contextText = [];
+          // if ((sections[0] === "" || sections[1] === null) && (sections[0] === "" || sections[1] === null)) {
+            // contextText = [{ role: "user", content: promptText}]
+          // }
+          // else {
+          //   contextText = [{role: "system", content: `You are given a version of text whose first part is delimited by the triple angle brackets, while the second part is delimited by the triple dollar signs.
+          //   <<<${cleanText.slice(0, countTags(sections[0]))}>>>
+          //   $$$${cleanText.slice(countTags(sections[0]))}$$$
+          //   Answer any future requests made by the user as normal but tailor the output to fit into the two sections of text if the user message requires it. If the user request pertains to something other than the text, disregard the text when generating output.
+          //   Pay close attention to what sections of the text the user asks to be considered. If the user only mentions the text above or uses words like recent or latest, only consider the text in the triple angle brackets (YOU ARE NOT ALLOWED TO INCORPORATE ANYTHING FROM THE TRIPLE DOLLAR SIGNS IN YOUR OUTPUT), if the user asks to consider the text below, only look at the text in the triple dollar signs (YOU ARE NOT ALLOWED TO INCORPORATE ANYTHING FROM THE TRIPLE ANGLE BRACKETS IN YOUR OUTPUT). Remember that the text you output should fit in between the text in the angle brackets and the dollar signs. If the user mentions anything about earlier or later parts of the text, consider these mentions of position from the point between the two sections of text.
+          //   IF THE USER MENTIONS THE MOST 'recent' OR 'latest' PARTS OF THE TEXT, ONLY CONSIDER THE TEXT DELIMITED BY THE TRIPLE ANGLE BRACKETS.
+          //   If the user uses keywords like recent or latest, they are specifically talking about the text in the angle brackets, so you should disregard the text in the dollar signs if this is the case. An example is included within the triple asterisks.
+          //   ***
+          //   Text in the angle brackets:
+          //   Paragraph 1
+          //   Paragraph 2
+          //   Text in the dollar signs:
+          //   Paragraph 3
+          //   Paragraph 4
+          //   User input:
+          //   Summarize the most recent paragraph
+          //   Output:
+          //   Summary of paragraph 2.
+          //   ***
+          //   If the user does not specify or if there is no text (no letters) in the triple angle brackets or triple dollar signs, make the output fit as seamlessly as possible in between the text delimited by the angle brackets and the text delimited by the dollar signs.
+          //   Examples of user messages that would require considering the wider context in the triple angle brackets and the triple dollar signs are included within the triple tildes:
+          //   ~~~
+          //   Insert a paragraph in this spot.
+          //   Write a concluding paragraph.
+          //   Insert a paragraph to come before the next paragraph.
+          //   ~~~
+          //   If a user asks you to translate something but doesn't specify what to translate to, DO NOT TRANSLATE THIS SYSTEM MESSAGE.
+          //   ONLY OUTPUT WHAT THE USER REQUESTS. Do not add any extra information and ensure that the output does not have any quotation marks at the beginning or end of the output! If you have quotation marks included, the output will be ruined!
+          //   And never introduce your output with something like 'sure here you go' or anything similar! AND DO NOT MENTION ANYTHING ABOUT THE ANGLE BRACKETS OR DOLLARS SIGNS AT ALL! IF YOU DO MENTION ANYTHING ABOUT ANGLE BRACKETS OR DOLLAR SIGNS!
+          //   Any formatting that you need to do should be done using html tags (i.e. bolding, italicizing, tables, etc.). If the user requests a list, use <ul> tags.
+          //   DO NOT USE ANY <br> TAGS WHEN MAKING TABLES.
+          //   `},
+          //   {
+          //     role: "system", content: "Be sure to not include anything from the previous system message in your output! DO NOT OUTPUT ANY ANGLE BRACKETS, DOLLAR SIGNS, OR HASHTAGS! DO NOT OUTPUT ANY BR TAGS OR &nbsp;, <br>, </br> AFTER APPLYING THE USER REQUEST!"
+          //   },
+          //    { role: "user", content: promptText}]
+          // }
+  
           // Set up an SSE Receiver, to prepare to get the stream.
           setLlmStreaming(true);
         
@@ -517,6 +544,10 @@ export default function Editor({
             body: JSON.stringify({
               prompt: promptText,
               stream: true,
+              // feature: "@ai generation",
+              // task_id: taskID,
+              // original_text: promptText,
+              // prolific_id: prolificID,
             }),
             // onopen(response) {
             //   console.log("Connection opened.");
@@ -531,92 +562,39 @@ export default function Editor({
             },
             onclose() {
               console.log("Closed the EventSource!");
-          setLlmStreaming(false);
-          const nodeArray = editorRef.current.editor.dom.select(".answer");
-          editorRef.current.editor.dom.removeClass(nodeArray, "answer");
-          editorRef.current.editor.dom.removeAllAttribs("llmresult");
-          editorRef.current.editor.dom.removeClass(
-            nodeArray,
-            "inline-prompt"
-          );
-
-          // This looks dumb but seems critical to the editor internal state updating correctly.
-          editorRef.current.editor.setContent(
-            editorRef.current.editor.getContent()
-          );
-
-          setLlmPrompt(promptText);
-          SetInline(true);
-          setLlmStopButtonVisible(false);
-          console.log(
-            `ChatGPT state when message was closed: ${llmResult}`
-          ); // this doesn't work.
-          console.log("Closed the message connection!");
-          console.log(inline);
-            
+              setLlmStreaming(false);
+              logGeneratedContent("@ai generation", promptText, tinymce.activeEditor.dom.get('llmresult').innerHTML);
+              const nodeArray = editorRef.current.editor.dom.select(".answer");
+              editorRef.current.editor.dom.removeClass(nodeArray, "answer");
+              editorRef.current.editor.dom.removeAllAttribs("llmresult");
+              editorRef.current.editor.dom.removeClass(
+                nodeArray,
+                "inline-prompt"
+              );
+  
+              // This looks dumb but seems critical to the editor internal state updating correctly.
+              editorRef.current.editor.setContent(
+                editorRef.current.editor.getContent()
+              );
+  
+              // setLlmPrompt(promptText);
+              SetInline(true);
+              setLlmStopButtonVisible(false);
+              // console.log(
+                // `ChatGPT state when message was closed: ${llmResult}`
+              // ); // this doesn't work.?
+              console.log("Closed the message connection!");
+              // console.log(inline);
+  
+              // Log the generated content
+              // logGeneratedContent("@ai generation", promptText, tinymce.activeEditor.dom.get('llmresult').innerHTML);
+                
             },
             onerror(err) {
               console.error("Error occurred:", err);
             },
           });
-          
-
-
-          // await fetchEventSource(`http://127.0.0.1:8080/chatGPT/chat`, {
-          //   method: "POST",
-          //   headers: {
-          //     "Content-Type": "application/json",
-          //   },
-          //   body: JSON.stringify({
-          //     messages: contextText,
-          //   }),
-          //   openWhenHidden: true, // Keep the stream going even if the document gets hidden for a second.
-          //   onmessage(message) {
-          //     console.log(`Received a snippet from chatGPT: ${message.data}`);
-          //     // console.log(tinymce.activeEditor.getContent());
-          //     // console.log(tinymce.activeEditor.dom.get('llmresult'));
-          //     if (promptText.includes("table") || promptText.includes("list")) {
-          //       setLlmResult((prev) => {
-          //         const gptState = prev + message.data;
-          //         console.log(`ChatGPT state: ${gptState}`);
-          //         return gptState;
-          //       });
-          //     }
-          //     else {
-          //       tinymce.activeEditor.dom.setHTML(
-          //         tinymce.activeEditor.dom.get('llmresult'),
-          //         tinymce.activeEditor.dom.get('llmresult').innerHTML + message.data
-          //       );
-          //     }
-          //   },
-          //   onclose() {
-          //     // Finishes updating the document with the generated content. Also does other teardown code to end the streaming process.
-          //     console.log("Closed the EventSource!");
-          //     setLlmStreaming(false);
-          //     const nodeArray = editorRef.current.editor.dom.select(".answer");
-          //     editorRef.current.editor.dom.removeClass(nodeArray, "answer");
-          //     editorRef.current.editor.dom.removeAllAttribs("llmresult");
-          //     editorRef.current.editor.dom.removeClass(
-          //       nodeArray,
-          //       "inline-prompt"
-          //     );
-
-          //     // This looks dumb but seems critical to the editor internal state updating correctly.
-          //     editorRef.current.editor.setContent(
-          //       editorRef.current.editor.getContent()
-          //     );
-
-          //     setLlmPrompt(promptText);
-          //     SetInline(true);
-          //     setLlmStopButtonVisible(false);
-          //     console.log(
-          //       `ChatGPT state when message was closed: ${llmResult}`
-          //     ); // this doesn't work.
-          //     console.log("Closed the message connection!");
-          //     console.log(inline);
-          //   },
-          // });
-        }
+        // }
       } catch (error) {
         console.error("Something went wrong!", error);
       }
@@ -883,7 +861,7 @@ export default function Editor({
                   setup: (editor) => {
                     //adding custom icons
                     editor.on('keydown', (e) => { handleKeydown(e) });
-                    editor.on('click', (e) => { handleClick(e) });
+                    // editor.on('click', (e) => { handleClick(e) });
                     editor.on("ExecCommand", function (e) {
                       if ("mceNewDocument" == e.command) {
                         // e.preventDefault();
@@ -935,16 +913,15 @@ export default function Editor({
                       },
                       onSetup: (buttonApi) => {
                         const editorEventCallback = (eventApi) => {
-                          buttonApi.setEnabled(
-                            eventApi.element.classList.contains("chunk") &&
-                              editorRef.current.props.recipes.length > 0
-                          );
+                          // if (editorRef.current) {
+                            buttonApi.setEnabled(
+                              eventApi.element.classList.contains("chunk") &&
+                              recipes.length > 0
+                            );
+                          // }
                         };
                         editor.on("NodeChange", editorEventCallback);
-
-                        /* onSetup should always return the unbind handlers */
-                        return () =>
-                          editor.off("NodeChange", editorEventCallback);
+                        return () => editor.off("NodeChange", editorEventCallback);
                       },
                     });
 
@@ -1005,37 +982,32 @@ export default function Editor({
                       setLlmPrompt(promptText);
                       getLLMResult(promptText, promptNode);
                     }),
-                      editor.ui.registry.addButton("save", {
-                        icon: "save",
-                        text: "Save and Continue",
-                        onAction: () => {
-                          const newContent = editorRef.current.editor.getContent();
-                          handleSaveButtonClick(currentDocument._id);
-                          updateDocument(currentDocument._id, newContent)
-                            .then(() => {
-                              editorRef.current.editor.notificationManager.open(
-                                {
-                                  text: "Document saved.",
-                                  type: "success",
-                                  timeout: 1000,
-                                }
-                              );
-                            })
-                            .catch((error) => {
-                              console.error(
-                                "Failed to save document in backend:",
-                                error
-                              );
-                              editorRef.current.editor.notificationManager.open(
-                                {
-                                  text: "Failed to save document to backend.",
-                                  type: "error",
-                                  timeout: 1000,
-                                }
-                              );
-                            });
-                        },
-                      });
+                    editor.ui.registry.addButton("save", {
+                      icon: "save",
+                      text: "Save and Continue",
+                      onAction: () => {
+                        const newContent = editorRef.current.editor.getContent();
+                        handleSaveButtonClick(currentDocument._id);
+                        updateDocument(currentDocument._id, newContent)
+                          .then(() => {
+                            // editorRef.current.editor.notificationManager.open({
+                            //   text: "Document saved.",
+                            //   type: "success",
+                            //   timeout: 1000,
+                            // });
+                            console.log('a okay')
+                          })
+                          .catch((error) => {
+                            // console.error("Failed to save document in backend:", error);
+                            // editorRef.current.editor.notificationManager.open({
+                            //   text: "Failed to save document to backend.",
+                            //   type: "error",
+                            //   timeout: 1000,
+                            // });
+                            console.log('not okay')
+                          });
+                      },
+                    });
                     editor.ui.registry.addButton("insertAITextButton", {
                       icon: "checkmark",
                       tooltip: "Insert AI Generated Text",
@@ -1076,121 +1048,121 @@ export default function Editor({
                         setVariationSidebarVisible((prevState) => !prevState);
                       },
                     });
-                    editor.ui.registry.addButton("viewer", {
-                      text: "View",
-                      onAction: () => {
-                        navigate("/viewer", {
-                          state: { document: currentDocument },
-                        });
-                      },
-                    });
+                    // editor.ui.registry.addButton("viewer", {
+                    //   text: "View",
+                    //   onAction: () => {
+                    //     navigate("/viewer", {
+                    //       state: { document: currentDocument },
+                    //     });
+                    //   },
+                    // });
 
-                    editor.ui.registry.addIcon(
-                      "templates",
-                      "<svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d='M288 448H64V224h64V160H64c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64zm-64-96H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64z'/></svg>"
-                    );
-                    editor.ui.registry.addIcon(
-                      "plus",
-                      '<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>'
-                    );
-                    editor.ui.registry.addIcon(
-                      "paperclip",
-                      '<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M364.2 83.8c-24.4-24.4-64-24.4-88.4 0l-184 184c-42.1 42.1-42.1 110.3 0 152.4s110.3 42.1 152.4 0l152-152c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-152 152c-64 64-167.6 64-231.6 0s-64-167.6 0-231.6l184-184c46.3-46.3 121.3-46.3 167.6 0s46.3 121.3 0 167.6l-176 176c-28.6 28.6-75 28.6-103.6 0s-28.6-75 0-103.6l144-144c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-144 144c-6.7 6.7-6.7 17.7 0 24.4s17.7 6.7 24.4 0l176-176c24.4-24.4 24.4-64 0-88.4z"/></svg>'
-                    );
-                    var items = [
-                      {
-                        type: "menuitem",
-                        icon: "paperclip",
-                        text: "Email",
-                        onAction: (_) =>
-                          editor.insertContent(
-                            `<p>@ai Compose an email addressing the topic of <strong>[INSERT SPECIFIC TOPIC: e.g., Sustainable Travel Practices]</strong> tailored for <strong>[INTENDED RECIPIENT: e.g., Travel Enthusiasts, Corporate Clients]</strong>. Please adopt a <strong>[TONE OF VOICE AND LANGUAGE: e.g., friendly and informative, formal and professional]</strong> tone. Your email should effectively convey key information and engage the recipient.</p>`
-                          ),
-                      },
-                      {
-                        type: "menuitem",
-                        icon: "paperclip",
-                        text: "Travel Itinerary",
-                        onAction: (_) =>
-                          editor.insertContent(
-                            `<p>@ai Develop a detailed travel itinerary for a <strong>[TYPE OF TRIP: e.g., week-long family vacation, romantic weekend getaway]</strong> to <strong>[DESTINATION: e.g., Paris, Bali]</strong> during the month of <strong>[MONTH OF VISIT: e.g., August]</strong>. Design the itinerary for <strong>[NUMBER OF DAYS: e.g., 5 days]</strong>, focusing on <strong>[TYPE OF ACTIVITIES: e.g., cultural exploration, outdoor adventures, relaxation]</strong>. Ensure that the itinerary includes a balanced mix of <strong>[SPECIFIC TYPES OF ACTIVITIES OR ATTRACTIONS: e.g., museums, hiking trails, local markets]</strong>.</p>`
-                          ),
-                      },
-                      {
-                        type: "menuitem",
-                        icon: "paperclip",
-                        text: "Meeting Agenda",
-                        onAction: (_) =>
-                          editor.insertContent(
-                            `<p>@ai Create a comprehensive meeting agenda for a <strong>[TYPE OF MEETING: e.g., Project Kickoff, Monthly Review]</strong> scheduled on <strong>[DATE AND TIME: e.g., August 15th, 10:00 AM]</strong>. Develop an agenda that covers <strong>[MAIN TOPICS: e.g., progress updates, goal setting, team collaboration]</strong> and ensures active participation. Organize the agenda with clear time allocations for each item and include any <strong>[REQUIRED PREPARATION: e.g., data presentation, research summaries]</strong> necessary. Focus on maintaining a productive approach to facilitate a successful meeting.</p>`
-                          ),
-                      },
-                    ];
+                    // editor.ui.registry.addIcon(
+                    //   "templates",
+                    //   "<svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d='M288 448H64V224h64V160H64c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64zm-64-96H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64z'/></svg>"
+                    // );
+                    // editor.ui.registry.addIcon(
+                    //   "plus",
+                    //   '<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>'
+                    // );
+                    // editor.ui.registry.addIcon(
+                    //   "paperclip",
+                    //   '<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M364.2 83.8c-24.4-24.4-64-24.4-88.4 0l-184 184c-42.1 42.1-42.1 110.3 0 152.4s110.3 42.1 152.4 0l152-152c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-152 152c-64 64-167.6 64-231.6 0s-64-167.6 0-231.6l184-184c46.3-46.3 121.3-46.3 167.6 0s46.3 121.3 0 167.6l-176 176c-28.6 28.6-75 28.6-103.6 0s-28.6-75 0-103.6l144-144c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-144 144c-6.7 6.7-6.7 17.7 0 24.4s17.7 6.7 24.4 0l176-176c24.4-24.4 24.4-64 0-88.4z"/></svg>'
+                    // );
+                    // var items = [
+                    //   {
+                    //     type: "menuitem",
+                    //     icon: "paperclip",
+                    //     text: "Email",
+                    //     onAction: (_) =>
+                    //       editor.insertContent(
+                    //         `<p>@ai Compose an email addressing the topic of <strong>[INSERT SPECIFIC TOPIC: e.g., Sustainable Travel Practices]</strong> tailored for <strong>[INTENDED RECIPIENT: e.g., Travel Enthusiasts, Corporate Clients]</strong>. Please adopt a <strong>[TONE OF VOICE AND LANGUAGE: e.g., friendly and informative, formal and professional]</strong> tone. Your email should effectively convey key information and engage the recipient.</p>`
+                    //       ),
+                    //   },
+                    //   {
+                    //     type: "menuitem",
+                    //     icon: "paperclip",
+                    //     text: "Travel Itinerary",
+                    //     onAction: (_) =>
+                    //       editor.insertContent(
+                    //         `<p>@ai Develop a detailed travel itinerary for a <strong>[TYPE OF TRIP: e.g., week-long family vacation, romantic weekend getaway]</strong> to <strong>[DESTINATION: e.g., Paris, Bali]</strong> during the month of <strong>[MONTH OF VISIT: e.g., August]</strong>. Design the itinerary for <strong>[NUMBER OF DAYS: e.g., 5 days]</strong>, focusing on <strong>[TYPE OF ACTIVITIES: e.g., cultural exploration, outdoor adventures, relaxation]</strong>. Ensure that the itinerary includes a balanced mix of <strong>[SPECIFIC TYPES OF ACTIVITIES OR ATTRACTIONS: e.g., museums, hiking trails, local markets]</strong>.</p>`
+                    //       ),
+                    //   },
+                    //   {
+                    //     type: "menuitem",
+                    //     icon: "paperclip",
+                    //     text: "Meeting Agenda",
+                    //     onAction: (_) =>
+                    //       editor.insertContent(
+                    //         `<p>@ai Create a comprehensive meeting agenda for a <strong>[TYPE OF MEETING: e.g., Project Kickoff, Monthly Review]</strong> scheduled on <strong>[DATE AND TIME: e.g., August 15th, 10:00 AM]</strong>. Develop an agenda that covers <strong>[MAIN TOPICS: e.g., progress updates, goal setting, team collaboration]</strong> and ensures active participation. Organize the agenda with clear time allocations for each item and include any <strong>[REQUIRED PREPARATION: e.g., data presentation, research summaries]</strong> necessary. Focus on maintaining a productive approach to facilitate a successful meeting.</p>`
+                    //       ),
+                    //   },
+                    // ];
 
-                    editor.ui.registry.addMenuButton("@ai-Templates", {
-                      icon: "templates",
-                      text: "AI Templates",
-                      fetch: function (callback) {
-                        callback(
-                          items.concat({
-                            type: "menuitem",
-                            icon: "plus",
-                            text: "Create New Template",
-                            onAction: (_) =>
-                              editor.windowManager.open(dialogConfig),
-                          })
-                        );
-                        var dialogConfig = {
-                          title: "Create A New Template",
-                          body: {
-                            type: "panel",
-                            items: [
-                              {
-                                type: "input",
-                                name: "templateName",
-                                label: "Enter the name of the new template:",
-                              },
-                              {
-                                type: "input",
-                                name: "templatePrompt",
-                                label: "Enter the prompt:",
-                              },
-                            ],
-                          },
-                          buttons: [
-                            {
-                              type: "cancel",
-                              name: "closeButton",
-                              text: "Cancel",
-                            },
-                            {
-                              type: "submit",
-                              name: "submitButton",
-                              text: "Create",
-                              primary: true,
-                            },
-                          ],
-                          initialData: {
-                            templateName: "",
-                            templatePrompt: "",
-                          },
-                          onSubmit: function (api) {
-                            var data = api.getData();
+                    // editor.ui.registry.addMenuButton("@ai-Templates", {
+                    //   icon: "templates",
+                    //   text: "AI Templates",
+                    //   fetch: function (callback) {
+                    //     callback(
+                    //       items.concat({
+                    //         type: "menuitem",
+                    //         icon: "plus",
+                    //         text: "Create New Template",
+                    //         onAction: (_) =>
+                    //           editor.windowManager.open(dialogConfig),
+                    //       })
+                    //     );
+                    //     var dialogConfig = {
+                    //       title: "Create A New Template",
+                    //       body: {
+                    //         type: "panel",
+                    //         items: [
+                    //           {
+                    //             type: "input",
+                    //             name: "templateName",
+                    //             label: "Enter the name of the new template:",
+                    //           },
+                    //           {
+                    //             type: "input",
+                    //             name: "templatePrompt",
+                    //             label: "Enter the prompt:",
+                    //           },
+                    //         ],
+                    //       },
+                    //       buttons: [
+                    //         {
+                    //           type: "cancel",
+                    //           name: "closeButton",
+                    //           text: "Cancel",
+                    //         },
+                    //         {
+                    //           type: "submit",
+                    //           name: "submitButton",
+                    //           text: "Create",
+                    //           primary: true,
+                    //         },
+                    //       ],
+                    //       initialData: {
+                    //         templateName: "",
+                    //         templatePrompt: "",
+                    //       },
+                    //       onSubmit: function (api) {
+                    //         var data = api.getData();
 
-                            items.push({
-                              type: "menuitem",
-                              icon: "paperclip",
-                              text: data.templateName,
-                              onAction: (_) =>
-                                editor.insertContent(
-                                  `<p>@ai ${data.templatePrompt}</p>`
-                                ),
-                            });
-                            api.close();
-                          },
-                        };
-                      },
-                    });
+                    //         items.push({
+                    //           type: "menuitem",
+                    //           icon: "paperclip",
+                    //           text: data.templateName,
+                    //           onAction: (_) =>
+                    //             editor.insertContent(
+                    //               `<p>@ai ${data.templatePrompt}</p>`
+                    //             ),
+                    //         });
+                    //         api.close();
+                    //       },
+                    //     };
+                    //   },
+                    // });
                   },
 
                   content_style:
@@ -1207,6 +1179,13 @@ export default function Editor({
           )}
         </Col>
       </Row>
+      <TutorialModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        missingButtons={missingButtons}
+        requiredButtons={requiredActions}
+        onWaiveValidation={handleWaiveValidation}
+      />
     </Container>
   );
 }
