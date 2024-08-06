@@ -97,10 +97,10 @@ export default function Task() {
         let configModule;
         console.log('sads',studyID)
         switch (studyID) {
-          case 'A':
+          case '66aca63c781c99be382101f6':
             configModule = await import('../../configs/stage1study1EN.js');
             break;
-          case 'B':
+          case '66aca69be884d495377c3f30':
             configModule = await import('../../configs/stage1study1ES.js');
             break;
           default:
@@ -130,7 +130,7 @@ export default function Task() {
         setCurrentTask(task);
         setUserAnswers({}); // Reset user answers for the new task
       } else {
-        window.location.href = "https://www.prolific.com";
+        window.location.href = `https://app.prolific.com/submissions/complete?cc=${tasksConfig.redirectCode}`;
       }
     }
   }, [tasksConfig, completedTasks, setTaskID, navigate]);

@@ -132,8 +132,8 @@ export default function Welcome() {
                   <div className="form-group">
                     <label htmlFor="proficiency">
                       Language Proficiency 
-                      {studyID === "A" && " (English)"}
-                      {studyID === "B" && " (Spanish)"}
+                      {studyID === "66aca63c781c99be382101f6" && " (English)"}
+                      {studyID === "66aca69be884d495377c3f30" && " (Spanish)"}
                     </label>
                     <select
                       id="proficiency"
