@@ -52,7 +52,7 @@ export default function Welcome() {
         spanish_proficiency: spanishProficiency,
       };
       saveParticipantInfo(participantData);
-      navigate("/task");
+      navigate("/instruction");
     } else {
       setValidationError("You must agree before proceeding.");
     }
@@ -138,8 +138,8 @@ export default function Welcome() {
                     <select
                       id="proficiency"
                       className="form-control"
-                      value={studyID === "A" ? englishProficiency : spanishProficiency}
-                      onChange={(e) => studyID === "A" ? setEnglishProficiency(e.target.value) : setSpanishProficiency(e.target.value)}
+                      value={studyID === "66aca63c781c99be382101f6" ? englishProficiency : spanishProficiency}
+                      onChange={(e) => studyID === "66aca69be884d495377c3f30" ? setEnglishProficiency(e.target.value) : setSpanishProficiency(e.target.value)}
                       required
                     >
                       <option value="">Select your proficiency level</option>

@@ -7,6 +7,7 @@ import Viewer from "./components/ABScribe/Viewer";
 import Tutorial from "./components/Home/Tutorial";
 import Docs from "./components/Docs/docs";
 import Welcome from "./components/Home/Welcome";
+import JobDescription from "./components/Home/JobDescription";
 import Task from "./components/Home/Task";
 import Questionnaire from "./components/Home/Questionnaire";
 import ReactDOM from "react-dom/client";
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "/welcome",
         element: <Welcome />,
+      },
+      {
+        path: "/instruction",
+        element: <JobDescription />,
       },
       {
         path: "/task",
