@@ -43,20 +43,18 @@ const JobDescription = ({ showButton = true }) => {
           <div className="card-body">
             <h2 className="card-title">Task Details</h2>
             <p>Thank you for considering this opportunity.</p>
-
+            <p>We are seeking individuals to write one short advertisement for one charity. The written advertisement should have 70-150 words. Your responses and work on this task will be stored securely, and your identity will remain anonymous.</p>
             <h3 className="card-subtitle">Eligibility Criteria</h3>
+            <p></p>
             <ul>
               <li>You are proficient in {getProficiencyLanguage()}.</li>
               <li>Your profile indicates that you work in a writing-related profession.</li>
             </ul>
-
-            <h3 className="card-subtitle">Task Details</h3>
-            <p>We are seeking individuals to write one short advertisement for one charity. The written advertisement should have 70-150 words.</p>
-            <p>Your responses and work on this task will be stored securely, and your identity will remain anonymous.</p>
-           
+            
+          
             <h3 className="card-subtitle">Compensation</h3>
-            <p>You will be compensated at a flat rate of £3.00 for completing this task. Additionally, you can earn a bonus of up to £10.00 based on the quality and effectiveness of your advertisement. Effectiveness of your advertisement will be
-              rated by other crowd workers based on two criterias - 1) Persuasiveness 2) Text quality. Following is the bonus compensation structure.
+            <p>You will be compensated at a flat rate of £3.00 for completing this task. Additionally, you can earn a bonus of up to £10.00. The bonus compensation structure is given below and the top %s texts will be determined by other crowd 
+              workers based on two criterias - 1) Persuasiveness and 2) Quality (grammar, spelling mistakes etc.) of the text.
             </p>
             <table className="table table-striped">
               <thead>
@@ -76,14 +74,15 @@ const JobDescription = ({ showButton = true }) => {
                 </tr>
                 <tr>
                   <td>Top 1%</td>
-                  <td>£10.00)</td>
+                  <td>£10.00</td>
                 </tr>
               </tbody>
             </table>
            
 
             <h3 className="card-subtitle">Estimated Time</h3>
-            <p>This task is estimated to take approximately {getEstimatedTime()}. If you are ready to complete the job without interruptions during this time, please click "Proceed" to start. Thank you for your interest!</p>
+            <p>This task is estimated to take approximately {getEstimatedTime()}. If you are ready to complete the job without interruptions during this time, please click "Proceed" to start.</p>
+            <p>Thank you for your interest!</p>
 
             {showButton && (
               <Button className="mt-4" variant="outline-dark" size="lg" onClick={handleProceedClick}>
