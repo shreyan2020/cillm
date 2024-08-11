@@ -41,6 +41,7 @@ import aiInsertGif from "../../resources/abscribe_ai_insert_new.gif";
 import hoverButtonsGif from "../../resources/hover_buttons_new.gif";
 import variationComponentGif from "../../resources/variations_new.gif";
 // import tasksConfig from "../../configs/taskConfigA.js";
+import featureDescriptionsConfig from "../../configs/featureDescriptionsConfig.js";
 import { TaskContext } from "../../context/TaskContext";
 import "../../scss/home.scss";
 
@@ -69,32 +70,33 @@ export default function Task() {
     "ai-recipe": airecipe,
     "save-doc": savedoc,
   };
-  const featureDescriptions = {
-    "ai-help": {
-      title: "Generate text with AI Insert",
-      description:
-        "ABScribe makes it easy to stream text from AI directly into the document. Simply type @ai followed by a prompt and press enter.",
-    },
-    "ai-recipe": {
-      title: "Generate variations with AI Buttons",
-      description:
-        "Create variations by first clicking create variations and then clicking on one of the pre-defined variation buttons",
-    },
-    "ai-create-recipe": {
-      title: "Create new variations",
-      description:
-        "You can either use existing variation or create your own",
-    },
-    "ai-cont": {
-      title: "Generate continuation for your written text",
-      description:
-        "If you are stuck on a text, you can ask AI to write it's continuation",
-    },
-    "save-doc":{
-      title: "Save the document and move to next phase of the task",
-      description: "After you have completed writing your advertisement you can click on `Save and Continue` right above the writing space to proceed to next phase of the task",
-    },
-  };
+  // const featureDescriptions = {
+  //   "ai-help": {
+  //     title: "Generate text with AI Insert",
+  //     description:
+  //       "ABScribe makes it easy to stream text from AI directly into the document. Simply type @ai followed by a prompt and press enter.",
+  //   },
+  //   "ai-recipe": {
+  //     title: "Generate variations with AI Buttons",
+  //     description:
+  //       "Create variations by first clicking create variations and then clicking on one of the pre-defined variation buttons",
+  //   },
+  //   "ai-create-recipe": {
+  //     title: "Create new variations",
+  //     description:
+  //       "You can either use existing variation or create your own",
+  //   },
+  //   "ai-cont": {
+  //     title: "Generate continuation for your written text",
+  //     description:
+  //       "If you are stuck on a text, you can ask AI to write it's continuation",
+  //   },
+  //   "save-doc":{
+  //     title: "Save the document and move to next phase of the task",
+  //     description: "After you have completed writing your advertisement you can click on `Save and Continue` right above the writing space to proceed to next phase of the task",
+  //   },
+  // };
+  const featureDescriptions = featureDescriptionsConfig[studyID]?.features || featureDescriptionsConfig.default.features;
 
   useEffect(() => {
     // Dynamically import the task configuration based on the taskType

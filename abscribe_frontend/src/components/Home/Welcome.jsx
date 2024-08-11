@@ -5,6 +5,7 @@ import "../../scss/home.scss";
 import Button from "react-bootstrap/Button";
 import { TaskContext } from "../../context/TaskContext";
 import { apiClient } from '../../services/abscribeAPI'; // Import apiClient
+import consentTextConfig from '../../configs/consentTextConfig';
 
 export default function Welcome() {
   const navigate = useNavigate();
@@ -18,31 +19,18 @@ export default function Welcome() {
   const [englishProficiency, setEnglishProficiency] = useState("");
   const [spanishProficiency, setSpanishProficiency] = useState("");
 
-  const config = {
-    '66aca63c781c99be382101f6': {
-      language: 'English',
-      time: '15 minutes'
-    },
-    '66aca69be884d495377c3f30': {
-      language: 'Spanish',
-      time: '20 minutes'
-    },
-    default: {
-      language: 'English',
-      time: '15 minutes'
-    }
-  };
-
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const prolific_id = params.get("PROLIFIC_PID");
     const study_id = params.get("STUDY_ID");
+    console.log('asasa', study_id)
     if (prolific_id) {
       setProlificID(prolific_id);
     }
     if (study_id) {
       setStudyID(study_id);
     }
+    
   }, [location.search, setProlificID, setStudyID]);
 
   const saveParticipantInfo = async (participantData) => {
@@ -57,7 +45,6 @@ export default function Welcome() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(englishProficiency, spanishProficiency)
     if (isChecked) {
       const participantData = {
         prolific_id: prolificID,
@@ -75,13 +62,18 @@ export default function Welcome() {
   };
 
   const getProficiencyLanguage = () => {
-    return config[studyID]?.language || config.default.language;
+    return consentTextConfig[studyID]?.language || "Something went wrong please contact researcher";
   };
 
   const getEstimatedTime = () => {
-    return config[studyID]?.time || config.default.time;
+    return consentTextConfig[studyID]?.time || "Something went wrong please contact researcher";
   };
 
+  const renderConsentText = () => {
+    const consentHTML = consentTextConfig[studyID]?.consentText || "Something went wrong please contact researcher";
+    return <div dangerouslySetInnerHTML={{ __html: consentHTML }} />;
+  };
+console.log(studyID, consentTextConfig)
   return (
     <>
       <div className="jumbotron m-3">
@@ -90,38 +82,7 @@ export default function Welcome() {
           <div className="card mt-4">
             <div className="card-body">
               <h2 className="card-title">Consent Form</h2>
-              <p>
-                We are a group of researchers at the Technical University of Delft in The Netherlands. In this research project, we aim to investigate human behavior in LLM-augmented co-writing. As such, you are invited to participate in our research study.
-              </p>
-              
-              <p>
-                The following task is part of the research project described above. Upon accessing the web application, you will be presented with the task of writing a persuasive message for WWF using an AI-powered text editor. 
-                After the task, you will be asked to fill in a small questionnaire that relates to your experience with the editor.
-              </p>
-              
-              <p>
-                Completion of these tasks does not require any specific equipment. Your participation in this task is entirely voluntary, and you can withdraw at any time.
-              </p>
-              
-              <p>
-                We will collect your usage and your experience with the tool. This includes:
-              </p>
-              <ul>
-                <li>Personal information: age and gender</li>
-                <li>Language proficiency</li>
-                <li>Usage data: keystrokes, interactions with the editor, and your final write-up (which may be used in future scientific tasks)</li>
-                <li>Responses from the questionnaires</li>
-              </ul>
-              
-              <p>
-                We do not collect any data aside from the information described, and we will keep your information confidential to the best of our ability. All data is stored in a password-protected electronic format. Be aware that the data we gather with this task might be published in anonymized form later. Such an anonymized data set would include the answers you provide in this task but no personal information (e.g., your worker ID) so that the answers will not be traceable back to you.
-              </p>    
-              <p>
-                By clicking “I consent” at the bottom of this page, you confirm that you have read, understood, and consent to the above information.
-              </p>
-              <p>
-                Note: You can exit the task at any time. This will imply revoking your consent, and subsequently, all your data will be discarded from our databases.
-              </p>
+              {renderConsentText()}
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="gender">Gender</label>
