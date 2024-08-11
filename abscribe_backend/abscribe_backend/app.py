@@ -23,7 +23,7 @@ from abscribe_backend.database.mongo_connection import db
 from abscribe_backend.models.chunk import Chunk
 from abscribe_backend.models.document import Document
 from abscribe_backend.models.particiapnt_info import ParticipantInfo
-
+from abscribe_backend.models.survey import SurveyResponse
 import abscribe_backend.services.chatgpt_service as chatgpt_service
 
 # from abscribe_backend.models.keylogger import KeyloggerActivity
@@ -178,6 +178,36 @@ def save_participant_info():
     except Exception as e:
         print("Error saving participant info:", e)  # Debugging
         return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/log_survey", methods=["POST"])
+def save_survey_response():
+    data = request.get_json()
+    # print("Received survey data:", data)  # Print incoming data for debugging
+
+    prolific_id = data.get("prolific_id")
+    study_id = data.get("study_id")
+    task_id = data.get("task_id")
+    responses = data.get("responses", {})
+
+    if not all([prolific_id, study_id, task_id]):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    try:
+        survey_response = SurveyResponse(
+            prolific_id=prolific_id,
+            study_id=study_id,
+            task_id=task_id,
+            responses=responses,
+            timestamp=datetime.now(timezone.utc)  # Set the current time in UTC
+        )
+        survey_response.save()
+
+        return jsonify({"message": "Survey responses saved successfully"}), 200
+    except Exception as e:
+        print("Error saving survey responses:", e)  # Print the exception for debugging
+        return jsonify({"error": str(e)}), 500
+
 
 # Document endpoints
 

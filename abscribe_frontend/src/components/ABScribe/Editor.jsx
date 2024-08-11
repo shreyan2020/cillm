@@ -287,7 +287,7 @@ export default function Editor({
         // addCompletedTask(currentDocument.task_id);
         // navigate(`/questionnaire`);
         await saveActivityLog(currentDocument);
-        navigate(`/questionnaire`);
+        navigate(`/survey`);
       }
     } catch (error) {
       console.error("Failed to log activity:", error);

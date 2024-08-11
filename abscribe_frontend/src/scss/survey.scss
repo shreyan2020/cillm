@@ -1,0 +1,140 @@
+/* Survey.css */
+
+/* Container and header styling */
+.survey-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .survey-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .survey-block {
+    margin-bottom: 30px;
+  }
+  
+  .survey-block h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 5px;
+    color: #333;
+  }
+  
+  .survey-question {
+    margin-bottom: 15px;
+  }
+  
+  /* Styling for the Likert scale sections */
+  .likert-scale {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  .likert-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .likert-option input[type="radio"] {
+    margin-bottom: 5px;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+    transition: border 0.3s ease;
+  }
+  
+  .likert-option input[type="radio"]:checked {
+    border-color: #007bff;
+    background-color: #007bff;
+  }
+  
+  .likert-label {
+    font-size: 12px;
+    text-align: center;
+  }
+  
+  /* Styling for the range input sections */
+  .survey-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  
+    input[type="range"] {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+  
+    label {
+      margin-left: 10px;
+      display: flex;
+      align-items: center;
+    }
+  
+    input[type="checkbox"] {
+      margin-left: 5px;
+    }
+  }
+  
+  .survey-input input[type="range"] {
+    margin-right: 15px;
+    flex: 1;
+  }
+  
+  .survey-input span {
+    width: 50px;
+    text-align: center;
+  }
+  
+  /* Submit button styling */
+  .survey-submit {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .survey-submit button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .survey-submit button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Styling for error messages */
+  .error {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+  
+    &::before {
+      content: "⚠️";  // Unicode for a warning sign, or use a custom image
+      color: orange;
+      margin-right: 5px;
+    }
+  }
+  

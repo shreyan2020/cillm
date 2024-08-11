@@ -10,7 +10,9 @@ import Welcome from "./components/Home/Welcome";
 import JobDescription from "./components/Home/JobDescription";
 import Task from "./components/Home/Task";
 import Questionnaire from "./components/Home/Questionnaire";
+import Survey from "./components/Home/Survey";
 import ReactDOM from "react-dom/client";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
 import "react-tooltip/dist/react-tooltip.css";
@@ -43,9 +45,13 @@ const router = createBrowserRouter([
         path: "/task",
         element: <Task />,
       },
+      // {
+      //   path: "/questionnaire",
+      //   element: <Questionnaire />,
+      // },
       {
-        path: "/questionnaire",
-        element: <Questionnaire />,
+        path: "/survey",
+        element: <Survey />,
       },
       {
         path: "/editor",
