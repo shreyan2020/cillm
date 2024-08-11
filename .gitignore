@@ -39,3 +39,5 @@ dist/
 *.iml
 *.ipynb_checkpoints/
 
+#Ignore data
+analysis/data/*

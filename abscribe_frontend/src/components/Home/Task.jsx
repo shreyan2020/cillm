@@ -49,6 +49,7 @@ import aicont from "../../resources/ai_cont.gif";
 import aicreaterecipe from "../../resources/ai_create_recipe.gif";
 import aihelp from "../../resources/ai_help.gif";
 import airecipe from "../../resources/ai_recipe.gif";
+import savedoc from "../../resources/save_document.gif";
 
 export default function Task() {
   const navigate = useNavigate();
@@ -66,6 +67,7 @@ export default function Task() {
     "ai-cont": aicont,
     "ai-create-recipe": aicreaterecipe,
     "ai-recipe": airecipe,
+    "save-doc": savedoc,
   };
   const featureDescriptions = {
     "ai-help": {
@@ -87,6 +89,10 @@ export default function Task() {
       title: "Generate continuation for your written text",
       description:
         "If you are stuck on a text, you can ask AI to write it's continuation",
+    },
+    "save-doc":{
+      title: "Save the document and move to next phase of the task",
+      description: "After you have completed writing your advertisement you can click on `Save and Continue` right above the writing space to proceed to next phase of the task",
     },
   };
 
@@ -159,6 +165,7 @@ export default function Task() {
   const handleStartTask = () => {
     if (currentTask.id.startsWith("sandbox_task")) {
       // For sandbox tasks, no need to validate answers, directly create the document
+      
       createDocument(currentTask.tutorial, currentTask.id+"_"+studyID, prolificID)
         .then((document) => {
           console.log("Document created in backend");
