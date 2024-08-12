@@ -109,7 +109,7 @@ export default function Editor({
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL + "chatGPT/chat"
   //Task Context
-  const { taskID, prolificID, activityLog, addCompletedTask, logKeyPress, saveActivityLog, logGeneratedContent } = useContext(TaskContext);
+  const { taskID, prolificID, activityLog, setActivityLog, addCompletedTask, logKeyPress, saveActivityLog, logGeneratedContent } = useContext(TaskContext);
   const activityLogRef = useRef(activityLog);
   const [showModal, setShowModal] = useState(false);
   const [missingButtons, setMissingButtons] = useState([]);
@@ -151,7 +151,60 @@ export default function Editor({
     { id: "recipe_ShortTerm", name: "Short-term Temporal Framing" }
   ];
   
+  useEffect(() => {
+    // Warning on page refresh or leaving
+    const handleBeforeUnload = (e) => {
+      // console.log(['trying to refresh'])
+      // e.returnValue = 'You have unsaved changes, are you sure you want to leave?';
+      e.preventDefault();
+      
+    };
 
+    // Tracking tab or window visibility
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        // console.log('User has left the tab');
+        const logEntry = {
+          action: 'left',
+          timestamp: new Date().toISOString(),
+        };
+        setActivityLog((prevLog) => {
+          const updatedLog = {
+            ...prevLog,
+            visibilityState: [...prevLog.visibilityState, logEntry],
+          };
+          activityLogRef.current = updatedLog;
+          return updatedLog;
+        });
+        // Log this action, pause activities, etc.
+      } else if (document.visibilityState === 'visible') {
+        const logEntry = {
+          action: 'rejoined',
+          timestamp: new Date().toISOString(),
+        };
+        setActivityLog((prevLog) => {
+          const updatedLog = {
+            ...prevLog,
+            visibilityState: [...prevLog.visibilityState, logEntry],
+          };
+          activityLogRef.current = updatedLog;
+          return updatedLog;
+        });
+        // console.log('User has returned to the tab');
+        // Resume activities, etc.
+      }
+    };
+
+    // Add event listeners
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Clean up the event listeners on component unmount
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
   // useEffect(() => {
   //   console.log('Editor mounted, context values:', { taskID, prolificID, activityLog });
   // }, [taskID, prolificID, activityLog]);
@@ -246,7 +299,7 @@ export default function Editor({
   const handleSaveButtonClick = async (documentID) => {
     const currentActivityLog = activityLogRef.current;
     // console.log('task id', taskID, 'prolific id', prolificID);
-    console.log('Inside handleSaveButtonClick - activityLog:', currentActivityLog);
+    // console.log('Inside handleSaveButtonClick - activityLog:', currentActivityLog);
     try {
       if (currentDocument.task_id.startsWith("sandbox_task")) {
         const missingActions = requiredActions.filter(
@@ -259,8 +312,8 @@ export default function Editor({
           setShowModal(true);
           return;
         }
-        await saveActivityLog(currentDocument);
-        navigate(`/task`);
+        // await saveActivityLog(currentDocument);
+        // navigate(`/task`);
         // const activityData = {
         //   document_id: documentID,
         //   task_id: currentDocument.task_id,

@@ -23,7 +23,7 @@ export default function Welcome() {
     const params = new URLSearchParams(location.search);
     const prolific_id = params.get("PROLIFIC_PID");
     const study_id = params.get("STUDY_ID");
-    console.log('asasa', study_id)
+    // console.log('asasa', study_id)
     if (prolific_id) {
       setProlificID(prolific_id);
     }
@@ -36,7 +36,7 @@ export default function Welcome() {
   const saveParticipantInfo = async (participantData) => {
     try {
       const response = await apiClient.post("/save_participant_info", participantData);
-      console.log("Participant info saved:", response.data);
+      // console.log("Participant info saved:", response.data);
     } catch (error) {
       console.error("Error saving participant info:", error);
       setValidationError("Failed to save participant information. Please try again.");
@@ -73,7 +73,7 @@ export default function Welcome() {
     const consentHTML = consentTextConfig[studyID]?.consentText || "Something went wrong please contact researcher";
     return <div dangerouslySetInnerHTML={{ __html: consentHTML }} />;
   };
-console.log(studyID, consentTextConfig)
+// console.log(studyID, consentTextConfig)
   return (
     <>
       <div className="jumbotron m-3">

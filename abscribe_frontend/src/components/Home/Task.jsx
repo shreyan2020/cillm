@@ -103,7 +103,7 @@ export default function Task() {
     const loadTaskConfig = async () => {
       try {
         let configModule;
-        console.log('sads',studyID)
+        // console.log('sads',studyID)
         switch (studyID) {
           case '66aca63c781c99be382101f6':
             configModule = await import('../../configs/stage1study1EN.js');

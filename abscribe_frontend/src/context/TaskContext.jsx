@@ -11,7 +11,8 @@ export const TaskProvider = ({ children }) => {
   const [activityLog, setActivityLog] = useState({
     buttonClicks: [],
     generatedContent: [],
-    keyLogs: []
+    keyLogs: [],
+    visibilityState: [],
   });
   const [completedTasks, setCompletedTasks] = useState([]);
 
@@ -88,7 +89,8 @@ export const TaskProvider = ({ children }) => {
     const clearedLog = {
       buttonClicks: [],
       generatedContent: [],
-      keyLogs: []
+      keyLogs: [],
+      visibilityState: [],
     };
     setActivityLog(clearedLog);
     activityLogRef.current = clearedLog;
@@ -111,6 +113,7 @@ export const TaskProvider = ({ children }) => {
         questionnaireID,
         setQuestionnaireID,
         activityLog,
+        setActivityLog,
         logButtonClick,
         logGeneratedContent,
         logKeyPress,
