@@ -43,7 +43,8 @@ const consentTextConfig = {
           },
         taskDetails: `
           <p>Thank you for considering this opportunity.</p>
-          <p>We are seeking individuals to write one short advertisement for one charity. The written advertisement should have 70-150 words. Your responses and work on this task will be stored securely, and your identity will remain anonymous.</p>
+          <p>We are seeking individuals to write one short advertisement for one charity. The written advertisement should have 70-150 words.</p>
+          <p><b>You are not allowed to leave the task and consult external resources. If you leave the environment your response will be not considered for the final evaluation and also the compensatioon will be withdrawn.</b></p>
         `,
         eligibilityCriteria: `
           <li>You are proficient in English.</li>
@@ -105,7 +106,8 @@ const consentTextConfig = {
           },
         taskDetails: `
           <p>Gracias por considerar esta oportunidad.</p>
-          <p>Estamos buscando personas para escribir un anuncio corto para una organización benéfica. El anuncio escrito debe tener entre 70 y 150 palabras. Sus respuestas y trabajo en esta tarea se almacenarán de forma segura, y su identidad permanecerá anónima.</p>
+          <p>Estamos buscando personas para escribir un anuncio corto para una organización benéfica. El anuncio escrito debe tener entre 70 y 150 palabras.</p>
+          <p><b>No se le permite abandonar la tarea ni consultar recursos externos. Si abandona el entorno, su respuesta no será considerada para la evaluación final y también se retirará la compensación.</b></p>
         `,
         eligibilityCriteria: `
           <li>Es competente en español.</li>
