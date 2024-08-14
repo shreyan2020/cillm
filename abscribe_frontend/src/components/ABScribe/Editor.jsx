@@ -528,7 +528,7 @@ export default function Editor({
           setLlmImage("");
           setLlmContinue(true);
           setLlmResult("");
-  
+
           console.log(`PromptText before streaming: ${promptText}`);
           // let entireText = tinymce.activeEditor.getContent();
           // let cleanText = tinymce.activeEditor.getContent({ format: 'text' })
@@ -594,7 +594,7 @@ export default function Editor({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              prompt: promptText,
+              prompt: "You are given a request, satisfy the request by outputting a text without any formatting\n request: " + promptText,
               stream: true,
               // feature: "@ai generation",
               // task_id: taskID,

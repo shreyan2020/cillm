@@ -149,20 +149,26 @@ const Survey = () => {
   };
 
   return (
-    <div className="survey-container">
-      <div className="survey-header">
-        <h1>Survey</h1>
-      </div>
+    <div className="survey-container p-4 bg-light">
+  <div className="survey-header mb-5">
+  <h1 className="mb-4 text-primary text-center">Usefulness of Features</h1>
+  <h2 className="mb-4 h4 text-secondary text-start">Instructions</h2>
+  <div className="instructions text-start mb-4">
+    <div dangerouslySetInnerHTML={{ __html: config.headers.usefulness }} />
+  </div>
+</div>
 
+  
       {/* Usefulness of Features */}
-      <div className="survey-block">
-        <h2>{config.headers.usefulness}</h2>
+      <div className="survey-block mb-5">
+        {/* <h3 className="h5 mb-4">{config.headers.usefulness}</h3> */}
         {config.questions.usefulness.map((feature, index) => (
-          <div key={index} className="survey-question">
-            <label>{feature}</label>
-            <div className="survey-input">
+          <div key={index} className="survey-question mb-4">
+            <label className="form-label">{feature}</label>
+            <div className="d-flex align-items-center">
               <input
                 type="range"
+                className="form-range me-3"
                 min="0"
                 max="100"
                 step="1"
@@ -170,10 +176,11 @@ const Survey = () => {
                 onChange={(e) => handleChange('usefulness', feature, e.target.value)}
                 disabled={responses.notApplicable[feature]}  // Disable slider if "Not Applicable" is checked
               />
-              <span>{responses.notApplicable[feature] ? 'NA' : responses.usefulness[feature] || 0}</span>
-              <label>
+              <span className="ms-3">{responses.notApplicable[feature] ? 'NA' : responses.usefulness[feature] || 0}</span>
+              <label className="form-check ms-3">
                 <input
                   type="checkbox"
+                  className="form-check-input"
                   checked={responses.notApplicable[feature] || false}
                   onChange={() => handleNotApplicableChange(feature)}
                 />
@@ -181,109 +188,115 @@ const Survey = () => {
               </label>
             </div>
             {validationErrors.usefulness[feature] && (
-              <div className="error">
+              <div className="text-danger mt-2">
                 <i className="fas fa-exclamation-triangle"></i> {validationErrors.usefulness[feature]}
               </div>
             )}
           </div>
         ))}
       </div>
-
+  
       {/* Ownership */}
-      <div className="survey-block">
-        <h2>{config.headers.ownership}</h2>
+      <div className="survey-block mb-5">
+     
+      <h1 className="mb-4 text-primary text-center">{config.headers.ownership}</h1>
         {config.questions.ownership.map((statement, index) => (
-          <div key={index} className="survey-question">
-            <label>{statement}</label>
-            <div className="likert-scale">
+          <div key={index} className="survey-question mb-4">
+            <label className="form-label">{statement}</label>
+            <div className="likert-scale d-flex justify-content-between">
               {config.likertScale.map((option, idx) => (
-                <label key={idx} className="likert-option">
+                <label key={idx} className="likert-option me-3">
                   <input
                     type="radio"
+                    className="form-check-input"
                     name={`ownership-${index}`}
                     value={option}
                     checked={responses.ownership[statement] === option}
                     onChange={() => handleRadioChange('ownership', statement, option)}
                   />
-                  <span className="likert-label">{option}</span>
+                  <span className="ms-2">{option}</span>
                 </label>
               ))}
             </div>
             {validationErrors.ownership[statement] && (
-              <div className="error">
+              <div className="text-danger mt-2">
                 <i className="fas fa-exclamation-triangle"></i> {validationErrors.ownership[statement]}
               </div>
             )}
           </div>
         ))}
       </div>
-
+  
       {/* Collaboration */}
-      <div className="survey-block">
-        <h2>{config.headers.collaboration}</h2>
+      <div className="survey-block mb-5">
+      <h1 className="mb-4 text-primary text-center">{config.headers.collaboration}</h1>
         {config.questions.collaboration.map((statement, index) => (
-          <div key={index} className="survey-question">
-            <label>{statement}</label>
-            <div className="likert-scale">
+          <div key={index} className="survey-question mb-4">
+            <label className="form-label">{statement}</label>
+            <div className="likert-scale d-flex justify-content-between">
               {config.likertScale.map((option, idx) => (
-                <label key={idx} className="likert-option">
+                <label key={idx} className="likert-option me-3">
                   <input
                     type="radio"
+                    className="form-check-input"
                     name={`collaboration-${index}`}
                     value={option}
                     checked={responses.collaboration[statement] === option}
                     onChange={() => handleRadioChange('collaboration', statement, option)}
                   />
-                  <span className="likert-label">{option}</span>
+                  <span className="ms-2">{option}</span>
                 </label>
               ))}
             </div>
             {validationErrors.collaboration[statement] && (
-              <div className="error">
+              <div className="text-danger mt-2">
                 <i className="fas fa-exclamation-triangle"></i> {validationErrors.collaboration[statement]}
               </div>
             )}
           </div>
         ))}
       </div>
-
+  
       {/* AI Writing Assistant Capabilities */}
-      <div className="survey-block">
-        <h2>{config.headers.aiCapabilities}</h2>
+      <div className="survey-block mb-5">
+      <h1 className="mb-4 text-primary text-center">{config.headers.aiCapabilities}</h1>
+        {/* <h3 className="h5 mb-4">{config.headers.aiCapabilities}</h3> */}
         {config.questions.aiCapabilities.map((statement, index) => (
-          <div key={index} className="survey-question">
-            <label>{statement}</label>
-            <div className="likert-scale">
+          <div key={index} className="survey-question mb-4">
+            <label className="form-label">{statement}</label>
+            <div className="likert-scale d-flex justify-content-between">
               {config.likertScale.map((option, idx) => (
-                <label key={idx} className="likert-option">
+                <label key={idx} className="likert-option me-3">
                   <input
                     type="radio"
+                    className="form-check-input"
                     name={`aiCapabilities-${index}`}
                     value={option}
                     checked={responses.aiCapabilities[statement] === option}
                     onChange={() => handleRadioChange('aiCapabilities', statement, option)}
                   />
-                  <span className="likert-label">{option}</span>
+                  <span className="ms-2">{option}</span>
                 </label>
               ))}
             </div>
             {validationErrors.aiCapabilities[statement] && (
-              <div className="error">
+              <div className="text-danger mt-2">
                 <i className="fas fa-exclamation-triangle"></i> {validationErrors.aiCapabilities[statement]}
               </div>
             )}
           </div>
         ))}
       </div>
-
+  
       {/* Submit Button */}
-      <div className="survey-submit">
-        <button onClick={handleSubmit}>
+      <div className="text-center">
+        <button className="btn btn-primary btn-lg" onClick={handleSubmit}>
           Submit
         </button>
       </div>
     </div>
   );
+  
 };
 
 export default Survey;

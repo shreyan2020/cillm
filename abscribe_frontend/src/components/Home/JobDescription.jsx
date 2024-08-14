@@ -25,10 +25,10 @@ const JobDescription = ({ showButton = true }) => {
         <h2 className="card-title">{jobDescription.headers.taskDetails}</h2>
         <div dangerouslySetInnerHTML={{ __html: jobDescription.taskDetails }} />
 
-        <h3 className="card-subtitle">{jobDescription.headers.eligibilityCriteria}</h3>
+        <h3 className="card-subtitle mb-3">{jobDescription.headers.eligibilityCriteria}</h3>
         <ul dangerouslySetInnerHTML={{ __html: jobDescription.eligibilityCriteria }} />
 
-        <h3 className="card-subtitle">{jobDescription.headers.compensation}</h3>
+        <h3 className="card-subtitle mb-3">{jobDescription.headers.compensation}</h3>
         <div dangerouslySetInnerHTML={{ __html: jobDescription.compensation }} />
 
         <table className="table table-striped">
@@ -48,7 +48,7 @@ const JobDescription = ({ showButton = true }) => {
           </tbody>
         </table>
 
-        <h3 className="card-subtitle">{jobDescription.headers.estimatedTime}</h3>
+        <h3 className="card-subtitle mb-3">{jobDescription.headers.estimatedTime}</h3>
         <div dangerouslySetInnerHTML={{ __html: jobDescription.estimatedTime }} />
       </>
     );

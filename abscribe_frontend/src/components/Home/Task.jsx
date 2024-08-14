@@ -201,7 +201,6 @@ export default function Task() {
   if (!currentTask) {
     return <div>Loading task...</div>;
   }
-
   return (
     <>
       {/* <NavHeader /> */}
@@ -209,49 +208,48 @@ export default function Task() {
         <div className="container">
           <div className="card mt-4">
             <div className="card-body">
-              <p className="card-text">
-                <h4>{currentTask.name}</h4>
-              </p>
+              <h4 className="card-title">{currentTask.name}</h4>
               {!currentTask.id.startsWith("sandbox_task") && (
-                <>
-                <h5>{currentTask.hoverText}</h5>
-                </>
+                <h5 className="card-subtitle mb-3">{currentTask.hoverText}</h5>
               )}
-              <p>
-                {currentTask.missionStatement}
-              </p>
+              <p className="card-text">{currentTask.missionStatement}</p>
+  
               {!currentTask.id.startsWith("sandbox_task") && (
                 <>
-                  <h5>Questions:</h5>
+                  <h5 className="mb-4">Questions:</h5>
                   <form>
                     <div className="mb-3">
                       {currentTask.questionSet.map((question, index) => (
-                        <div key={index}>
+                        <div key={index} className="mb-3">
                           <p>{question.question}</p>
                           {question.options.map((option, optionIndex) => (
-                            <div key={optionIndex}>
-                              <p><input
+                            <div key={optionIndex} className="form-check">
+                              <input
                                 type="radio"
+                                className="form-check-input"
                                 name={`question-${index}`}
                                 value={option}
                                 checked={userAnswers[index] === option}
                                 onChange={() => handleAnswerChange(index, option)}
                               />
-                                <label>{option}</label>
-                              </p>
+                              <label className="form-check-label ms-2">
+                                {option}
+                              </label>
                             </div>
                           ))}
                         </div>
                       ))}
                     </div>
                   </form>
+  
                   {validationError && (
-                    <p style={{ color: "red" }}>{validationError}</p>
+                    <p className="text-danger">{validationError}</p>
                   )}
                 </>
               )}
-  {/* Conditional rendering for sandbox tasks */}
-  {currentTask.id.startsWith("sandbox_task") && (
+  
+              {/* Conditional rendering for sandbox tasks */}
+              {currentTask.id.startsWith("sandbox_task") && (
                 <div>
                   <p>{currentTask.hoverText}</p>
                   <div className="row row-cols-1 row-cols-md-4 mt-2">
@@ -263,11 +261,11 @@ export default function Task() {
                           onClick={() => handleFeatureClick(key)}
                           style={{ cursor: "pointer" }}
                         >
-                          <div className="card-body" style={{ padding: "10px" }}>
-                            <h5 className="card-title" style={{ fontSize: "16px" }}>
+                          <div className="card-body p-2">
+                            <h5 className="card-title fs-6">
                               {featureDescriptions[key].title}
                             </h5>
-                            <p className="card-text" style={{ fontSize: "14px" }}>
+                            <p className="card-text fs-6">
                               {featureDescriptions[key].description}
                             </p>
                           </div>
@@ -283,22 +281,25 @@ export default function Task() {
                       style={{ maxHeight: "400px", objectFit: "contain" }}
                     />
                   </div>
-                  <p> {currentTask.noteText} </p>
+                  <p>{currentTask.noteText}</p>
                 </div>
               )}
-
+  
               <Button
                 className="mt-4"
                 onClick={handleStartTask}
                 variant="outline-dark"
                 size="lg"
               >
-                {currentTask.id.startsWith("sandbox_task") ? "Start Tutorial" : "Start Writing Task"}
-                </Button>
+                {currentTask.id.startsWith("sandbox_task")
+                  ? "Start Tutorial"
+                  : "Start Writing Task"}
+              </Button>
             </div>
           </div>
         </div>
       </div>
     </>
   );
-}
+  }
+  

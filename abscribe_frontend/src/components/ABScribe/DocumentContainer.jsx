@@ -327,9 +327,8 @@ export default function DocumentContainer() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            prompt: `You are given a text input in YAML, generate the continuation for it in MAX 3-5 WORDS. Maintain the source language of the input text in the output\n
-            - text: ${newChunks[0].versions[0].text}\n
-            - output:`,
+            prompt: `Generate continuation for the given unfinished text in MAX 3-5 WORDS. Do not provide anything else in the output but the output text and do not do any formatting. Maintain the source language of the input text in the output\n
+            - text: ${newChunks[0].versions[0].text}`,
             // original_text: newChunks[0].versions[0].text,
             stream: true,
             // feature: "continuation",
@@ -520,7 +519,7 @@ export default function DocumentContainer() {
     let entireText = tinymce.activeEditor.getContent();
     let element = tinymce.activeEditor.dom.get(chunkId);
     let htmlText = "";
-
+    let promptText = element.innerHTML;
     try {
         let responseText = ""
         fetchEventSource(backendUrl, {
@@ -529,8 +528,8 @@ export default function DocumentContainer() {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                prompt: `You are given two types of information in YAML, original text and a modification requirement. Apply the modification to the input text and print the output in no more than 2 sentences. Do not provide anything else in the output. Maintain the source language of the input text in the output\n
-                 - text: ${element.innerHTML}\n
+                prompt: `You are given two types of input, original text and a modification requirement. Apply the modification to the original text in no more than 2 sentences. Do not provide anything else in the output but the output text and do not do any formatting. Maintain the source language of the input text in the output\n
+                 - original text: ${element.innerHTML}\n
                  - modification: ${prompt}\n
                  - output:`,
                 // original_text: prompt,
@@ -577,7 +576,7 @@ export default function DocumentContainer() {
                 });
 
                 // Log the generated content after receiving the full response
-                logGeneratedContent(recipename, prompt, responseText);
+                logGeneratedContent(recipename, promptText, responseText);
             },
             onerror(err) {
                 console.error("Error occurred:", err);

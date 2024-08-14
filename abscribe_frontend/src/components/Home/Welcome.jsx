@@ -83,9 +83,13 @@ export default function Welcome() {
             <div className="card-body">
               <h2 className="card-title">Consent Form</h2>
               {renderConsentText()}
+
+              {/* Adding a thick horizontal line to separate informed consent from questions */}
+              <hr style={{ borderTop: "5px solid #bbb" }} />
+
               <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label htmlFor="gender">Gender</label>
+                <div className="form-group mb-3">
+                  <label className="mb-2" htmlFor="gender">Gender</label>
                   <select
                     id="gender"
                     className="form-control"
@@ -101,8 +105,8 @@ export default function Welcome() {
                   </select>
                 </div>
                 
-                <div className="form-group">
-                  <label htmlFor="age">Age</label>
+                <div className="form-group mb-3">
+                  <label htmlFor="age" className="mb-2">Age</label>
                   <input
                     type="number"
                     id="age"
@@ -113,8 +117,8 @@ export default function Welcome() {
                   />
                 </div>
                 
-                <div className="form-group">
-                  <label htmlFor="proficiency">
+                <div className="form-group mb-3">
+                  <label htmlFor="proficiency" className="mb-2">
                     Language Proficiency {studyID === "66aca63c781c99be382101f6" ? "(English)" : "(Spanish)"}
                   </label>
                   <select
@@ -146,7 +150,7 @@ export default function Welcome() {
                     onChange={(e) => setIsChecked(e.target.checked)}
                     required
                   />
-                  <label htmlFor="agree"> I Consent</label>
+                  <label htmlFor="agree" style={{ paddingLeft: '10px' }}> I Consent</label>
                 </div>
                 {validationError && (
                   <p style={{ color: "red" }}>{validationError}</p>
