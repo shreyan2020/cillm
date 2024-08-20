@@ -1,14 +1,20 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation  } from "react-router-dom";
 import '../../scss/survey.scss';
 import { apiClient } from '../../services/abscribeAPI';
 import { TaskContext } from '../../context/TaskContext';
-import surveyConfig from '../../configs/surveyConfig'; // Import the new config file
+import surveyConfig from '../../configs/surveyConfig';
+import Alert from 'react-bootstrap/Alert';  // Make sure this is imported
 
 const Survey = () => {
+  
+  const location = useLocation();
   const navigate = useNavigate();
   const { prolificID, taskID, studyID } = useContext(TaskContext);
+  const [errorMessage, setErrorMessage] = useState('');
 
+  // const timeSpentOutside = location.state?.totalTimeSpentOutside || 0;
+  const timeSpentOutside = 50000;
   const config = surveyConfig[studyID] || surveyConfig.default;
 
   const [responses, setResponses] = useState({
@@ -16,7 +22,9 @@ const Survey = () => {
     ownership: {},
     collaboration: {},
     aiCapabilities: {},
-    notApplicable: {}  // State to track "Not Applicable" selections
+    notApplicable: {},  
+    resourcesUsed: "", 
+    additionalComments: "", 
   });
 
   const [validationErrors, setValidationErrors] = useState({
@@ -24,6 +32,7 @@ const Survey = () => {
     ownership: {},
     collaboration: {},
     aiCapabilities: {},
+    resourcesUsed: "",  // Add this field for validation errors
   });
 
   const handleChange = (block, question, value) => {
@@ -38,11 +47,23 @@ const Survey = () => {
       ...prevErrors,
       [block]: {
         ...prevErrors[block],
-        [question]: null,  // Clear validation error when a value is selected
+        [question]: null,  
       },
     }));
   };
 
+  const handleTextChange = (field, value) => {
+    setResponses((prevResponses) => ({
+      ...prevResponses,
+      [field]: value,
+    }));
+
+    setValidationErrors((prevErrors) => ({
+      ...prevErrors,
+      [field]: null,  // Clear the error when the field is updated
+    }));
+  };
+  
   const handleNotApplicableChange = (question) => {
     setResponses((prevResponses) => ({
       ...prevResponses,
@@ -59,7 +80,7 @@ const Survey = () => {
       ...prevErrors,
       usefulness: {
         ...prevErrors.usefulness,
-        [question]: null,  // Clear validation error when "Not Applicable" is selected
+        [question]: null,  
       },
     }));
   };
@@ -76,7 +97,7 @@ const Survey = () => {
       ...prevErrors,
       [block]: {
         ...prevErrors[block],
-        [question]: null,  // Clear validation error when a value is selected
+        [question]: null,  
       },
     }));
   };
@@ -117,13 +138,22 @@ const Survey = () => {
       }
     });
 
+    // Conditionally validate resourcesUsed
+    if (timeSpentOutside / 1000 >= 30 && !responses.resourcesUsed.trim()) {
+      errors.resourcesUsed = 'Please describe the resources you consulted.';
+    }
+
     setValidationErrors(errors);
 
+    // Check if there are any validation errors
+    const hasErrors = Object.values(errors).some(
+      (errorGroup) => typeof errorGroup === 'object'
+        ? Object.values(errorGroup).some(error => error)
+        : errorGroup // this covers the case of errors.resourcesUsed
+    );
+
     // Return true if there are no errors
-    return !Object.values(errors.usefulness).some(error => error) &&
-           !Object.values(errors.ownership).some(error => error) &&
-           !Object.values(errors.collaboration).some(error => error) &&
-           !Object.values(errors.aiCapabilities).some(error => error);
+    return !hasErrors;
   };
 
   const handleSubmit = async () => {
@@ -132,36 +162,35 @@ const Survey = () => {
     }
 
     console.log('Survey responses:', responses);
+    const surveyData = {
+      prolific_id: prolificID,
+      study_id: studyID,
+      task_id: taskID, 
+      responses: responses,
+    };
     try {
-      const surveyData = {
-        prolific_id: prolificID,
-        study_id: studyID,
-        task_id: taskID, 
-        responses: responses,
-      };
-
       await apiClient.post("/log_survey", surveyData);
       console.log('Survey responses saved successfully');
       navigate("/task");
     } catch (error) {
-      console.error('Failed to save survey responses:', error);
+      const formattedSurveyData = JSON.stringify(surveyData, null, 2);
+      // console.error('Failed to save survey responses:', formattedSurveyData);
+      setErrorMessage(`There was an error submitting your survey responses. Please share the following data with the researcher to ensure you get compensated:\n\n${formattedSurveyData}\n\nError: ${error.message}`);
     }
   };
 
   return (
     <div className="survey-container p-4 bg-light">
-  <div className="survey-header mb-5">
-  <h1 className="mb-4 text-primary text-center">Usefulness of Features</h1>
-  <h2 className="mb-4 h4 text-secondary text-start">Instructions</h2>
-  <div className="instructions text-start mb-4">
-    <div dangerouslySetInnerHTML={{ __html: config.headers.usefulness }} />
-  </div>
-</div>
+      <div className="survey-header mb-5">
+        <h1 className="mb-4 text-primary text-center">Usefulness of Features</h1>
+        <h2 className="mb-4 h4 text-secondary text-start">Instructions</h2>
+        <div className="instructions text-start mb-4">
+          <div dangerouslySetInnerHTML={{ __html: config.headers.usefulness }} />
+        </div>
+      </div>
 
-  
       {/* Usefulness of Features */}
       <div className="survey-block mb-5">
-        {/* <h3 className="h5 mb-4">{config.headers.usefulness}</h3> */}
         {config.questions.usefulness.map((feature, index) => (
           <div key={index} className="survey-question mb-4">
             <label className="form-label">{feature}</label>
@@ -174,7 +203,7 @@ const Survey = () => {
                 step="1"
                 value={responses.notApplicable[feature] ? "NA" : responses.usefulness[feature] || 0}
                 onChange={(e) => handleChange('usefulness', feature, e.target.value)}
-                disabled={responses.notApplicable[feature]}  // Disable slider if "Not Applicable" is checked
+                disabled={responses.notApplicable[feature]}  
               />
               <span className="ms-3">{responses.notApplicable[feature] ? 'NA' : responses.usefulness[feature] || 0}</span>
               <label className="form-check ms-3">
@@ -198,8 +227,7 @@ const Survey = () => {
   
       {/* Ownership */}
       <div className="survey-block mb-5">
-     
-      <h1 className="mb-4 text-primary text-center">{config.headers.ownership}</h1>
+        <h1 className="mb-4 text-primary text-center">{config.headers.ownership}</h1>
         {config.questions.ownership.map((statement, index) => (
           <div key={index} className="survey-question mb-4">
             <label className="form-label">{statement}</label>
@@ -229,7 +257,7 @@ const Survey = () => {
   
       {/* Collaboration */}
       <div className="survey-block mb-5">
-      <h1 className="mb-4 text-primary text-center">{config.headers.collaboration}</h1>
+        <h1 className="mb-4 text-primary text-center">{config.headers.collaboration}</h1>
         {config.questions.collaboration.map((statement, index) => (
           <div key={index} className="survey-question mb-4">
             <label className="form-label">{statement}</label>
@@ -259,8 +287,7 @@ const Survey = () => {
   
       {/* AI Writing Assistant Capabilities */}
       <div className="survey-block mb-5">
-      <h1 className="mb-4 text-primary text-center">{config.headers.aiCapabilities}</h1>
-        {/* <h3 className="h5 mb-4">{config.headers.aiCapabilities}</h3> */}
+        <h1 className="mb-4 text-primary text-center">{config.headers.aiCapabilities}</h1>
         {config.questions.aiCapabilities.map((statement, index) => (
           <div key={index} className="survey-question mb-4">
             <label className="form-label">{statement}</label>
@@ -287,7 +314,47 @@ const Survey = () => {
           </div>
         ))}
       </div>
-  
+
+      {/* New Section: Time Spent Outside Abscribe */}
+      {timeSpentOutside / 1000 >= 30 && (
+      <div className="survey-block mb-5">
+        <h3 className="h5 mb-4">Time Spent Outside Abscribe</h3>
+        <p>You spent <strong>{(timeSpentOutside / 1000 / 60).toFixed(2)} minutes</strong> outside Abscribe. Please let us know what resources you used during this time.</p>
+        <textarea
+          className="form-control mb-4"
+          rows="3"
+          placeholder="Please describe the resources you consulted..."
+          value={responses.resourcesUsed}
+          onChange={(e) => handleTextChange('resourcesUsed', e.target.value)}
+        ></textarea>
+        {validationErrors.resourcesUsed && (
+          <div className="text-danger mt-2">
+            <i className="fas fa-exclamation-triangle"></i> {validationErrors.resourcesUsed}
+          </div>
+        )}
+      </div>
+      )}
+
+      {/* New Section: Additional Comments */}
+      <div className="survey-block mb-5">
+        <h3 className="h5 mb-4">Additional Comments</h3>
+        <p>Do you have any additional comments regarding your experience with the writing task?</p>
+        <textarea
+          className="form-control mb-4"
+          rows="3"
+          placeholder="Please share your thoughts..."
+          value={responses.additionalComments}
+          onChange={(e) => handleTextChange('additionalComments', e.target.value)}
+        ></textarea>
+      </div>
+
+      {errorMessage && (
+        <Alert variant="danger" onClose={() => setErrorMessage('')} dismissible>
+          <Alert.Heading>Submission Error</Alert.Heading>
+          <p>{errorMessage}</p>
+        </Alert>
+      )}
+
       {/* Submit Button */}
       <div className="text-center">
         <button className="btn btn-primary btn-lg" onClick={handleSubmit}>
@@ -296,7 +363,6 @@ const Survey = () => {
       </div>
     </div>
   );
-  
 };
 
 export default Survey;

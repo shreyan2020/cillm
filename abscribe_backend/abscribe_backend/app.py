@@ -128,7 +128,8 @@ def log_activity():
     task_id = data.get("task_id")
     prolific_id = data.get("prolific_id")
     activity_log = data.get("activity_log", {})
-    
+    time_spent_outside = data.get("time_spent_outside", 0)  # Default to 0 if not provided
+
     if not all([document_id, task_id, prolific_id]):
         return jsonify({"error": "Missing required fields"}), 400
 
@@ -138,7 +139,8 @@ def log_activity():
             task_id=task_id,
             prolific_id=prolific_id,
             activity_log=activity_log,
-            timestamp=datetime.now(timezone.utc)
+            timestamp=datetime.now(timezone.utc),
+            time_spent_outside=int(time_spent_outside),  # Ensure this is stored as an integer
         )
         activity_log_entry.save()
 

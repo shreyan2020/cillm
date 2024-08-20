@@ -203,7 +203,6 @@ export default function Task() {
   }
   return (
     <>
-      {/* <NavHeader /> */}
       <div className="jumbotron m-3">
         <div className="container">
           <div className="card mt-4">
@@ -259,15 +258,18 @@ export default function Task() {
                           className="feature-card card h-100"
                           onMouseOver={() => handleFeatureClick(key)}
                           onClick={() => handleFeatureClick(key)}
-                          style={{ cursor: "pointer" }}
+                          style={{
+                            cursor: "pointer",
+                            textAlign: "center",
+                            backgroundColor: "#f8f9fa",
+                            border: "1px solid #ced4da",
+                            transition: "transform 0.2s",
+                          }}
                         >
                           <div className="card-body p-2">
                             <h5 className="card-title fs-6">
                               {featureDescriptions[key].title}
                             </h5>
-                            <p className="card-text fs-6">
-                              {featureDescriptions[key].description}
-                            </p>
                           </div>
                         </div>
                       </div>
@@ -278,7 +280,23 @@ export default function Task() {
                       src={currentGif}
                       className="img-fluid"
                       alt="Feature GIF"
-                      style={{ maxHeight: "400px", objectFit: "contain" }}
+                      style={{ maxHeight: "300px", objectFit: "contain" }}
+                    />
+                  </div>
+                  <div className="mt-4">
+                    <div
+                      className="description-box"
+                      style={{
+                        backgroundColor: "#f8f9fa",
+                        padding: "20px",
+                        borderRadius: "8px",
+                        border: "1px solid #ced4da",
+                        fontSize: "16px",
+                        lineHeight: "1.5",
+                        color: "#495057",
+                        textAlign: "center",
+                      }}
+                      dangerouslySetInnerHTML={{ __html: featureDescriptions[currentTask.id.startsWith("sandbox_task") ? "ai-recipe" : "ai-help"].description }}
                     />
                   </div>
                   <p>{currentTask.noteText}</p>

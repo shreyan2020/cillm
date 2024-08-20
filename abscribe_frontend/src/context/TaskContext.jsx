@@ -67,7 +67,7 @@ export const TaskProvider = ({ children }) => {
     });
   };
 
-  const saveActivityLog = async (currentDocument) => {
+  const saveActivityLog = async (currentDocument, timeSpentOutside) => {
     console.log("Activity log now", activityLogRef.current);
     try {
       const activityData = {
@@ -75,6 +75,7 @@ export const TaskProvider = ({ children }) => {
         prolific_id: currentDocument.prolific_id,
         task_id: currentDocument.task_id,
         activity_log: activityLogRef.current,
+        time_spent_outside: timeSpentOutside,
       };
       await apiClient.post("/log_activity", activityData);
       console.log("Activity log saved successfully", activityData);

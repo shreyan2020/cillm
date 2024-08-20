@@ -42,7 +42,6 @@ const consentTextConfig = {
       taskDetails: `
         <p>Thank you for considering this opportunity.</p>
         <p>We are seeking individuals to write one short advertisement for a charity. The written advertisement should have 70-150 words.</p>
-        <p style="color: red;"><b>You are not allowed to leave the task and consult external resources. If you leave the environment your response will be not be considered for the final evaluation and the compensation will be effected.</b></p>
       `,
       eligibilityCriteria: `
         <li>You are proficient in English.</li>
@@ -50,7 +49,7 @@ const consentTextConfig = {
       `,
       compensation: `
         <p>You will be compensated at a flat rate of £3.00 for completing this task. Additionally, you can earn a bonus of up to £10.00. The bonus compensation structure is given below and the top %s texts 
-        will be determined by other crowd workers (i.e., your peers on Prolific) based on two criteria - 1) Persuasiveness and 2) Quality (grammar, spelling mistakes etc.) of the text.</p>
+        will be determined by other crowd workers (i.e., your peers on Prolific) based on the "Persuasiveness" of the text you wrote.</p>
       `,
       bonusTable: [
         { level: "Top 20%", amount: "£4.00" },
@@ -104,14 +103,14 @@ const consentTextConfig = {
       taskDetails: `
         <p>Gracias por considerar esta oportunidad.</p>
         <p>Estamos buscando personas para escribir un anuncio corto para una organización benéfica. El anuncio escrito debe tener entre 70 y 150 palabras.</p>
-        <p style="color: red;"><b>No se le permite abandonar la tarea ni consultar recursos externos. Si abandona el entorno, su respuesta no será considerada para la evaluación final y también se retirará la compensación.</b></p>
       `,
       eligibilityCriteria: `
         <li>Es competente en español.</li>
         <li>Su perfil indica que trabaja en una profesión relacionada con la escritura.</li>
       `,
       compensation: `
-        <p>Recibirá una compensación de £3.00 por completar esta tarea. Además, puede ganar un bono de hasta £10.00. La estructura de compensación de bonificación se detalla a continuación y los textos principales se determinarán por otros trabajadores (es decir, sus compañeros en Prolific) en función de dos criterios: 1) Persuasividad y 2) Calidad (gramática, errores ortográficos, etc.) del texto.</p>
+        
+<p>Recibirás una compensación de £3.00 por completar esta tarea. Además, puedes ganar un bono de hasta £10.00. La estructura de compensación de bonos se detalla a continuación y los textos en el %s superior serán determinados por otros trabajadores de la comunidad (es decir, tus compañeros en Prolific) basándose en la "Persuasión" del texto que escribiste.</p>
       `,
       bonusTable: [
         { level: "Top 20%", amount: "£4.00" },

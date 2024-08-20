@@ -114,7 +114,13 @@ export default function Editor({
   const [showModal, setShowModal] = useState(false);
   const [missingButtons, setMissingButtons] = useState([]);
   const handleModalClose = () => setShowModal(false);
+  const [timeSpentOutside, setTimeSpentOutside] = useState(0);
+  const [leaveTimestamp, setLeaveTimestamp] = useState(0);
+  const leaveTimestampRef = useRef(null);
+  const timeSpentOutsideRef = useRef(0);
 
+  // const timeSpentOutside = use
+// const [timeSpentOutside, setTimeSpentOutside] = useState(0);
   //Refs
   const editorRef = useRef(null); //TinyMCE Editor
 
@@ -164,34 +170,50 @@ export default function Editor({
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
         // console.log('User has left the tab');
-        const logEntry = {
-          action: 'left',
-          timestamp: new Date().toISOString(),
-        };
-        setActivityLog((prevLog) => {
-          const updatedLog = {
-            ...prevLog,
-            visibilityState: [...prevLog.visibilityState, logEntry],
-          };
-          activityLogRef.current = updatedLog;
-          return updatedLog;
-        });
+        // const logEntry = {
+        //   action: 'left',
+        //   timestamp: new Date().toISOString(),
+        // };
+        // setActivityLog((prevLog) => {
+        //   const updatedLog = {
+        //     ...prevLog,
+        //     visibilityState: [...prevLog.visibilityState, logEntry],
+        //   };
+        //   activityLogRef.current = updatedLog;
+        //   return updatedLog;
+        // });
+
+        // setLeaveTimestamp(Date.now());
+        leaveTimestampRef.current = Date.now();
+        console.log('user left at', leaveTimestampRef.current)
         // Log this action, pause activities, etc.
       } else if (document.visibilityState === 'visible') {
-        const logEntry = {
-          action: 'rejoined',
-          timestamp: new Date().toISOString(),
-        };
-        setActivityLog((prevLog) => {
-          const updatedLog = {
-            ...prevLog,
-            visibilityState: [...prevLog.visibilityState, logEntry],
-          };
-          activityLogRef.current = updatedLog;
-          return updatedLog;
-        });
-        // console.log('User has returned to the tab');
+        if (leaveTimestampRef.current) {
+          const timeOutside = Date.now() - leaveTimestampRef.current;
+          timeSpentOutsideRef.current += timeOutside
+          setTimeSpentOutside(timeSpentOutsideRef.current);
+          // setTimeSpentOutside((prevTime) => {
+          //   const newTime = prevTime + timeOutside;
+          //   console.log('Updated timeSpentOutside:', newTime);
+          //   return newTime;
+          // });
+          // console.log('User rejoined after', timeOutside);
+        }
+        // const logEntry = {
+        //   action: 'rejoined',
+        //   timestamp: new Date().toISOString(),
+        // };
+        // setActivityLog((prevLog) => {
+        //   const updatedLog = {
+        //     ...prevLog,
+        //     visibilityState: [...prevLog.visibilityState, logEntry],
+        //   };
+        //   activityLogRef.current = updatedLog;
+        //   return updatedLog;
+        // });
+        // // console.log('User has returned to the tab');
         // Resume activities, etc.
+        leaveTimestampRef.current = null;
       }
     };
 
@@ -298,6 +320,8 @@ export default function Editor({
 
   const handleSaveButtonClick = async (documentID) => {
     const currentActivityLog = activityLogRef.current;
+    const totalTimeSpentOutside = timeSpentOutsideRef.current;
+    // console.log('Total time spent outside:', totalTimeSpentOutside);
     // console.log('task id', taskID, 'prolific id', prolificID);
     // console.log('Inside handleSaveButtonClick - activityLog:', currentActivityLog);
     try {
@@ -339,8 +363,9 @@ export default function Editor({
         // console.log("Activity logged successfully");
         // addCompletedTask(currentDocument.task_id);
         // navigate(`/questionnaire`);
-        await saveActivityLog(currentDocument);
-        navigate(`/survey`);
+        await saveActivityLog(currentDocument, totalTimeSpentOutside);
+        // navigate(`/survey`);
+        navigate('/survey', { state: { totalTimeSpentOutside } });
       }
     } catch (error) {
       console.error("Failed to log activity:", error);
