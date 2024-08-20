@@ -336,6 +336,8 @@ export default function Editor({
           setShowModal(true);
           return;
         }
+        await saveActivityLog(currentDocument, totalTimeSpentOutside);
+        navigate(`/task`);
         // await saveActivityLog(currentDocument);
         // navigate(`/task`);
         // const activityData = {

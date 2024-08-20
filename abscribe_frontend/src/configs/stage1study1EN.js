@@ -1,7 +1,7 @@
 // taskConfigV3.js
 
 const stage1study1EN = {
-  redirectCode: "C1CYRPR7",
+  redirectCode: "CYK6DNUT",
     tasks: [
       {
         id: "sandbox_task_1_eng",

@@ -13,8 +13,8 @@ const Survey = () => {
   const { prolificID, taskID, studyID } = useContext(TaskContext);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // const timeSpentOutside = location.state?.totalTimeSpentOutside || 0;
-  const timeSpentOutside = 50000;
+  const timeSpentOutside = location.state?.totalTimeSpentOutside || 0;
+  // const timeSpentOutside = 50000;
   const config = surveyConfig[studyID] || surveyConfig.default;
 
   const [responses, setResponses] = useState({

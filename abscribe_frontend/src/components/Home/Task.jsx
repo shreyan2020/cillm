@@ -105,7 +105,7 @@ export default function Task() {
         let configModule;
         // console.log('sads',studyID)
         switch (studyID) {
-          case '66aca63c781c99be382101f6':
+          case '66c516b1d61c7b572205f713':
             configModule = await import('../../configs/stage1study1EN.js');
             break;
           case '66aca69be884d495377c3f30':
@@ -127,21 +127,56 @@ export default function Task() {
     }
   }, [studyID]);
 
+  // useEffect(() => {
+  //   if (tasksConfig) {
+  //     const nextTaskIndex = completedTasks.length;
+  //     if (nextTaskIndex < tasksConfig.order.length) {
+  //       const nextTaskID = tasksConfig.order[nextTaskIndex];
+  //       const task = tasksConfig.tasks.find((task) => task.id === nextTaskID);
+  //       setQuestionnaireID(task.questionnaire_id);
+  //       setTaskID(nextTaskID);
+  //       setCurrentTask(task);
+  //       setUserAnswers({}); // Reset user answers for the new task
+  //     } else {
+  //       window.location.href = `https://app.prolific.com/submissions/complete?cc=${tasksConfig.redirectCode}`;
+  //     }
+  //   }
+  // }, [tasksConfig, completedTasks, setTaskID, navigate]);
+
   useEffect(() => {
     if (tasksConfig) {
-      const nextTaskIndex = completedTasks.length;
-      if (nextTaskIndex < tasksConfig.order.length) {
-        const nextTaskID = tasksConfig.order[nextTaskIndex];
-        const task = tasksConfig.tasks.find((task) => task.id === nextTaskID);
-        setQuestionnaireID(task.questionnaire_id);
-        setTaskID(nextTaskID);
-        setCurrentTask(task);
-        setUserAnswers({}); // Reset user answers for the new task
-      } else {
-        window.location.href = `https://app.prolific.com/submissions/complete?cc=${tasksConfig.redirectCode}`;
-      }
+        const nextTaskIndex = completedTasks.length;
+
+        if (nextTaskIndex < tasksConfig.order.length) {
+            const nextTaskID = tasksConfig.order[nextTaskIndex];
+            const task = tasksConfig.tasks.find((task) => task.id === nextTaskID);
+            setQuestionnaireID(task.questionnaire_id);
+            setTaskID(nextTaskID);
+            setCurrentTask(task);
+            setUserAnswers({}); // Reset user answers for the new task
+        } else {
+            // Check if the last completed task was 'main_task_1'
+            const lastCompletedTaskID = completedTasks[completedTasks.length - 1];
+            if (lastCompletedTaskID === "main_task_1") {
+                window.location.href = `https://app.prolific.com/submissions/complete?cc=${tasksConfig.redirectCode}`;
+            } else {
+                console.log("Last task was not 'main_task_1', loading 'main_task_1' instead.");
+                // Load 'main_task_1' instead
+                const mainTask = tasksConfig.tasks.find(task => task.id === "main_task_1");
+                if (mainTask) {
+                    setQuestionnaireID(mainTask.questionnaire_id);
+                    setTaskID(mainTask.id);
+                    setCurrentTask(mainTask);
+                    setUserAnswers({}); // Reset user answers for the new task
+                }
+            }
+        }
     }
-  }, [tasksConfig, completedTasks, setTaskID, navigate]);
+}, [tasksConfig, completedTasks, setTaskID, navigate]);
+
+
+
+
 
   // useEffect(() => {
   //   const nextTaskIndex = completedTasks.length;

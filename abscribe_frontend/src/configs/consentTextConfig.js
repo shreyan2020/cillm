@@ -1,5 +1,5 @@
 const consentTextConfig = {
-  '66aca63c781c99be382101f6': {
+  '66c516b1d61c7b572205f713': {
     language: 'English',
     consentText: `
       <p>

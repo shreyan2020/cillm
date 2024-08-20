@@ -24,9 +24,9 @@ const TutorialModal = ({ show, onHide, missingButtons, requiredButtons, onWaiveV
       <Button variant="secondary" onClick={onHide}>
         Stay and Explore More
       </Button>
-      <Button variant="primary" onClick={onWaiveValidation}>
+      {/* <Button variant="primary" onClick={onWaiveValidation}>
         Continue to Main Task
-      </Button>
+      </Button> */}
     </Modal.Footer>
   </Modal>
 );
