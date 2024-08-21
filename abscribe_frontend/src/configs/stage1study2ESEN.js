@@ -1,6 +1,6 @@
 // taskConfigV3.js
 
-const stage1study1ENES = {
+const stage1study1ESEN = {
   redirectCode: "C10QL3NX",
     tasks: [
       {
@@ -26,7 +26,7 @@ const stage1study1ENES = {
         id: "main_task_1",
         questionnaire_id: "SV_6sAAZH7qj0jogRw", 
         hoverText: "Mission Statement:",
-        name: "Task One: This is the main task. Read the mission statement of the charity (WWF) carefully and then utilize the AI powered Abscribe tool to write your advertisement",
+        name: "Task Two: This is the main task. Read the mission statement of the charity (WWF) carefully and then utilize the AI powered Abscribe tool to write your advertisement",
         missionStatement: "The mission of the World Wildlife Fund (WWF) is to conserve nature and reduce the most pressing threats to the diversity of life on Earth. Our vision is to build a future in which people live in harmony with nature. We aim to save a planet rich with biodiversity by reconciling the needs of human beings with the needs of other species. We strive to practice humane conservation, instilling a reverence for nature and balancing it with a belief in human potential. From local communities to global organizations, we inspire and support those advancing the cause of conservation. As a voice for the voiceless creatures of our world, we dedicate our talents, knowledge, and passion to enriching life, spirit, and the wonder of nature.",
         instructions: "Please write an essay on the importance of biodiversity and wildlife conservation.",
         tutorial: "Now write your charity advertisement here (you can remove this text)",
@@ -66,7 +66,7 @@ const stage1study1ENES = {
         id: "main_task_2",
         questionnaire_id: "SV_6ybTt5FPNtfsYKy", 
         hoverText: "Declaración de Misión:",
-        name: "Tarea Dos: Esta es la tarea principal. Lee atentamente la declaración de misión de la organización benéfica (WWF) y luego utiliza la herramienta Abscribe para escribir tu anuncio.",
+        name: "Tarea Uno: Esta es la tarea principal. Lee atentamente la declaración de misión de la organización benéfica (WWF) y luego utiliza la herramienta Abscribe para escribir tu anuncio.",
         missionStatement: "La misión del Fondo Mundial para la Naturaleza (WWF) es conservar la naturaleza y reducir las amenazas más apremiantes a la diversidad de la vida en la Tierra. Nuestra visión es construir un futuro en el que las personas vivan en armonía con la naturaleza. Nuestro objetivo es salvar un planeta rico en biodiversidad reconciliando las necesidades de los seres humanos con las de otras especies. Nos esforzamos por practicar una conservación humana, inculcando una reverencia por la naturaleza y equilibrándola con una creencia en el potencial humano. Desde las comunidades locales hasta las organizaciones globales, inspiramos y apoyamos a aquellos que promueven la causa de la conservación. Como voz para las criaturas sin voz de nuestro mundo, dedicamos nuestros talentos, conocimientos y pasión a enriquecer la vida, el espíritu y el asombro de la naturaleza.",
         instructions: "Por favor, escribe un ensayo sobre la importancia de la biodiversidad y la conservación de la vida silvestre.",
         tutorial: "Ahora escribe tu anuncio de caridad aquí (puedes eliminar este texto)",
@@ -85,12 +85,12 @@ const stage1study1ENES = {
       },    
     ],
     order: [
-      "sandbox_task_1_eng",
-      "main_task_1", // English main task for WWF
       "sandbox_task_1_esp",
-      "main_task_2", // English main task for LiveStrong
+      "main_task_2",
+      "sandbox_task_1_eng",
+      "main_task_1",
     ],
   };
   
-  export default stage1study1ENES;
+  export default stage1study1ESEN;
   

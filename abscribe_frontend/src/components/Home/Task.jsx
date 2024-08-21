@@ -44,6 +44,7 @@ import variationComponentGif from "../../resources/variations_new.gif";
 import featureDescriptionsConfig from "../../configs/featureDescriptionsConfig.js";
 import { TaskContext } from "../../context/TaskContext";
 import "../../scss/home.scss";
+import tasksConfig from '../../configs/stage1study2ENES.js'; // Update this import according to your config file
 
 
 import aicont from "../../resources/ai_cont.gif";
@@ -106,14 +107,17 @@ export default function Task() {
         let configModule;
         // console.log('sads',studyID)
         switch (studyID) {
-          case '66c5e9afb11bf5c62a286fe8':
+          case '66c616da5ea4ebca7f461ac7':
             configModule = await import('../../configs/stage1study2ENES.js');
             break;
-          case '66aca69be884d495377c3f30':
-            configModule = await import('../../configs/stage1study1ES.js');
+          case '66c63f4f7c3e886b7c9cc498':
+            configModule = await import('../../configs/stage1study2ESEN.js');
+            break;
+          case '66c63f502b78911af098063d':
+            configModule = await import('../../configs/stage1study2ESEN.js');
             break;
           default:
-            configModule = await import('../../configs/stage1study1EN.js');
+            configModule = await import('../../configs/stage1study2ENES.js');
             break;
         }
         setTasksConfig(configModule.default);
@@ -159,12 +163,15 @@ export default function Task() {
             // Check if the last completed task was 'main_task_1'
             const lastCompletedTaskID = completedTasks[completedTasks.length - 1];
             console.log('last completed', lastCompletedTaskID)
-            if (lastCompletedTaskID.startsWith("main_task_2")) {
+            const taskOrder = tasksConfig.order;
+            const lastTask = taskOrder[taskOrder.length - 1];
+            // const isLastTask = lastCompletedTaskID === 
+            if (lastCompletedTaskID === lastTask) {
                 window.location.href = `https://app.prolific.com/submissions/complete?cc=${tasksConfig.redirectCode}`;
             } else {
-                console.log("Last task was not 'main_task_1', loading 'main_task_1' instead.");
+                console.log("Last task was not done yet loading last task");
                 // Load 'main_task_1' instead
-                const mainTask = tasksConfig.tasks.find(task => task.id === "main_task_1");
+                const mainTask = tasksConfig.tasks.find(task => task.id === lastTask);
                 if (mainTask) {
                     setQuestionnaireID(mainTask.questionnaire_id);
                     setTaskID(mainTask.id);

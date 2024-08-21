@@ -62,15 +62,15 @@ export default function Welcome() {
   };
 
   const getProficiencyLanguage = () => {
-    return consentTextConfig[studyID]?.language || "Something went wrong please contact researcher";
+    return consentTextConfig["Master"]?.language || "Something went wrong please contact researcher";
   };
 
   const getEstimatedTime = () => {
-    return consentTextConfig[studyID]?.time || "Something went wrong please contact researcher";
+    return consentTextConfig["Master"]?.time || "Something went wrong please contact researcher";
   };
 
   const renderConsentText = () => {
-    const consentHTML = consentTextConfig[studyID]?.consentText || "Something went wrong please contact researcher";
+    const consentHTML = consentTextConfig["Master"]?.consentText || "Something went wrong please contact researcher";
     return <div dangerouslySetInnerHTML={{ __html: consentHTML }} />;
   };
 // console.log(studyID, consentTextConfig)

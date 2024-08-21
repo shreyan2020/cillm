@@ -15,7 +15,8 @@ const Survey = () => {
 
   const timeSpentOutside = location.state?.totalTimeSpentOutside || 0;
   // const timeSpentOutside = 50000;
-  const config = surveyConfig[studyID] || surveyConfig.default;
+  const config = surveyConfig["Master"];
+  //  || surveyConfig.default;
 
   const [responses, setResponses] = useState({
     usefulness: {},
@@ -171,7 +172,16 @@ const Survey = () => {
     try {
       await apiClient.post("/log_survey", surveyData);
       console.log('Survey responses saved successfully');
-      navigate("/task");
+      const taskOrder = tasksConfig.order;
+      const isLastTask = taskID === taskOrder[taskOrder.length - 1];
+      if (isLastTask) {
+        // Redirect to Prolific submission page
+        window.location.href = `https://app.prolific.com/submissions/complete?cc=${tasksConfig.redirectCode}`;
+      } else {
+        // Navigate to the next task or desired page
+        navigate("/task");
+      }
+      // navigate("/task");
     } catch (error) {
       const formattedSurveyData = JSON.stringify(surveyData, null, 2);
       // console.error('Failed to save survey responses:', formattedSurveyData);

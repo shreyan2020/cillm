@@ -14,11 +14,11 @@ const JobDescription = ({ showButton = true }) => {
   };
 
   const getProficiencyLanguage = () => {
-    return consentTextConfig[studyID]?.language || "consentTextConfig.default.language";
+    return consentTextConfig["Master"]?.language || "consentTextConfig.default.language";
   };
 
   const renderJobDescription = () => {
-    const jobDescription = consentTextConfig[studyID]?.jobDescription || "consentTextConfig.default.jobDescription";
+    const jobDescription = consentTextConfig["Master"]?.jobDescription || "consentTextConfig.default.jobDescription";
 
     return (
       <>

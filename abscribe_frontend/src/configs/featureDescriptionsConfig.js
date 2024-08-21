@@ -1,5 +1,5 @@
 const featureDescriptionsConfig = {
-  '66c5e9afb11bf5c62a286fe8': {
+  'Master': {
     language: 'English',
     features: {
       "ai-help": {

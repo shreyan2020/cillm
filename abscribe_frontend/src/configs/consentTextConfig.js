@@ -1,12 +1,12 @@
 const consentTextConfig = {
-  '66c5e9afb11bf5c62a286fe8': {
+  'Master': {
     language: 'English',
     consentText: `
       <p>
         We are a group of researchers at the Technical University of Delft in The Netherlands. In this research project, we aim to investigate human behavior in LLM-augmented co-writing. As such, you are invited to participate in our research study.
       </p>
       <p>
-        The following task is part of the research project described above. Upon accessing the web application, you will be presented with the task of writing a persuasive message for the World Wildlife Fund (WWF) using an AI-powered text editor. 
+        The following task is part of the research project described above. Upon accessing the web application, you will be presented with the task of writing two persuasive messages for the World Wildlife Fund (WWF) using an AI-powered text editor. 
         After the task, you will be asked to fill in a small questionnaire that relates to your experience with the editor.
       </p>
       <p>

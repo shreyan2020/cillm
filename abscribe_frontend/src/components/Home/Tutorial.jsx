@@ -21,7 +21,7 @@ export default function Tutorial({ showButton = true }) {
     "ai-recipe": airecipe,
     "save-doc": savedoc,
   };
-  const featureDescriptions = featureDescriptionsConfig[studyID]?.features || featureDescriptionsConfig.default.features;
+  const featureDescriptions = featureDescriptionsConfig["Master"]?.features || featureDescriptionsConfig.default.features;
 
   const handleFeatureClick = (featureKey) => {
     setCurrentGif(gifData[featureKey]);
