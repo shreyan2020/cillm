@@ -6,11 +6,8 @@ const surveyConfig = {
         <p className="mb-3">
           <strong>1.</strong> Respond to the following questions honestly and to the best of your ability. There are no right answers, and we are interested in understanding your perception. Note that the usefulness of features can be reported on a scale of 1-100.
         </p>
-        <p className="mb-3">
-          <strong>2.</strong> If a feature does not apply to you, select <em>"Not Applicable"</em>.
-        </p>
-        <p>
-          <strong>3.</strong> To rate a feature 0, drag it right then drag it back to 0. Rating a feature with 0 will be interpreted as not applicable. 
+       <p className="mb-3">
+          <strong>2.</strong> If you have not used the feature or you want to rate it 0 click on <em>"Not Applicable"</em>.
         </p>`,
       ownership: 'Ownership',
       collaboration: 'Collaboration',
@@ -18,12 +15,12 @@ const surveyConfig = {
     },
     questions: {
       usefulness: [
-        'Variation - Gain Framing with Anecdotal Information',
-        'Variation - Loss Framing with Anecdotal Information',
-        'Variation - Gain Framing with Statistics',
-        'Variation - Loss Framing with Statistics',
-        'Variation - Short-term Temporal Framing',
-        'Variation - Long-term Temporal Framing',
+        'Variation - Positive Narrative Framing',
+        'Variation - Cautionary Narrative Framing',
+        'Variation - Positive Narrative Framing with Statistics',
+        'Variation - Cautionary Narrative with Statistics',
+        'Variation - Emphasis on Immediate Outcome',
+        'Variation - Emphasis on Long-Term Outcome',
         '@ai to Generate New Texts',
         'Create Continuation'
       ],
@@ -65,12 +62,12 @@ const surveyConfig = {
     },
     questions: {
       usefulness: [
-        'Variación - Enmarcado de Ganancia con Información Anecdótica',
-        'Variación - Enmarcado de Pérdida con Información Anecdótica',
-        'Variación - Enmarcado de Ganancia con Estadísticas',
-        'Variación - Enmarcado de Pérdida con Estadísticas',
-        'Variación - Enmarcado Temporal a Corto Plazo',
-        'Variación - Enmarcado Temporal a Largo Plazo',
+        'Variación - Enfoque Positivo en la Narrativa',
+        'Variación - Enfoque Cauteloso en la Narrativa',
+        'Variación - Enfoque Positivo en la Narrativa con Estadísticas',
+        'Variación - Enfoque Cauteloso en la Narrativa con Estadísticas',
+        'Variación - Énfasis en el Resultado Inmediato',
+        'Variación - Énfasis en el Resultado a Largo Plazo',
         '@ai para Generar Nuevos Textos',
         'Crear Continuación'
       ],
@@ -100,11 +97,8 @@ const surveyConfig = {
         <p className="mb-3">
           <strong>1.</strong> Respond to the following questions honestly and to the best of your ability. There are no right answers, and we are interested in understanding your perception. Note that the usefulness of features can be reported on a scale of 1-100.
         </p>
-        <p className="mb-3">
-          <strong>2.</strong> If a feature does not apply to you, select <em>"Not Applicable"</em>.
-        </p>
-        <p>
-          <strong>3.</strong> To rate a feature 0, drag it right then drag it back to 0. Rating a feature with 0 will be interpreted as not applicable. 
+       <p className="mb-3">
+          <strong>2.</strong> Si no has utilizado la función o deseas calificarla con 0, haz clic en <em>"No aplica"</em>.
         </p>`,
       ownership: 'Ownership',
       collaboration: 'Collaboration',
@@ -112,12 +106,12 @@ const surveyConfig = {
     },
     questions: {
       usefulness: [
-        'Variation - Gain Framing with Anecdotal Information',
-        'Variation - Loss Framing with Anecdotal Information',
-        'Variation - Gain Framing with Statistics',
-        'Variation - Loss Framing with Statistics',
-        'Variation - Short-term Temporal Framing',
-        'Variation - Long-term Temporal Framing',
+        'Variation - Positive Narrative Framing',
+        'Variation - Cautionary Narrative Framing',
+        'Variation - Positive Narrative Framing with Statistics',
+        'Variation - Cautionary Narrative with Statistics',
+        'Variation - Emphasis on Immediate Outcome',
+        'Variation - Emphasis on Long-Term Outcome',
         '@ai to Generate New Texts',
         'Create Continuation'
       ],

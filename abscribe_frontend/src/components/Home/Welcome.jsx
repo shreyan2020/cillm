@@ -119,14 +119,14 @@ export default function Welcome() {
                 
                 <div className="form-group mb-3">
                   <label htmlFor="proficiency" className="mb-2">
-                    Language Proficiency {studyID === "66aca63c781c99be382101f6" ? "(English)" : "(Spanish)"}
+                    Language Proficiency {studyID === "66c516b1d61c7b572205f713" ? "(English)" : "(Spanish)"}
                   </label>
                   <select
                     id="proficiency"
                     className="form-control"
-                    value={studyID === "66aca63c781c99be382101f6" ? englishProficiency : spanishProficiency}
+                    value={studyID === "66c516b1d61c7b572205f713" ? englishProficiency : spanishProficiency}
                     onChange={(e) => {
-                      if (studyID === "66aca63c781c99be382101f6") {
+                      if (studyID === "66c516b1d61c7b572205f713") {
                         setEnglishProficiency(e.target.value);
                       } else {
                         setSpanishProficiency(e.target.value);

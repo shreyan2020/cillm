@@ -27,7 +27,7 @@ export default function NavHeader() {
     <p><b>La misión del Fondo Mundial para la Naturaleza (WWF)</b> es conservar la naturaleza y reducir las amenazas más urgentes a la diversidad de la vida en la Tierra. Nuestra visión es construir un futuro en el que las personas vivan en armonía con la naturaleza. Nuestro objetivo es salvar un planeta rico en biodiversidad, conciliando las necesidades de los seres humanos con las de otras especies. Nos esforzamos por practicar la conservación humanitaria, inculcando un respeto por la naturaleza y equilibrándolo con una creencia en el potencial humano. Desde las comunidades locales hasta las organizaciones globales, inspiramos y apoyamos a aquellos que avanzan en la causa de la conservación. Como voz de las criaturas sin voz de nuestro mundo, dedicamos nuestros talentos, conocimientos y pasión a enriquecer la vida, el espíritu y el asombro por la naturaleza.</p>
   );
 
-  const missionStatement = studyID === '66aca63c781c99be382101f6' ? missionStatementEN : missionStatementES;
+  const missionStatement = studyID === '66c516b1d61c7b572205f713' ? missionStatementEN : missionStatementES;
 
   return (
     <>

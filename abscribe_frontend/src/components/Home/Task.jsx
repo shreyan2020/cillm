@@ -61,6 +61,7 @@ export default function Task() {
   const [validationError, setValidationError] = useState(null);
   const [tasksConfig, setTasksConfig] = useState(null);
   const [currentGif, setCurrentGif] = useState(aihelp);
+  const [currentDescription, setCurrentDescription] = useState("");
 
   // const [demo, setDemo] = useState("video");
   const gifData = {
@@ -142,7 +143,7 @@ export default function Task() {
   //     }
   //   }
   // }, [tasksConfig, completedTasks, setTaskID, navigate]);
-
+// console.log()
   useEffect(() => {
     if (tasksConfig) {
         const nextTaskIndex = completedTasks.length;
@@ -158,7 +159,7 @@ export default function Task() {
             // Check if the last completed task was 'main_task_1'
             const lastCompletedTaskID = completedTasks[completedTasks.length - 1];
             console.log('last completed', lastCompletedTaskID)
-            if (lastCompletedTaskID === "main_task_1") {
+            if (lastCompletedTaskID.startsWith("main_task_1")) {
                 window.location.href = `https://app.prolific.com/submissions/complete?cc=${tasksConfig.redirectCode}`;
             } else {
                 console.log("Last task was not 'main_task_1', loading 'main_task_1' instead.");
@@ -198,6 +199,8 @@ export default function Task() {
 
   const handleFeatureClick = (featureKey) => {
     setCurrentGif(gifData[featureKey]);
+    setCurrentDescription(featureDescriptions[featureKey].description);
+
   };
 
   const handleStartTask = () => {
@@ -320,20 +323,20 @@ export default function Task() {
                     />
                   </div>
                   <div className="mt-4">
-                    <div
-                      className="description-box"
-                      style={{
-                        backgroundColor: "#f8f9fa",
-                        padding: "20px",
-                        borderRadius: "8px",
-                        border: "1px solid #ced4da",
-                        fontSize: "16px",
-                        lineHeight: "1.5",
-                        color: "#495057",
-                        textAlign: "center",
-                      }}
-                      dangerouslySetInnerHTML={{ __html: featureDescriptions[currentTask.id.startsWith("sandbox_task") ? "ai-recipe" : "ai-help"].description }}
-                    />
+                  <div
+  className="description-box"
+  style={{
+    backgroundColor: "#f8f9fa",
+    padding: "20px",
+    borderRadius: "8px",
+    border: "1px solid #ced4da",
+    fontSize: "16px",
+    lineHeight: "1.5",
+    color: "#495057",
+    textAlign: "center",
+  }}
+  dangerouslySetInnerHTML={{ __html: currentDescription }}
+/>
                   </div>
                   <p>{currentTask.noteText}</p>
                 </div>
