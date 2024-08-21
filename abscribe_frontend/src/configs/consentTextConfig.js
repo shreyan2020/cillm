@@ -1,5 +1,5 @@
 const consentTextConfig = {
-  '66c516b1d61c7b572205f713': {
+  '66c5e9afb11bf5c62a286fe8': {
     language: 'English',
     consentText: `
       <p>
@@ -41,14 +41,14 @@ const consentTextConfig = {
         },
       taskDetails: `
         <p>Thank you for considering this opportunity.</p>
-        <p>We are seeking individuals to write one short advertisement for a charity. The written advertisement should have 70-150 words.</p>
+        <p>We are seeking individuals to write two short advertisements for a charity, one in English and one in Spanish. The written advertisements should have 70-150 words.</p>
       `,
       eligibilityCriteria: `
-        <li>You are proficient in English.</li>
+        <li>You are proficient in English and Spanish.</li>
         <li>Your profile indicates that you work in a writing-related profession.</li>
       `,
       compensation: `
-        <p>You will be compensated at a flat rate of £3.00 for completing this task. Additionally, you can earn a bonus of up to £10.00. The bonus compensation structure is given below and the top %s texts 
+        <p>You will be compensated at a flat rate of £5.00 for completing this task. Additionally, you can earn a bonus of up to £10.00. The bonus compensation structure is given below and the top %s texts 
         will be determined by other crowd workers (i.e., your peers on Prolific) based on the "Persuasiveness" of the text you wrote.</p>
       `,
       bonusTable: [
@@ -57,7 +57,7 @@ const consentTextConfig = {
         { level: "Top 1%", amount: "£10.00" },
       ],
       estimatedTime: `
-      <p>This task is estimated to take approximately 15 minutes. If you are ready to complete the job without interruptions during this time, please click "Proceed" to start.</p>
+      <p>This task is estimated to take approximately 20-25 minutes. If you are ready to complete the job without interruptions during this time, please click "Proceed" to start.</p>
       <p>Thank you for your interest!</p>`,
     },
   },

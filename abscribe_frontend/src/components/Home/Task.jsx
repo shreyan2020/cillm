@@ -106,8 +106,8 @@ export default function Task() {
         let configModule;
         // console.log('sads',studyID)
         switch (studyID) {
-          case '66c516b1d61c7b572205f713':
-            configModule = await import('../../configs/stage1study1EN.js');
+          case '66c5e9afb11bf5c62a286fe8':
+            configModule = await import('../../configs/stage1study2ENES.js');
             break;
           case '66aca69be884d495377c3f30':
             configModule = await import('../../configs/stage1study1ES.js');
@@ -159,7 +159,7 @@ export default function Task() {
             // Check if the last completed task was 'main_task_1'
             const lastCompletedTaskID = completedTasks[completedTasks.length - 1];
             console.log('last completed', lastCompletedTaskID)
-            if (lastCompletedTaskID.startsWith("main_task_1")) {
+            if (lastCompletedTaskID.startsWith("main_task_2")) {
                 window.location.href = `https://app.prolific.com/submissions/complete?cc=${tasksConfig.redirectCode}`;
             } else {
                 console.log("Last task was not 'main_task_1', loading 'main_task_1' instead.");

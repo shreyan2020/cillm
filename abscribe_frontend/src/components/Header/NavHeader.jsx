@@ -9,7 +9,7 @@ import JobDescription from "../Home/JobDescription"; // Adjust the import path a
 import { TaskContext } from "../../context/TaskContext"; // Import the TaskContext
 
 export default function NavHeader() {
-  const { studyID } = useContext(TaskContext); // Access studyID from TaskContext
+  const { studyID, taskID } = useContext(TaskContext); // Access studyID from TaskContext
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState(null);
 
@@ -27,7 +27,7 @@ export default function NavHeader() {
     <p><b>La misión del Fondo Mundial para la Naturaleza (WWF)</b> es conservar la naturaleza y reducir las amenazas más urgentes a la diversidad de la vida en la Tierra. Nuestra visión es construir un futuro en el que las personas vivan en armonía con la naturaleza. Nuestro objetivo es salvar un planeta rico en biodiversidad, conciliando las necesidades de los seres humanos con las de otras especies. Nos esforzamos por practicar la conservación humanitaria, inculcando un respeto por la naturaleza y equilibrándolo con una creencia en el potencial humano. Desde las comunidades locales hasta las organizaciones globales, inspiramos y apoyamos a aquellos que avanzan en la causa de la conservación. Como voz de las criaturas sin voz de nuestro mundo, dedicamos nuestros talentos, conocimientos y pasión a enriquecer la vida, el espíritu y el asombro por la naturaleza.</p>
   );
 
-  const missionStatement = studyID === '66c516b1d61c7b572205f713' ? missionStatementEN : missionStatementES;
+  const missionStatement = (taskID === 'main_task_1' || taskID === 'sandbox_task_1_eng') ? missionStatementEN : missionStatementES;
 
   return (
     <>

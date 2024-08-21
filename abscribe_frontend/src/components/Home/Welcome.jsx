@@ -116,17 +116,54 @@ export default function Welcome() {
                     required
                   />
                 </div>
-                
                 <div className="form-group mb-3">
+  <label htmlFor="englishProficiency" className="mb-2">
+    English Proficiency
+  </label>
+  <select
+    id="englishProficiency"
+    className="form-control"
+    value={englishProficiency}
+    onChange={(e) => setEnglishProficiency(e.target.value)}
+    required
+  >
+    <option value="">Select your English proficiency level</option>
+    <option value="beginner">Beginner</option>
+    <option value="intermediate">Intermediate</option>
+    <option value="advanced">Advanced</option>
+    <option value="native">Native</option>
+  </select>
+</div>
+
+<div className="form-group mb-3">
+  <label htmlFor="spanishProficiency" className="mb-2">
+    Spanish Proficiency
+  </label>
+  <select
+    id="spanishProficiency"
+    className="form-control"
+    value={spanishProficiency}
+    onChange={(e) => setSpanishProficiency(e.target.value)}
+    required
+  >
+    <option value="">Select your Spanish proficiency level</option>
+    <option value="beginner">Beginner</option>
+    <option value="intermediate">Intermediate</option>
+    <option value="advanced">Advanced</option>
+    <option value="native">Native</option>
+  </select>
+</div>
+      
+                {/* <div className="form-group mb-3">
                   <label htmlFor="proficiency" className="mb-2">
-                    Language Proficiency {studyID === "66c516b1d61c7b572205f713" ? "(English)" : "(Spanish)"}
+                    Language Proficiency {studyID === "66c5e9afb11bf5c62a286fe8" ? "(English)" : "(Spanish)"}
                   </label>
                   <select
                     id="proficiency"
                     className="form-control"
-                    value={studyID === "66c516b1d61c7b572205f713" ? englishProficiency : spanishProficiency}
+                    value={studyID === "66c5e9afb11bf5c62a286fe8" ? englishProficiency : spanishProficiency}
                     onChange={(e) => {
-                      if (studyID === "66c516b1d61c7b572205f713") {
+                      if (studyID === "66c5e9afb11bf5c62a286fe8") {
                         setEnglishProficiency(e.target.value);
                       } else {
                         setSpanishProficiency(e.target.value);
@@ -140,7 +177,7 @@ export default function Welcome() {
                     <option value="advanced">Advanced</option>
                     <option value="native">Native</option>
                   </select>
-                </div>
+                </div> */}
 
                 <div className="form-group">
                   <input
