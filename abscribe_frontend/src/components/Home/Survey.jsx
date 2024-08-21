@@ -1,22 +1,21 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate, useLocation  } from "react-router-dom";
+import React, { useState, useContext, useRef } from 'react';
+import { useNavigate, useLocation } from "react-router-dom";
 import '../../scss/survey.scss';
 import { apiClient } from '../../services/abscribeAPI';
 import { TaskContext } from '../../context/TaskContext';
 import surveyConfig from '../../configs/surveyConfig';
-import Alert from 'react-bootstrap/Alert';  // Make sure this is imported
+import Alert from 'react-bootstrap/Alert';
 
 const Survey = () => {
-  
   const location = useLocation();
   const navigate = useNavigate();
-  const { prolificID, taskID, studyID } = useContext(TaskContext);
+  const { prolificID, taskID, studyID, tasksConfig } = useContext(TaskContext); // Access tasksConfig from context
   const [errorMessage, setErrorMessage] = useState('');
-
+  
+  const errorRefs = useRef({}); // Use refs to store error elements for scrolling
+  
   const timeSpentOutside = location.state?.totalTimeSpentOutside || 0;
-  // const timeSpentOutside = 50000;
-  const config = surveyConfig["Master"];
-  //  || surveyConfig.default;
+  const config = surveyConfig["Master"]; // Use the appropriate config
 
   const [responses, setResponses] = useState({
     usefulness: {},
@@ -33,7 +32,7 @@ const Survey = () => {
     ownership: {},
     collaboration: {},
     aiCapabilities: {},
-    resourcesUsed: "",  // Add this field for validation errors
+    resourcesUsed: "",
   });
 
   const handleChange = (block, question, value) => {
@@ -48,7 +47,7 @@ const Survey = () => {
       ...prevErrors,
       [block]: {
         ...prevErrors[block],
-        [question]: null,  
+        [question]: null,
       },
     }));
   };
@@ -61,10 +60,10 @@ const Survey = () => {
 
     setValidationErrors((prevErrors) => ({
       ...prevErrors,
-      [field]: null,  // Clear the error when the field is updated
+      [field]: null,
     }));
   };
-  
+
   const handleNotApplicableChange = (question) => {
     setResponses((prevResponses) => ({
       ...prevResponses,
@@ -81,7 +80,7 @@ const Survey = () => {
       ...prevErrors,
       usefulness: {
         ...prevErrors.usefulness,
-        [question]: null,  
+        [question]: null,
       },
     }));
   };
@@ -98,7 +97,7 @@ const Survey = () => {
       ...prevErrors,
       [block]: {
         ...prevErrors[block],
-        [question]: null,  
+        [question]: null,
       },
     }));
   };
@@ -111,10 +110,13 @@ const Survey = () => {
       aiCapabilities: {},
     };
 
+    let firstErrorKey = null; // To store the first error key for scrolling
+
     // Validate Usefulness of Features
     config.questions.usefulness.forEach((feature) => {
       if (!responses.usefulness[feature] && !responses.notApplicable[feature]) {
         errors.usefulness[feature] = 'This field is required';
+        if (!firstErrorKey) firstErrorKey = `usefulness-${feature}`;
       }
     });
 
@@ -122,6 +124,7 @@ const Survey = () => {
     config.questions.ownership.forEach((statement) => {
       if (!responses.ownership[statement]) {
         errors.ownership[statement] = 'This field is required';
+        if (!firstErrorKey) firstErrorKey = `ownership-${statement}`;
       }
     });
 
@@ -129,6 +132,7 @@ const Survey = () => {
     config.questions.collaboration.forEach((statement) => {
       if (!responses.collaboration[statement]) {
         errors.collaboration[statement] = 'This field is required';
+        if (!firstErrorKey) firstErrorKey = `collaboration-${statement}`;
       }
     });
 
@@ -136,15 +140,25 @@ const Survey = () => {
     config.questions.aiCapabilities.forEach((statement) => {
       if (!responses.aiCapabilities[statement]) {
         errors.aiCapabilities[statement] = 'This field is required';
+        if (!firstErrorKey) firstErrorKey = `aiCapabilities-${statement}`;
       }
     });
 
     // Conditionally validate resourcesUsed
     if (timeSpentOutside / 1000 >= 30 && !responses.resourcesUsed.trim()) {
       errors.resourcesUsed = 'Please describe the resources you consulted.';
+      if (!firstErrorKey) firstErrorKey = 'resourcesUsed';
     }
 
     setValidationErrors(errors);
+
+    // If there's a validation error, scroll to the first one
+    if (firstErrorKey) {
+      const firstErrorElement = errorRefs.current[firstErrorKey];
+      if (firstErrorElement) {
+        firstErrorElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
 
     // Check if there are any validation errors
     const hasErrors = Object.values(errors).some(
@@ -162,29 +176,29 @@ const Survey = () => {
       return;
     }
 
-    console.log('Survey responses:', responses);
     const surveyData = {
       prolific_id: prolificID,
       study_id: studyID,
       task_id: taskID, 
       responses: responses,
     };
+
     try {
       await apiClient.post("/log_survey", surveyData);
-      console.log('Survey responses saved successfully');
+      console.log('Survey responses saved successfully', tasksConfig);
+
       const taskOrder = tasksConfig.order;
-      const isLastTask = taskID === taskOrder[taskOrder.length - 1];
-      if (isLastTask) {
+      const lastTask = taskOrder[taskOrder.length - 1];
+
+      if (taskID.startsWith(lastTask)) {
         // Redirect to Prolific submission page
         window.location.href = `https://app.prolific.com/submissions/complete?cc=${tasksConfig.redirectCode}`;
       } else {
         // Navigate to the next task or desired page
         navigate("/task");
       }
-      // navigate("/task");
     } catch (error) {
       const formattedSurveyData = JSON.stringify(surveyData, null, 2);
-      // console.error('Failed to save survey responses:', formattedSurveyData);
       setErrorMessage(`There was an error submitting your survey responses. Please share the following data with the researcher to ensure you get compensated:\n\n${formattedSurveyData}\n\nError: ${error.message}`);
     }
   };
@@ -214,6 +228,7 @@ const Survey = () => {
                 value={responses.notApplicable[feature] ? "NA" : responses.usefulness[feature] || 0}
                 onChange={(e) => handleChange('usefulness', feature, e.target.value)}
                 disabled={responses.notApplicable[feature]}  
+                ref={(el) => errorRefs.current[`usefulness-${feature}`] = el}
               />
               <span className="ms-3">{responses.notApplicable[feature] ? 'NA' : responses.usefulness[feature] || 0}</span>
               <label className="form-check ms-3">
@@ -251,6 +266,7 @@ const Survey = () => {
                     value={option}
                     checked={responses.ownership[statement] === option}
                     onChange={() => handleRadioChange('ownership', statement, option)}
+                    ref={(el) => errorRefs.current[`ownership-${statement}`] = el}
                   />
                   <span className="ms-2">{option}</span>
                 </label>
@@ -281,6 +297,7 @@ const Survey = () => {
                     value={option}
                     checked={responses.collaboration[statement] === option}
                     onChange={() => handleRadioChange('collaboration', statement, option)}
+                    ref={(el) => errorRefs.current[`collaboration-${statement}`] = el}
                   />
                   <span className="ms-2">{option}</span>
                 </label>
@@ -311,6 +328,7 @@ const Survey = () => {
                     value={option}
                     checked={responses.aiCapabilities[statement] === option}
                     onChange={() => handleRadioChange('aiCapabilities', statement, option)}
+                    ref={(el) => errorRefs.current[`aiCapabilities-${statement}`] = el}
                   />
                   <span className="ms-2">{option}</span>
                 </label>
@@ -327,22 +345,23 @@ const Survey = () => {
 
       {/* New Section: Time Spent Outside Abscribe */}
       {timeSpentOutside / 1000 >= 30 && (
-      <div className="survey-block mb-5">
-        <h3 className="h5 mb-4">Time Spent Outside Abscribe</h3>
-        <p>You spent <strong>{(timeSpentOutside / 1000 / 60).toFixed(2)} minutes</strong> outside Abscribe. Please let us know what resources you used during this time.</p>
-        <textarea
-          className="form-control mb-4"
-          rows="3"
-          placeholder="Please describe the resources you consulted..."
-          value={responses.resourcesUsed}
-          onChange={(e) => handleTextChange('resourcesUsed', e.target.value)}
-        ></textarea>
-        {validationErrors.resourcesUsed && (
-          <div className="text-danger mt-2">
-            <i className="fas fa-exclamation-triangle"></i> {validationErrors.resourcesUsed}
-          </div>
-        )}
-      </div>
+        <div className="survey-block mb-5">
+          <h3 className="h5 mb-4">Time Spent Outside Abscribe</h3>
+          <p>You spent <strong>{(timeSpentOutside / 1000 / 60).toFixed(2)} minutes</strong> outside Abscribe. Please let us know what resources you used during this time.</p>
+          <textarea
+            className="form-control mb-4"
+            rows="3"
+            placeholder="Please describe the resources you consulted..."
+            value={responses.resourcesUsed}
+            onChange={(e) => handleTextChange('resourcesUsed', e.target.value)}
+            ref={(el) => errorRefs.current['resourcesUsed'] = el}
+          ></textarea>
+          {validationErrors.resourcesUsed && (
+            <div className="text-danger mt-2">
+              <i className="fas fa-exclamation-triangle"></i> {validationErrors.resourcesUsed}
+            </div>
+          )}
+        </div>
       )}
 
       {/* New Section: Additional Comments */}

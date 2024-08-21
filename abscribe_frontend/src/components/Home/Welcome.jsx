@@ -11,7 +11,7 @@ export default function Welcome() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { prolificID, setProlificID, studyID, setStudyID } = useContext(TaskContext);
+  const { prolificID, setProlificID, studyID, setStudyID, setTasksConfig } = useContext(TaskContext);
   const [validationError, setValidationError] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
   const [gender, setGender] = useState("");
@@ -23,20 +23,48 @@ export default function Welcome() {
     const params = new URLSearchParams(location.search);
     const prolific_id = params.get("PROLIFIC_PID");
     const study_id = params.get("STUDY_ID");
-    // console.log('asasa', study_id)
+    
     if (prolific_id) {
       setProlificID(prolific_id);
     }
     if (study_id) {
       setStudyID(study_id);
     }
-    
   }, [location.search, setProlificID, setStudyID]);
+
+  useEffect(() => {
+    // Dynamically import the task configuration based on the studyID
+    const loadTaskConfig = async () => {
+      try {
+        let configModule;
+        switch (studyID) {
+          case '66c616da5ea4ebca7f461ac7':
+            configModule = await import('../../configs/stage1study2ENES.js');
+            break;
+          case '66c63f4f7c3e886b7c9cc498':
+            configModule = await import('../../configs/stage1study2ESEN.js');
+            break;
+          case '66c63f502b78911af098063d':
+            configModule = await import('../../configs/stage1study2ESEN.js');
+            break;
+          default:
+            configModule = await import('../../configs/stage1study2ENES.js');
+            break;
+        }
+        setTasksConfig(configModule.default);
+      } catch (error) {
+        console.error('Error loading task configuration:', error);
+      }
+    };
+
+    if (studyID) {
+      loadTaskConfig();
+    }
+  }, [studyID, setTasksConfig]);
 
   const saveParticipantInfo = async (participantData) => {
     try {
       const response = await apiClient.post("/save_participant_info", participantData);
-      // console.log("Participant info saved:", response.data);
     } catch (error) {
       console.error("Error saving participant info:", error);
       setValidationError("Failed to save participant information. Please try again.");
@@ -73,7 +101,7 @@ export default function Welcome() {
     const consentHTML = consentTextConfig["Master"]?.consentText || "Something went wrong please contact researcher";
     return <div dangerouslySetInnerHTML={{ __html: consentHTML }} />;
   };
-// console.log(studyID, consentTextConfig)
+
   return (
     <>
       <div className="jumbotron m-3">
@@ -116,69 +144,41 @@ export default function Welcome() {
                     required
                   />
                 </div>
-                <div className="form-group mb-3">
-  <label htmlFor="englishProficiency" className="mb-2">
-    English Proficiency
-  </label>
-  <select
-    id="englishProficiency"
-    className="form-control"
-    value={englishProficiency}
-    onChange={(e) => setEnglishProficiency(e.target.value)}
-    required
-  >
-    <option value="">Select your English proficiency level</option>
-    <option value="beginner">Beginner</option>
-    <option value="intermediate">Intermediate</option>
-    <option value="advanced">Advanced</option>
-    <option value="native">Native</option>
-  </select>
-</div>
 
-<div className="form-group mb-3">
-  <label htmlFor="spanishProficiency" className="mb-2">
-    Spanish Proficiency
-  </label>
-  <select
-    id="spanishProficiency"
-    className="form-control"
-    value={spanishProficiency}
-    onChange={(e) => setSpanishProficiency(e.target.value)}
-    required
-  >
-    <option value="">Select your Spanish proficiency level</option>
-    <option value="beginner">Beginner</option>
-    <option value="intermediate">Intermediate</option>
-    <option value="advanced">Advanced</option>
-    <option value="native">Native</option>
-  </select>
-</div>
-      
-                {/* <div className="form-group mb-3">
-                  <label htmlFor="proficiency" className="mb-2">
-                    Language Proficiency {studyID === "66c5e9afb11bf5c62a286fe8" ? "(English)" : "(Spanish)"}
-                  </label>
+                <div className="form-group mb-3">
+                  <label htmlFor="englishProficiency" className="mb-2">English Proficiency</label>
                   <select
-                    id="proficiency"
+                    id="englishProficiency"
                     className="form-control"
-                    value={studyID === "66c5e9afb11bf5c62a286fe8" ? englishProficiency : spanishProficiency}
-                    onChange={(e) => {
-                      if (studyID === "66c5e9afb11bf5c62a286fe8") {
-                        setEnglishProficiency(e.target.value);
-                      } else {
-                        setSpanishProficiency(e.target.value);
-                      }
-                    }}
+                    value={englishProficiency}
+                    onChange={(e) => setEnglishProficiency(e.target.value)}
                     required
                   >
-                    <option value="">Select your proficiency level</option>
+                    <option value="">Select your English proficiency level</option>
                     <option value="beginner">Beginner</option>
                     <option value="intermediate">Intermediate</option>
                     <option value="advanced">Advanced</option>
                     <option value="native">Native</option>
                   </select>
-                </div> */}
+                </div>
 
+                <div className="form-group mb-3">
+                  <label htmlFor="spanishProficiency" className="mb-2">Spanish Proficiency</label>
+                  <select
+                    id="spanishProficiency"
+                    className="form-control"
+                    value={spanishProficiency}
+                    onChange={(e) => setSpanishProficiency(e.target.value)}
+                    required
+                  >
+                    <option value="">Select your Spanish proficiency level</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                    <option value="native">Native</option>
+                  </select>
+                </div>
+      
                 <div className="form-group">
                   <input
                     type="checkbox"

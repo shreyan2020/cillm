@@ -8,6 +8,7 @@ export const TaskProvider = ({ children }) => {
   const [prolificID, setProlificID] = useState(null);
   const [studyID, setStudyID] = useState(null);
   const [questionnaireID, setQuestionnaireID] = useState(null);
+  const [tasksConfig, setTasksConfig] = useState(null); // New state for tasks configuration
   const [activityLog, setActivityLog] = useState({
     buttonClicks: [],
     generatedContent: [],
@@ -113,6 +114,8 @@ export const TaskProvider = ({ children }) => {
         setProlificID,
         questionnaireID,
         setQuestionnaireID,
+        tasksConfig, // Expose tasksConfig
+        setTasksConfig, // Expose setTasksConfig
         activityLog,
         setActivityLog,
         logButtonClick,
