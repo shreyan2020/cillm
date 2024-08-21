@@ -157,6 +157,7 @@ export default function Task() {
         } else {
             // Check if the last completed task was 'main_task_1'
             const lastCompletedTaskID = completedTasks[completedTasks.length - 1];
+            console.log('last completed', lastCompletedTaskID)
             if (lastCompletedTaskID === "main_task_1") {
                 window.location.href = `https://app.prolific.com/submissions/complete?cc=${tasksConfig.redirectCode}`;
             } else {

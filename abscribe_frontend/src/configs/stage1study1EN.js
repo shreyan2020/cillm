@@ -46,7 +46,7 @@ const stage1study1EN = {
     ],
     order: [
       "sandbox_task_1_eng",
-      "main_task_1", // English main task for WWF
+      // "main_task_1", // English main task for WWF
     //   "sandbox_task_2_eng",
     //   "main_task_2", // English main task for LiveStrong
     ],
