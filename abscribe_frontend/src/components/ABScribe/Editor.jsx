@@ -109,7 +109,7 @@ export default function Editor({
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL + "chatGPT/chat"
   //Task Context
-  const { taskID, prolificID, activityLog, setActivityLog, addCompletedTask, logKeyPress, saveActivityLog, logGeneratedContent } = useContext(TaskContext);
+  const { taskID, prolificID, activityLog, logKeyPress, saveActivityLog, logGeneratedContent } = useContext(TaskContext);
   const activityLogRef = useRef(activityLog);
   const [showModal, setShowModal] = useState(false);
   const [missingButtons, setMissingButtons] = useState([]);
