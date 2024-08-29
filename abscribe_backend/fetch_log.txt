@@ -1,0 +1,257 @@
+2024-08-29 10:16:55,132  * Debugger is active!
+2024-08-29 10:16:55,136  * Debugger PIN: 442-777-315
+2024-08-29 10:17:10,255 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:17:10,255 127.0.0.1 - - [29/Aug/2024 10:17:10] "[35m[1mPOST /api/get_persuasive_text HTTP/1.1[0m" 500 -
+2024-08-29 10:18:07,937  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\models\\persuasive_texts.py', reloading
+2024-08-29 10:18:09,241  * Debugger is active!
+2024-08-29 10:18:09,244  * Debugger PIN: 442-777-315
+2024-08-29 10:18:32,134  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-29 10:18:33,305  * Debugger is active!
+2024-08-29 10:18:33,309  * Debugger PIN: 442-777-315
+2024-08-29 10:18:38,559 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:18:38,560 127.0.0.1 - - [29/Aug/2024 10:18:38] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:19:36,692  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-29 10:19:37,920  * Debugger is active!
+2024-08-29 10:19:37,924  * Debugger PIN: 442-777-315
+2024-08-29 10:19:55,230 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:19:55,230 127.0.0.1 - - [29/Aug/2024 10:19:55] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:20:34,266 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:20:34,267 127.0.0.1 - - [29/Aug/2024 10:20:34] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:20:39,994 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:20:39,994 127.0.0.1 - - [29/Aug/2024 10:20:39] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:27:47,165  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-29 10:27:48,782  * Debugger is active!
+2024-08-29 10:27:48,786  * Debugger PIN: 442-777-315
+2024-08-29 10:27:54,775 127.0.0.1 - - [29/Aug/2024 10:27:54] "[35m[1mPOST /api/get_persuasive_text HTTP/1.1[0m" 500 -
+2024-08-29 10:28:02,352  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-29 10:28:03,982  * Debugger is active!
+2024-08-29 10:28:03,986  * Debugger PIN: 442-777-315
+2024-08-29 10:28:06,604 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:28:06,604 127.0.0.1 - - [29/Aug/2024 10:28:06] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:28:13,307 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:28:13,307 127.0.0.1 - - [29/Aug/2024 10:28:13] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:28:19,170 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:28:19,171 127.0.0.1 - - [29/Aug/2024 10:28:19] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:29:19,780  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-29 10:29:21,138  * Debugger is active!
+2024-08-29 10:29:21,142  * Debugger PIN: 442-777-315
+2024-08-29 10:29:32,322 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:29:32,323 127.0.0.1 - - [29/Aug/2024 10:29:32] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:30:04,787  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-29 10:30:06,253  * Debugger is active!
+2024-08-29 10:30:06,257  * Debugger PIN: 442-777-315
+2024-08-29 10:30:11,371 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:30:11,371 127.0.0.1 - - [29/Aug/2024 10:30:11] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:34:22,985  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-29 10:34:24,389  * Debugger is active!
+2024-08-29 10:34:24,392  * Debugger PIN: 442-777-315
+2024-08-29 10:34:42,106 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:34:42,107 127.0.0.1 - - [29/Aug/2024 10:34:42] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:34:59,911 Prolific ID 12345 fetched document ID 66c5e4be2f44d7b54f76e52d
+2024-08-29 10:34:59,912 127.0.0.1 - - [29/Aug/2024 10:34:59] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:35:07,577 Prolific ID 12345 fetched document ID 66c5a21086c57a87db6f59e1
+2024-08-29 10:35:07,578 127.0.0.1 - - [29/Aug/2024 10:35:07] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:44:04,775 Prolific ID 12345 faced error while fetching a document
+2024-08-29 10:44:04,777 127.0.0.1 - - [29/Aug/2024 10:44:04] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 10:46:51,006 Prolific ID 12345 faced error while fetching a document
+2024-08-29 10:46:51,007 127.0.0.1 - - [29/Aug/2024 10:46:51] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 10:50:06,247 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:50:06,247 127.0.0.1 - - [29/Aug/2024 10:50:06] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:50:09,010 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:50:09,011 127.0.0.1 - - [29/Aug/2024 10:50:09] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:50:11,691 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:50:11,692 127.0.0.1 - - [29/Aug/2024 10:50:11] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:50:15,466 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:50:15,467 127.0.0.1 - - [29/Aug/2024 10:50:15] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:50:18,383 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 10:50:18,384 127.0.0.1 - - [29/Aug/2024 10:50:18] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 10:50:21,176 Prolific ID 12345 faced error while fetching a document
+2024-08-29 10:50:21,177 127.0.0.1 - - [29/Aug/2024 10:50:21] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 12:51:18,550 127.0.0.1 - - [29/Aug/2024 12:51:18] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 12:51:18,822 127.0.0.1 - - [29/Aug/2024 12:51:18] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 13:20:16,508 127.0.0.1 - - [29/Aug/2024 13:20:16] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 13:20:16,773 127.0.0.1 - - [29/Aug/2024 13:20:16] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:13:34,480  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\models\\persuasive_texts.py', reloading
+2024-08-29 16:13:36,467  * Debugger is active!
+2024-08-29 16:13:36,470  * Debugger PIN: 442-777-315
+2024-08-29 16:14:02,686  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-29 16:14:04,103  * Debugger is active!
+2024-08-29 16:14:04,107  * Debugger PIN: 442-777-315
+2024-08-29 16:14:13,055 127.0.0.1 - - [29/Aug/2024 16:14:13] "[35m[1mPOST /api/get_persuasive_text HTTP/1.1[0m" 500 -
+2024-08-29 16:14:22,832 127.0.0.1 - - [29/Aug/2024 16:14:22] "[35m[1mPOST /api/get_persuasive_text HTTP/1.1[0m" 500 -
+2024-08-29 16:14:55,422  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-29 16:14:56,704  * Debugger is active!
+2024-08-29 16:14:56,708  * Debugger PIN: 442-777-315
+2024-08-29 16:15:01,047 Prolific ID 12345 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-29 16:15:01,048 127.0.0.1 - - [29/Aug/2024 16:15:01] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:16:45,190 127.0.0.1 - - [29/Aug/2024 16:16:45] "[33mOPTIONS /api/api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:16:45,191 127.0.0.1 - - [29/Aug/2024 16:16:45] "[33mOPTIONS /api/api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:17:08,322 127.0.0.1 - - [29/Aug/2024 16:17:08] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:17:08,648 Prolific ID 66c616da5ea4ebca7f461ac7 faced error while fetching a document
+2024-08-29 16:17:08,648 127.0.0.1 - - [29/Aug/2024 16:17:08] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:17:23,749 127.0.0.1 - - [29/Aug/2024 16:17:23] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:17:24,060 Prolific ID 66c616da5ea4ebca7f461ac7 faced error while fetching a document
+2024-08-29 16:17:24,060 127.0.0.1 - - [29/Aug/2024 16:17:24] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:17:31,328 127.0.0.1 - - [29/Aug/2024 16:17:31] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:17:31,644 127.0.0.1 - - [29/Aug/2024 16:17:31] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:17:31,648 Prolific ID 66c616da5ea4ebca7f461ac7 faced error while fetching a document
+2024-08-29 16:17:31,649 127.0.0.1 - - [29/Aug/2024 16:17:31] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:17:31,958 Prolific ID 66c616da5ea4ebca7f461ac7 faced error while fetching a document
+2024-08-29 16:17:31,959 127.0.0.1 - - [29/Aug/2024 16:17:31] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:18:09,662 127.0.0.1 - - [29/Aug/2024 16:18:09] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:18:09,669 127.0.0.1 - - [29/Aug/2024 16:18:09] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:18:09,926 Prolific ID 66c616da5ea4ebca7f461ac7 faced error while fetching a document
+2024-08-29 16:18:09,927 127.0.0.1 - - [29/Aug/2024 16:18:09] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:18:09,971 Prolific ID 66c616da5ea4ebca7f461ac7 faced error while fetching a document
+2024-08-29 16:18:09,971 127.0.0.1 - - [29/Aug/2024 16:18:09] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:18:41,394 127.0.0.1 - - [29/Aug/2024 16:18:41] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:18:41,722 127.0.0.1 - - [29/Aug/2024 16:18:41] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:18:41,725 127.0.0.1 - - [29/Aug/2024 16:18:41] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:18:41,727 127.0.0.1 - - [29/Aug/2024 16:18:41] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:18:41,988 Prolific ID 66c616da5ea4ebca7f461ac7 faced error while fetching a document
+2024-08-29 16:18:41,989 127.0.0.1 - - [29/Aug/2024 16:18:41] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:18:42,030 Prolific ID 66c616da5ea4ebca7f461ac7 faced error while fetching a document
+2024-08-29 16:18:42,031 127.0.0.1 - - [29/Aug/2024 16:18:42] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:19:29,991  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-29 16:19:31,392  * Debugger is active!
+2024-08-29 16:19:31,396  * Debugger PIN: 442-777-315
+2024-08-29 16:19:39,972 127.0.0.1 - - [29/Aug/2024 16:19:39] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:19:39,981 127.0.0.1 - - [29/Aug/2024 16:19:39] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:19:39,987 127.0.0.1 - - [29/Aug/2024 16:19:39] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:19:40,238 127.0.0.1 - - [29/Aug/2024 16:19:40] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:19:40,303 Prolific ID 66c616da5ea4ebca7f461ac7 faced error while fetching a document
+2024-08-29 16:19:40,303 127.0.0.1 - - [29/Aug/2024 16:19:40] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:19:40,309 Prolific ID 66c616da5ea4ebca7f461ac7 faced error while fetching a document
+2024-08-29 16:19:40,309 127.0.0.1 - - [29/Aug/2024 16:19:40] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:20:08,848 127.0.0.1 - - [29/Aug/2024 16:20:08] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:20:09,173 127.0.0.1 - - [29/Aug/2024 16:20:09] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:20:09,174 127.0.0.1 - - [29/Aug/2024 16:20:09] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:20:09,202 127.0.0.1 - - [29/Aug/2024 16:20:09] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:20:09,439 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c5e4be2f44d7b54f76e52d
+2024-08-29 16:20:09,440 127.0.0.1 - - [29/Aug/2024 16:20:09] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:20:09,491 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c5a21086c57a87db6f59e1
+2024-08-29 16:20:09,492 127.0.0.1 - - [29/Aug/2024 16:20:09] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:23:23,320 127.0.0.1 - - [29/Aug/2024 16:23:23] "[33mOPTIONS /api/api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:24:27,885 127.0.0.1 - - [29/Aug/2024 16:24:27] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-08-29 16:24:28,141 127.0.0.1 - - [29/Aug/2024 16:24:28] "[31m[1mPOST /api/log_survey HTTP/1.1[0m" 400 -
+2024-08-29 16:25:12,054 127.0.0.1 - - [29/Aug/2024 16:25:12] "[33mOPTIONS /api/api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:25:16,448 127.0.0.1 - - [29/Aug/2024 16:25:16] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-08-29 16:25:16,716 127.0.0.1 - - [29/Aug/2024 16:25:16] "[31m[1mPOST /api/log_survey HTTP/1.1[0m" 400 -
+2024-08-29 16:25:56,161 127.0.0.1 - - [29/Aug/2024 16:25:56] "[33mOPTIONS /api/api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:25:58,396 127.0.0.1 - - [29/Aug/2024 16:25:58] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-08-29 16:25:58,673 127.0.0.1 - - [29/Aug/2024 16:25:58] "[31m[1mPOST /api/log_survey HTTP/1.1[0m" 400 -
+2024-08-29 16:26:05,657 127.0.0.1 - - [29/Aug/2024 16:26:05] "[33mOPTIONS /api/api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:26:09,181 127.0.0.1 - - [29/Aug/2024 16:26:09] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-08-29 16:26:09,446 127.0.0.1 - - [29/Aug/2024 16:26:09] "[31m[1mPOST /api/log_survey HTTP/1.1[0m" 400 -
+2024-08-29 16:28:56,339 127.0.0.1 - - [29/Aug/2024 16:28:56] "[33mOPTIONS /api/api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:31:32,318 127.0.0.1 - - [29/Aug/2024 16:31:32] "[33mOPTIONS /api/api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:31:32,318 127.0.0.1 - - [29/Aug/2024 16:31:32] "[33mOPTIONS /api/api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:31:48,102 127.0.0.1 - - [29/Aug/2024 16:31:48] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:31:48,417 127.0.0.1 - - [29/Aug/2024 16:31:48] "[33mOPTIONS /api/api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:31:48,419 127.0.0.1 - - [29/Aug/2024 16:31:48] "[33mOPTIONS /api/api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:31:48,423 127.0.0.1 - - [29/Aug/2024 16:31:48] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:32:03,020 127.0.0.1 - - [29/Aug/2024 16:32:03] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:32:03,335 127.0.0.1 - - [29/Aug/2024 16:32:03] "[31m[1mPOST /api/get_persuasive_text HTTP/1.1[0m" 400 -
+2024-08-29 16:32:12,760 127.0.0.1 - - [29/Aug/2024 16:32:12] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:32:13,076 127.0.0.1 - - [29/Aug/2024 16:32:13] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:32:13,080 127.0.0.1 - - [29/Aug/2024 16:32:13] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:32:13,081 127.0.0.1 - - [29/Aug/2024 16:32:13] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:32:13,343 127.0.0.1 - - [29/Aug/2024 16:32:13] "[31m[1mPOST /api/get_persuasive_text HTTP/1.1[0m" 400 -
+2024-08-29 16:32:13,388 127.0.0.1 - - [29/Aug/2024 16:32:13] "[31m[1mPOST /api/get_persuasive_text HTTP/1.1[0m" 400 -
+2024-08-29 16:32:50,102 127.0.0.1 - - [29/Aug/2024 16:32:50] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:32:50,413 Prolific ID 66c616da5ea4ebca7f461ac7 faced error while fetching a document
+2024-08-29 16:32:50,414 127.0.0.1 - - [29/Aug/2024 16:32:50] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:32:56,753 127.0.0.1 - - [29/Aug/2024 16:32:56] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:32:57,083 127.0.0.1 - - [29/Aug/2024 16:32:57] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:32:57,085 127.0.0.1 - - [29/Aug/2024 16:32:57] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:32:57,089 127.0.0.1 - - [29/Aug/2024 16:32:57] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:32:57,345 Prolific ID 66c616da5ea4ebca7f461ac7 faced error while fetching a document
+2024-08-29 16:32:57,346 127.0.0.1 - - [29/Aug/2024 16:32:57] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:32:57,408 Prolific ID 66c616da5ea4ebca7f461ac7 faced error while fetching a document
+2024-08-29 16:32:57,408 127.0.0.1 - - [29/Aug/2024 16:32:57] "[33mPOST /api/get_persuasive_text HTTP/1.1[0m" 404 -
+2024-08-29 16:33:20,489 127.0.0.1 - - [29/Aug/2024 16:33:20] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:33:20,806 127.0.0.1 - - [29/Aug/2024 16:33:20] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:33:20,814 127.0.0.1 - - [29/Aug/2024 16:33:20] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:33:20,819 127.0.0.1 - - [29/Aug/2024 16:33:20] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:33:21,066 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c88773e46942c099b32393
+2024-08-29 16:33:21,066 127.0.0.1 - - [29/Aug/2024 16:33:21] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:33:21,132 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c5a3e386c57a87db6f59f9
+2024-08-29 16:33:21,134 127.0.0.1 - - [29/Aug/2024 16:33:21] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:33:50,018 127.0.0.1 - - [29/Aug/2024 16:33:50] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:33:50,331 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c5a85186c57a87db6f5a21
+2024-08-29 16:33:50,332 127.0.0.1 - - [29/Aug/2024 16:33:50] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:33:53,904 127.0.0.1 - - [29/Aug/2024 16:33:53] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:33:54,220 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c5a42286c57a87db6f59fa
+2024-08-29 16:33:54,221 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c522869236da2225cc8cf2
+2024-08-29 16:33:54,222 127.0.0.1 - - [29/Aug/2024 16:33:54] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:33:54,223 127.0.0.1 - - [29/Aug/2024 16:33:54] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:33:54,226 127.0.0.1 - - [29/Aug/2024 16:33:54] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:35:20,337 127.0.0.1 - - [29/Aug/2024 16:35:20] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:35:20,342 127.0.0.1 - - [29/Aug/2024 16:35:20] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:35:20,601 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c5a9ab86c57a87db6f5a32
+2024-08-29 16:35:20,602 127.0.0.1 - - [29/Aug/2024 16:35:20] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:35:20,648 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c5e76c2f44d7b54f76e534
+2024-08-29 16:35:20,649 127.0.0.1 - - [29/Aug/2024 16:35:20] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:35:32,010 127.0.0.1 - - [29/Aug/2024 16:35:32] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:35:32,326 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c524a69236da2225cc8cfd
+2024-08-29 16:35:32,326 127.0.0.1 - - [29/Aug/2024 16:35:32] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:35:42,477 127.0.0.1 - - [29/Aug/2024 16:35:42] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:35:42,790 127.0.0.1 - - [29/Aug/2024 16:35:42] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:35:42,795 127.0.0.1 - - [29/Aug/2024 16:35:42] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:35:42,802 127.0.0.1 - - [29/Aug/2024 16:35:42] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:35:43,044 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c88f79e46942c099b323a7
+2024-08-29 16:35:43,045 127.0.0.1 - - [29/Aug/2024 16:35:43] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:35:43,117 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c5a45586c57a87db6f59fc
+2024-08-29 16:35:43,118 127.0.0.1 - - [29/Aug/2024 16:35:43] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:36:11,232 127.0.0.1 - - [29/Aug/2024 16:36:11] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:36:11,564 127.0.0.1 - - [29/Aug/2024 16:36:11] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:36:11,564 127.0.0.1 - - [29/Aug/2024 16:36:11] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:36:11,565 127.0.0.1 - - [29/Aug/2024 16:36:11] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:36:11,828 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c88d0be46942c099b323a0
+2024-08-29 16:36:11,828 127.0.0.1 - - [29/Aug/2024 16:36:11] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:36:11,878 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c88731e46942c099b32391
+2024-08-29 16:36:11,879 127.0.0.1 - - [29/Aug/2024 16:36:11] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:37:32,911 127.0.0.1 - - [29/Aug/2024 16:37:32] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:37:33,172 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c5241b9236da2225cc8cfa
+2024-08-29 16:37:33,173 127.0.0.1 - - [29/Aug/2024 16:37:33] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:37:40,035 127.0.0.1 - - [29/Aug/2024 16:37:40] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:37:40,350 127.0.0.1 - - [29/Aug/2024 16:37:40] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:37:40,350 127.0.0.1 - - [29/Aug/2024 16:37:40] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:37:40,351 127.0.0.1 - - [29/Aug/2024 16:37:40] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:37:40,608 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c6181507bfd712ba618584
+2024-08-29 16:37:40,611 127.0.0.1 - - [29/Aug/2024 16:37:40] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:37:40,662 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c627b607bfd712ba6185cc
+2024-08-29 16:37:40,662 127.0.0.1 - - [29/Aug/2024 16:37:40] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:37:49,791 127.0.0.1 - - [29/Aug/2024 16:37:49] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-08-29 16:37:50,106 127.0.0.1 - - [29/Aug/2024 16:37:50] "[31m[1mPOST /api/log_survey HTTP/1.1[0m" 400 -
+2024-08-29 16:38:21,542  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-29 16:38:23,018  * Debugger is active!
+2024-08-29 16:38:23,022  * Debugger PIN: 442-777-315
+2024-08-29 16:38:24,276 127.0.0.1 - - [29/Aug/2024 16:38:24] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-08-29 16:38:24,542 127.0.0.1 - - [29/Aug/2024 16:38:24] "[35m[1mPOST /api/log_survey HTTP/1.1[0m" 500 -
+2024-08-29 16:38:42,867  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\models\\donation_survey.py', reloading
+2024-08-29 16:38:44,021  * Debugger is active!
+2024-08-29 16:38:44,025  * Debugger PIN: 442-777-315
+2024-08-29 16:38:46,783 127.0.0.1 - - [29/Aug/2024 16:38:46] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-08-29 16:38:47,048 127.0.0.1 - - [29/Aug/2024 16:38:47] "[35m[1mPOST /api/log_survey HTTP/1.1[0m" 500 -
+2024-08-29 16:38:59,790  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-29 16:39:01,153  * Debugger is active!
+2024-08-29 16:39:01,158  * Debugger PIN: 442-777-315
+2024-08-29 16:39:06,706 127.0.0.1 - - [29/Aug/2024 16:39:06] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-08-29 16:39:07,004 127.0.0.1 - - [29/Aug/2024 16:39:07] "POST /api/log_survey HTTP/1.1" 200 -
+2024-08-29 16:40:26,933 127.0.0.1 - - [29/Aug/2024 16:40:26] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:40:26,934 127.0.0.1 - - [29/Aug/2024 16:40:26] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:40:27,201 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c6302d07bfd712ba6185e3
+2024-08-29 16:40:27,202 127.0.0.1 - - [29/Aug/2024 16:40:27] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:40:27,249 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c78f7df837defabd5eb804
+2024-08-29 16:40:27,249 127.0.0.1 - - [29/Aug/2024 16:40:27] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:53:52,973 127.0.0.1 - - [29/Aug/2024 16:53:52] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:53:53,238 127.0.0.1 - - [29/Aug/2024 16:53:53] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-29 16:55:30,118 127.0.0.1 - - [29/Aug/2024 16:55:30] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:55:30,118 127.0.0.1 - - [29/Aug/2024 16:55:30] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:55:30,384 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c7905af837defabd5eb80a
+2024-08-29 16:55:30,384 127.0.0.1 - - [29/Aug/2024 16:55:30] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:55:30,431 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c7a655f837defabd5eb872
+2024-08-29 16:55:30,432 127.0.0.1 - - [29/Aug/2024 16:55:30] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-29 16:55:51,220 127.0.0.1 - - [29/Aug/2024 16:55:51] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-08-29 16:55:51,537 127.0.0.1 - - [29/Aug/2024 16:55:51] "POST /api/log_survey HTTP/1.1" 200 -

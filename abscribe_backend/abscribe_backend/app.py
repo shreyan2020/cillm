@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 import re
 from datetime import datetime, timezone
 from flask import Flask, request, Response, jsonify
+import numpy as np
+import logging
 
 
 # import torch
@@ -15,7 +17,8 @@ import abscribe_backend.services.recipe_service as recipe_service
 
 from abscribe_backend.models.document import Document
 from abscribe_backend.models.activity_log import ActivityLog
-
+from abscribe_backend.models.donation_survey import DonationSurvey
+from abscribe_backend.models.persuasive_texts import PersuasiveTexts
 
 from flask_cors import CORS
 
@@ -25,7 +28,6 @@ from abscribe_backend.models.document import Document
 from abscribe_backend.models.particiapnt_info import ParticipantInfo
 from abscribe_backend.models.survey import SurveyResponse
 import abscribe_backend.services.chatgpt_service as chatgpt_service
-
 # from abscribe_backend.models.keylogger import KeyloggerActivity
 
 
@@ -111,6 +113,7 @@ CORS(
 # # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # device = "cuda"
 # model.to(device)
+logging.basicConfig(filename='fetch_log.txt', level=logging.INFO, format='%(asctime)s %(message)s')
 
 db.init_app(app)
 
@@ -118,6 +121,80 @@ db.init_app(app)
 # Helper function to convert objects to JSON serializable dictionaries
 def to_dict(obj):
     return obj.to_mongo().to_dict() if obj else None
+
+
+
+
+
+
+
+
+@app.route("/api/get_persuasive_text", methods=["POST"])
+def get_persuasive_text():
+    data = request.get_json()
+    task_category = data.get("task_category")
+    prolific_id = data.get("prolific_id")
+    print(data)
+    if not all([task_category, prolific_id]):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    try:
+        # Find a text that hasn't been viewed 5 times yet
+        document = PersuasiveTexts.objects(task_category=task_category, view_count__lt=5).order_by("view_count").modify(
+            inc__view_count=1,  # Increment view_count
+            new=True  # Return the updated document
+        )
+        if document:
+            logging.info(f"Prolific ID {prolific_id} fetched document ID {document.id}")
+            print(document.view_count)
+            return jsonify(document.to_dict()), 200
+        else:
+            logging.error(f"Prolific ID {prolific_id} faced error while fetching a document")
+            return jsonify({"error": "No more texts available for this task"}), 404
+
+    except Exception as e:
+        print("Error retrieving persuasive text:", e)
+        return jsonify({"error": str(e)}), 500
+
+
+
+@app.route("/api/log_survey", methods=["POST"])
+def save_survey_response():
+    data = request.get_json()
+
+    prolific_id = data.get("prolific_id")
+    document_id = data.get("document_id")
+    # task_id = data.get("task_id")
+    # donationAmount = 
+    responses = data.get("responses", {})
+
+    if not all([prolific_id, document_id]):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    try:
+        survey_response = DonationSurvey(
+            prolific_id=prolific_id,
+            document_id=document_id,
+            # task_id=task_id,
+            responses=responses,
+            timestamp=datetime.now(timezone.utc),  # Set the current time in UTC
+        )
+        survey_response.save()
+
+        return jsonify({"message": "Survey responses saved successfully"}), 200
+    except Exception as e:
+        print("Error saving survey responses:", e)
+        return jsonify({"error": str(e)}), 500
+
+
+
+
+
+
+
+
+
+
 
 @app.route("/api/log_activity", methods=["POST"])
 def log_activity():
@@ -148,6 +225,8 @@ def log_activity():
     except Exception as e:
         print("Error saving activity log:", e)  # Print the exception for debugging
         return jsonify({"error": str(e)}), 500
+
+
 
 
 @app.route("/api/save_participant_info", methods=["POST"])
@@ -182,33 +261,33 @@ def save_participant_info():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/log_survey", methods=["POST"])
-def save_survey_response():
-    data = request.get_json()
-    # print("Received survey data:", data)  # Print incoming data for debugging
+# @app.route("/api/log_survey", methods=["POST"])
+# def save_survey_response():
+#     data = request.get_json()
+#     # print("Received survey data:", data)  # Print incoming data for debugging
 
-    prolific_id = data.get("prolific_id")
-    study_id = data.get("study_id")
-    task_id = data.get("task_id")
-    responses = data.get("responses", {})
+#     prolific_id = data.get("prolific_id")
+#     study_id = data.get("study_id")
+#     task_id = data.get("task_id")
+#     responses = data.get("responses", {})
 
-    if not all([prolific_id, study_id, task_id]):
-        return jsonify({"error": "Missing required fields"}), 400
+#     if not all([prolific_id, study_id, task_id]):
+#         return jsonify({"error": "Missing required fields"}), 400
 
-    try:
-        survey_response = SurveyResponse(
-            prolific_id=prolific_id,
-            study_id=study_id,
-            task_id=task_id,
-            responses=responses,
-            timestamp=datetime.now(timezone.utc)  # Set the current time in UTC
-        )
-        survey_response.save()
+#     try:
+#         survey_response = SurveyResponse(
+#             prolific_id=prolific_id,
+#             study_id=study_id,
+#             task_id=task_id,
+#             responses=responses,
+#             timestamp=datetime.now(timezone.utc)  # Set the current time in UTC
+#         )
+#         survey_response.save()
 
-        return jsonify({"message": "Survey responses saved successfully"}), 200
-    except Exception as e:
-        print("Error saving survey responses:", e)  # Print the exception for debugging
-        return jsonify({"error": str(e)}), 500
+#         return jsonify({"message": "Survey responses saved successfully"}), 200
+#     except Exception as e:
+#         print("Error saving survey responses:", e)  # Print the exception for debugging
+#         return jsonify({"error": str(e)}), 500
 
 
 # Document endpoints

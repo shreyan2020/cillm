@@ -11,6 +11,7 @@ import JobDescription from "./components/Home/JobDescription";
 import Task from "./components/Home/Task";
 import Questionnaire from "./components/Home/Questionnaire";
 import Survey from "./components/Home/Survey";
+import DonationSurvey from "./components/Home/DonationSurvey";
 import ReactDOM from "react-dom/client";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: "/survey",
         element: <Survey />,
+      },
+      {
+        path: "/donation",
+        element: <DonationSurvey />,
       },
       {
         path: "/editor",
