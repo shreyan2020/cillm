@@ -114,6 +114,7 @@ const DonationSurvey = () => {
                 value={responses.donationAmount}
                 onChange={(e) => setResponses({ ...responses, donationAmount: e.target.value })}
                 min="0"
+                step = "0.1"
                 max="1.5"
               />
               {validationErrors.donationAmount && (

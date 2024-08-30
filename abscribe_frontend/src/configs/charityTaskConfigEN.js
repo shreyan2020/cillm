@@ -67,7 +67,7 @@ const charityTaskConfigEN = {
         estimatedTime: "Estimated Time",
       },
       taskDetails: `
-        <p>First, read the text carefully. You are provided an amount of €1.5 to donate to the charity. You can either keep it for yourself or donate to the charity fully or in any amount you deem fit.</p>
+        <p>After clicking next you will be presented with a charity advertisement. First, read the advertisement text carefully. You are provided an amount of €1.5 to donate to the charity. You can either keep it for yourself or donate to the charity fully or in any amount you deem fit.</p>
         <p>For example, if you choose to donate €1.5, then you will only get €1 for completing the task. If you donate €1, then you will get €1 + (€1.5 - €1) = €1.5, and so on.</p>
         <p>After donating, you will be asked to answer a few questions regarding the text.</p>
       `,
