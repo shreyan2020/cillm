@@ -475,3 +475,71 @@
 2024-08-30 23:34:52,410 127.0.0.1 - - [30/Aug/2024 23:34:52] "POST /api/get_persuasive_text HTTP/1.1" 200 -
 2024-08-30 23:34:52,456 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c6e5986db9c208f260cab9
 2024-08-30 23:34:52,457 127.0.0.1 - - [30/Aug/2024 23:34:52] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 00:09:57,549 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.178.129:8080
+2024-08-31 00:09:57,549 [33mPress CTRL+C to quit[0m
+2024-08-31 00:09:57,552  * Restarting with stat
+2024-08-31 00:09:58,511  * Debugger is active!
+2024-08-31 00:09:58,515  * Debugger PIN: 442-777-315
+2024-08-31 00:11:12,640 127.0.0.1 - - [31/Aug/2024 00:11:12] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-31 00:11:12,916 127.0.0.1 - - [31/Aug/2024 00:11:12] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-31 00:13:39,447 127.0.0.1 - - [31/Aug/2024 00:13:39] "OPTIONS /api/documents HTTP/1.1" 200 -
+2024-08-31 00:13:39,701 127.0.0.1 - - [31/Aug/2024 00:13:39] "[35m[1mPOST /api/documents HTTP/1.1[0m" 201 -
+2024-08-31 00:13:39,799 127.0.0.1 - - [31/Aug/2024 00:13:39] "GET /api/documents/66d24413f75d4d28cb566bb8 HTTP/1.1" 200 -
+2024-08-31 00:13:40,110 127.0.0.1 - - [31/Aug/2024 00:13:40] "GET /api/recipes/ HTTP/1.1" 200 -
+2024-08-31 00:13:40,130 127.0.0.1 - - [31/Aug/2024 00:13:40] "GET /api/documents/66d24413f75d4d28cb566bb8 HTTP/1.1" 200 -
+2024-08-31 00:13:40,414 127.0.0.1 - - [31/Aug/2024 00:13:40] "GET /api/recipes/ HTTP/1.1" 200 -
+2024-08-31 00:13:42,052 127.0.0.1 - - [31/Aug/2024 00:13:42] "OPTIONS /api/documents/66d24413f75d4d28cb566bb8 HTTP/1.1" 200 -
+2024-08-31 00:13:42,312 127.0.0.1 - - [31/Aug/2024 00:13:42] "PUT /api/documents/66d24413f75d4d28cb566bb8 HTTP/1.1" 200 -
+2024-08-31 00:13:43,629 127.0.0.1 - - [31/Aug/2024 00:13:43] "PUT /api/documents/66d24413f75d4d28cb566bb8 HTTP/1.1" 200 -
+2024-08-31 00:13:47,899 127.0.0.1 - - [31/Aug/2024 00:13:47] "OPTIONS /api/log_activity HTTP/1.1" 200 -
+2024-08-31 00:13:48,167 127.0.0.1 - - [31/Aug/2024 00:13:48] "POST /api/log_activity HTTP/1.1" 200 -
+2024-08-31 00:13:50,848 127.0.0.1 - - [31/Aug/2024 00:13:50] "OPTIONS /api/documents HTTP/1.1" 200 -
+2024-08-31 00:13:51,171 127.0.0.1 - - [31/Aug/2024 00:13:51] "[35m[1mPOST /api/documents HTTP/1.1[0m" 201 -
+2024-08-31 00:13:51,432 127.0.0.1 - - [31/Aug/2024 00:13:51] "GET /api/documents/66d2441ff75d4d28cb566bba HTTP/1.1" 200 -
+2024-08-31 00:13:51,505 127.0.0.1 - - [31/Aug/2024 00:13:51] "GET /api/recipes/ HTTP/1.1" 200 -
+2024-08-31 00:13:51,506 127.0.0.1 - - [31/Aug/2024 00:13:51] "GET /api/documents/66d2441ff75d4d28cb566bba HTTP/1.1" 200 -
+2024-08-31 00:13:51,763 127.0.0.1 - - [31/Aug/2024 00:13:51] "GET /api/recipes/ HTTP/1.1" 200 -
+2024-08-31 00:13:52,182 127.0.0.1 - - [31/Aug/2024 00:13:52] "OPTIONS /api/documents/66d2441ff75d4d28cb566bba HTTP/1.1" 200 -
+2024-08-31 00:13:52,497 127.0.0.1 - - [31/Aug/2024 00:13:52] "PUT /api/documents/66d2441ff75d4d28cb566bba HTTP/1.1" 200 -
+2024-08-31 00:13:53,257 127.0.0.1 - - [31/Aug/2024 00:13:53] "OPTIONS /api/log_activity HTTP/1.1" 200 -
+2024-08-31 00:13:53,568 127.0.0.1 - - [31/Aug/2024 00:13:53] "POST /api/log_activity HTTP/1.1" 200 -
+2024-08-31 00:13:53,569 127.0.0.1 - - [31/Aug/2024 00:13:53] "PUT /api/documents/66d2441ff75d4d28cb566bba HTTP/1.1" 200 -
+2024-08-31 00:14:17,740 127.0.0.1 - - [31/Aug/2024 00:14:17] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-08-31 00:14:17,993 127.0.0.1 - - [31/Aug/2024 00:14:17] "[31m[1mPOST /api/log_survey HTTP/1.1[0m" 400 -
+2024-08-31 00:16:02,497  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-31 00:16:02,759  * Restarting with stat
+2024-08-31 00:16:03,732  * Debugger is active!
+2024-08-31 00:16:03,736  * Debugger PIN: 442-777-315
+2024-08-31 00:16:05,872  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-31 00:16:06,359  * Restarting with stat
+2024-08-31 00:16:07,314  * Debugger is active!
+2024-08-31 00:16:07,319  * Debugger PIN: 442-777-315
+2024-08-31 00:16:08,090 127.0.0.1 - - [31/Aug/2024 00:16:08] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-08-31 00:16:08,358 127.0.0.1 - - [31/Aug/2024 00:16:08] "POST /api/log_survey HTTP/1.1" 200 -
+2024-08-31 00:16:10,752 127.0.0.1 - - [31/Aug/2024 00:16:10] "OPTIONS /api/documents HTTP/1.1" 200 -
+2024-08-31 00:16:11,066 127.0.0.1 - - [31/Aug/2024 00:16:11] "[35m[1mPOST /api/documents HTTP/1.1[0m" 201 -
+2024-08-31 00:16:11,328 127.0.0.1 - - [31/Aug/2024 00:16:11] "GET /api/documents/66d244abcdc9b92ce21578ca HTTP/1.1" 200 -
+2024-08-31 00:16:11,405 127.0.0.1 - - [31/Aug/2024 00:16:11] "GET /api/recipes/ HTTP/1.1" 200 -
+2024-08-31 00:16:11,407 127.0.0.1 - - [31/Aug/2024 00:16:11] "GET /api/documents/66d244abcdc9b92ce21578ca HTTP/1.1" 200 -
+2024-08-31 00:16:11,639 127.0.0.1 - - [31/Aug/2024 00:16:11] "GET /api/recipes/ HTTP/1.1" 200 -
+2024-08-31 00:16:12,146 127.0.0.1 - - [31/Aug/2024 00:16:12] "OPTIONS /api/documents/66d244abcdc9b92ce21578ca HTTP/1.1" 200 -
+2024-08-31 00:16:12,473 127.0.0.1 - - [31/Aug/2024 00:16:12] "PUT /api/documents/66d244abcdc9b92ce21578ca HTTP/1.1" 200 -
+2024-08-31 00:16:13,298 127.0.0.1 - - [31/Aug/2024 00:16:13] "PUT /api/documents/66d244abcdc9b92ce21578ca HTTP/1.1" 200 -
+2024-08-31 00:16:14,730 127.0.0.1 - - [31/Aug/2024 00:16:14] "OPTIONS /api/log_activity HTTP/1.1" 200 -
+2024-08-31 00:16:14,986 127.0.0.1 - - [31/Aug/2024 00:16:14] "POST /api/log_activity HTTP/1.1" 200 -
+2024-08-31 00:16:18,961 127.0.0.1 - - [31/Aug/2024 00:16:18] "OPTIONS /api/documents HTTP/1.1" 200 -
+2024-08-31 00:16:19,274 127.0.0.1 - - [31/Aug/2024 00:16:19] "[35m[1mPOST /api/documents HTTP/1.1[0m" 201 -
+2024-08-31 00:16:19,541 127.0.0.1 - - [31/Aug/2024 00:16:19] "GET /api/documents/66d244b3cdc9b92ce21578cc HTTP/1.1" 200 -
+2024-08-31 00:16:19,626 127.0.0.1 - - [31/Aug/2024 00:16:19] "GET /api/documents/66d244b3cdc9b92ce21578cc HTTP/1.1" 200 -
+2024-08-31 00:16:19,626 127.0.0.1 - - [31/Aug/2024 00:16:19] "GET /api/recipes/ HTTP/1.1" 200 -
+2024-08-31 00:16:19,856 127.0.0.1 - - [31/Aug/2024 00:16:19] "GET /api/recipes/ HTTP/1.1" 200 -
+2024-08-31 00:16:20,177 127.0.0.1 - - [31/Aug/2024 00:16:20] "OPTIONS /api/documents/66d244b3cdc9b92ce21578cc HTTP/1.1" 200 -
+2024-08-31 00:16:20,496 127.0.0.1 - - [31/Aug/2024 00:16:20] "PUT /api/documents/66d244b3cdc9b92ce21578cc HTTP/1.1" 200 -
+2024-08-31 00:16:20,764 127.0.0.1 - - [31/Aug/2024 00:16:20] "PUT /api/documents/66d244b3cdc9b92ce21578cc HTTP/1.1" 200 -
+2024-08-31 00:16:20,855 127.0.0.1 - - [31/Aug/2024 00:16:20] "OPTIONS /api/log_activity HTTP/1.1" 200 -
+2024-08-31 00:16:20,863 127.0.0.1 - - [31/Aug/2024 00:16:20] "POST /api/log_activity HTTP/1.1" 200 -
+2024-08-31 00:16:37,868 127.0.0.1 - - [31/Aug/2024 00:16:37] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-08-31 00:16:38,138 127.0.0.1 - - [31/Aug/2024 00:16:38] "POST /api/log_survey HTTP/1.1" 200 -

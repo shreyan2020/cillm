@@ -1,19 +1,24 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import { TaskContext } from '../../context/TaskContext';
-import '../../scss/job-description.scss';
+import { TaskContext } from '../../context/TaskContext'; // Import TaskContext
+import consentTextConfig from '../../configs/consentTextConfig'; // Import config file
+import '../../scss/job-description.scss'; // Import CSS for styling
 
 const JobDescription = ({ showButton = true }) => {
   const navigate = useNavigate();
-  const { tasksConfig } = useContext(TaskContext); // Get taskConfig from context
+  const { studyID } = useContext(TaskContext); // Get studyID from context
 
   const handleProceedClick = () => {
-    navigate('/donation');
+    navigate('/task');
+  };
+
+  const getProficiencyLanguage = () => {
+    return consentTextConfig["Master"]?.language || "consentTextConfig.default.language";
   };
 
   const renderJobDescription = () => {
-    const jobDescription = tasksConfig.config.jobDescription;
+    const jobDescription = consentTextConfig["Master"]?.jobDescription || "consentTextConfig.default.jobDescription";
 
     return (
       <>
@@ -29,8 +34,8 @@ const JobDescription = ({ showButton = true }) => {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th>{jobDescription.headers.qualityLevel}</th>
-              <th>{jobDescription.headers.bonusAmount}</th>
+              <th>Quality Level</th>
+              <th>Bonus Amount</th>
             </tr>
           </thead>
           <tbody>
@@ -58,7 +63,7 @@ const JobDescription = ({ showButton = true }) => {
             {renderJobDescription()}
             {showButton && (
               <Button className="mt-4" variant="outline-dark" size="lg" onClick={handleProceedClick}>
-                Proceed
+                Next
               </Button>
             )}
           </div>

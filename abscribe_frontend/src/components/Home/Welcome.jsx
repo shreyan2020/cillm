@@ -4,13 +4,14 @@ import "prismjs/themes/prism.css";
 import "../../scss/home.scss";
 import Button from "react-bootstrap/Button";
 import { TaskContext } from "../../context/TaskContext";
-import { apiClient } from '../../services/abscribeAPI';  // Assuming you have an apiClient setup
+import { apiClient } from '../../services/abscribeAPI'; // Import apiClient
+import consentTextConfig from '../../configs/consentTextConfig';
 
 export default function Welcome() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { prolificID, setProlificID, studyID, setStudyID, tasksConfig, setTasksConfig } = useContext(TaskContext);
+  const { prolificID, setProlificID, studyID, setStudyID, setTasksConfig } = useContext(TaskContext);
   const [validationError, setValidationError] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
   const [gender, setGender] = useState("");
@@ -32,27 +33,37 @@ export default function Welcome() {
   }, [location.search, setProlificID, setStudyID]);
 
   useEffect(() => {
+    // Dynamically import the task configuration based on the studyID
     const loadTaskConfig = async () => {
       try {
         let configModule;
         switch (studyID) {
+          case '66c90fcc4541f87369be0127':
+            configModule = await import('../../configs/NollmEN.js');
+            break;
+          case '66c516b1d61c7b572205f713':
+            configModule = await import('../../configs/stage1study1EN.js');
+            break;
+          case '66c5e9afb11bf5c62a286fe8':
+            configModule = await import('../../configs/stage1study2ENES.js');
+            break;
           case '66c616da5ea4ebca7f461ac7':
-            configModule = await import('../../configs/charityTaskConfigEN.js');
+            configModule = await import('../../configs/stage1study2ENES.js');
             break;
           case '66c63f4f7c3e886b7c9cc498':
-            configModule = await import('../../configs/charityTaskConfigES.js');
+            configModule = await import('../../configs/stage1study2ESEN.js');
+            break;
+          case '66c994e78d5b3da79c6cc853':
+            configModule = await import('../../configs/stage1study2ESEN.js');
+            break;
+          case '66c63f502b78911af098063d':
+            configModule = await import('../../configs/stage1study2ESEN.js');
             break;
           default:
-            configModule = await import('../../configs/charityTaskConfigEN.js');
+            configModule = await import('../../configs/stage1study2ENES.js');
             break;
         }
-        
-        if (configModule && configModule.default) {
-          setTasksConfig(configModule.default);  // Setting tasksConfig in context
-          console.log('Task config loaded:', configModule.default);
-        } else {
-          console.error('Task config is undefined or null.');
-        }
+        setTasksConfig(configModule.default);
       } catch (error) {
         console.error('Error loading task configuration:', error);
       }
@@ -63,11 +74,6 @@ export default function Welcome() {
     }
   }, [studyID, setTasksConfig]);
 
-  useEffect(() => {
-    console.log('Task Config from context after setting:', tasksConfig);
-  }, [tasksConfig]);
-
-
   const saveParticipantInfo = async (participantData) => {
     try {
       const response = await apiClient.post("/save_participant_info", participantData);
@@ -76,6 +82,7 @@ export default function Welcome() {
       setValidationError("Failed to save participant information. Please try again.");
     }
   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (isChecked) {
@@ -94,8 +101,16 @@ export default function Welcome() {
     }
   };
 
+  const getProficiencyLanguage = () => {
+    return consentTextConfig["Master"]?.language || "Something went wrong please contact researcher";
+  };
+
+  const getEstimatedTime = () => {
+    return consentTextConfig["Master"]?.time || "Something went wrong please contact researcher";
+  };
+
   const renderConsentText = () => {
-    const consentHTML = tasksConfig?.config.consentText || "Something went wrong please contact researcher";
+    const consentHTML = consentTextConfig["Master"]?.consentText || "Something went wrong please contact researcher";
     return <div dangerouslySetInnerHTML={{ __html: consentHTML }} />;
   };
 
@@ -107,8 +122,9 @@ export default function Welcome() {
           <div className="card mt-4">
             <div className="card-body">
               <h2 className="card-title">Consent Form</h2>
-              {tasksConfig ? renderConsentText() : <p>Loading configuration...</p>}
+              {renderConsentText()}
 
+              {/* Adding a thick horizontal line to separate informed consent from questions */}
               <hr style={{ borderTop: "5px solid #bbb" }} />
 
               <form onSubmit={handleSubmit}>
@@ -140,45 +156,41 @@ export default function Welcome() {
                     required
                   />
                 </div>
-               
-                {tasksConfig && tasksConfig.config.language === "ENG" && (
-                  <div className="form-group mb-3">
-                    <label htmlFor="englishProficiency" className="mb-2">English Proficiency</label>
-                    <select
-                      id="englishProficiency"
-                      className="form-control"
-                      value={englishProficiency}
-                      onChange={(e) => setEnglishProficiency(e.target.value)}
-                      required
-                    >
-                      <option value="">Select your English proficiency level</option>
-                      <option value="beginner">Beginner</option>
-                      <option value="intermediate">Intermediate</option>
-                      <option value="advanced">Advanced</option>
-                      <option value="native">Native</option>
-                    </select>
-                  </div>
-                )}
 
-                {tasksConfig && tasksConfig.config.language === "ESP" && (
-                  <div className="form-group mb-3">
-                    <label htmlFor="spanishProficiency" className="mb-2">Spanish Proficiency</label>
-                    <select
-                      id="spanishProficiency"
-                      className="form-control"
-                      value={spanishProficiency}
-                      onChange={(e) => setSpanishProficiency(e.target.value)}
-                      required
-                    >
-                      <option value="">Select your Spanish proficiency level</option>
-                      <option value="beginner">Beginner</option>
-                      <option value="intermediate">Intermediate</option>
-                      <option value="advanced">Advanced</option>
-                      <option value="native">Native</option>
-                    </select>
-                  </div>
-                )}
-                
+                <div className="form-group mb-3">
+                  <label htmlFor="englishProficiency" className="mb-2">English Proficiency</label>
+                  <select
+                    id="englishProficiency"
+                    className="form-control"
+                    value={englishProficiency}
+                    onChange={(e) => setEnglishProficiency(e.target.value)}
+                    required
+                  >
+                    <option value="">Select your English proficiency level</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                    <option value="native">Native</option>
+                  </select>
+                </div>
+
+                <div className="form-group mb-3">
+                  <label htmlFor="spanishProficiency" className="mb-2">Spanish Proficiency</label>
+                  <select
+                    id="spanishProficiency"
+                    className="form-control"
+                    value={spanishProficiency}
+                    onChange={(e) => setSpanishProficiency(e.target.value)}
+                    required
+                  >
+                    <option value="">Select your Spanish proficiency level</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                    <option value="native">Native</option>
+                  </select>
+                </div>
+      
                 <div className="form-group">
                   <input
                     type="checkbox"
@@ -199,7 +211,7 @@ export default function Welcome() {
                   size="lg"
                   disabled={!isChecked}
                 >
-                  Proceed to Task
+                  Proceed to Instructions
                 </Button>
               </form>
             </div>
