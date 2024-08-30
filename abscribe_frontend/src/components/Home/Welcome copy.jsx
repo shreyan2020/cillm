@@ -38,10 +38,22 @@ export default function Welcome() {
       try {
         let configModule;
         switch (studyID) {
+          case '66c90fcc4541f87369be0127':
+            configModule = await import('../../configs/NollmEN.js');
+            break;
+          case '66c516b1d61c7b572205f713':
+            configModule = await import('../../configs/stage1study1EN.js');
+            break;
+          case '66c5e9afb11bf5c62a286fe8':
+            configModule = await import('../../configs/stage1study2ENES.js');
+            break;
           case '66c616da5ea4ebca7f461ac7':
             configModule = await import('../../configs/stage1study2ENES.js');
             break;
           case '66c63f4f7c3e886b7c9cc498':
+            configModule = await import('../../configs/stage1study2ESEN.js');
+            break;
+          case '66c994e78d5b3da79c6cc853':
             configModule = await import('../../configs/stage1study2ESEN.js');
             break;
           case '66c63f502b78911af098063d':
