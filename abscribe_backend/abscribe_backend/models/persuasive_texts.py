@@ -5,7 +5,7 @@ class PersuasiveTexts(db.Document):
     document_id = db.StringField(required=True)
     task_id = db.StringField(required=True)
     task_category = db.StringField(required=True)
-    plain_text = db.StringField(required=True)
+    content = db.StringField(required=True)
     view_count = db.IntField(default=0)
     timestamp = db.DateTimeField()
     
@@ -15,7 +15,7 @@ class PersuasiveTexts(db.Document):
             "document_id": self.task_id,
             "task_id": self.task_id,
             "task_category": self.task_category,
-            "plain_text": self.plain_text,
+            "content": self.content,
             "view_count": self.view_count,
             "timestamp": self.timestamp,
         }

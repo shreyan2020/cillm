@@ -8,11 +8,12 @@ const DonationSurvey = () => {
   const navigate = useNavigate();
   const { prolificID, studyID, taskID, tasksConfig } = useContext(TaskContext);
   const [textData, setTextData] = useState(null);
-  const [showSurvey, setShowSurvey] = useState(false);
+  const [currentStep, setCurrentStep] = useState('pre-questionnaire');
   const [responses, setResponses] = useState({
+    familiarity: '',
     donationAmount: '',
-    charityFeedback: "",
-    adSource: "",
+    charityFeedback: '',
+    adSource: '',
     recipeUsed: [],
   });
   const [validationErrors, setValidationErrors] = useState({});
@@ -41,55 +42,77 @@ const DonationSurvey = () => {
     fetchText();
   }, [taskID, prolificID]);
 
+  const handleNextStep = () => {
+    setCurrentStep((prevStep) => {
+      switch (prevStep) {
+        case 'pre-questionnaire':
+          return 'ad-display';
+        case 'ad-display':
+          return 'donation';
+        case 'donation':
+          return 'post-questionnaire';
+        default:
+          return 'post-questionnaire';
+      }
+    });
+  };
+
+  const handleInputChange = (key, value) => {
+    setResponses({ ...responses, [key]: value });
+  };
+
+  const handleOptionChange = (key, option) => {
+    setResponses((prevResponses) => {
+      if (key === 'recipeUsed') {
+        const newRecipeUsed = prevResponses.recipeUsed.includes(option)
+          ? prevResponses.recipeUsed.filter((item) => item !== option)
+          : [...prevResponses.recipeUsed, option];
+        return { ...prevResponses, recipeUsed: newRecipeUsed };
+      }
+      return { ...prevResponses, [key]: option };
+    });
+  };
+
+  const validateAndProceed = (currentKey) => {
+    const errors = {};
+
+    if (!responses[currentKey].trim()) {
+      errors[currentKey] = `Please provide an answer for ${config.questions[currentKey]}`;
+      setValidationErrors(errors);
+      return false;
+    }
+    setValidationErrors({});
+    handleNextStep();
+    return true;
+  };
+
   const handleDonationSubmit = (event) => {
     event.preventDefault();
-     // Validate the donation amount
-     const donationValue = parseFloat(responses.donationAmount);
-     if (!responses.donationAmount || isNaN(donationValue) || donationValue < 0) {
-       setValidationErrors({ donationAmount: "Please enter a valid donation amount." });
-       return;
-     } else {
-       setValidationErrors({});
-       setShowSurvey(true);
-     }
-   };
- 
+    const donationValue = parseFloat(responses.donationAmount);
+    if (!responses.donationAmount || isNaN(donationValue) || donationValue < 0) {
+      setValidationErrors({ donationAmount: "Please enter a valid donation amount." });
+    } else {
+      setValidationErrors({});
+      handleNextStep();
+    }
+  };
 
   const handleSurveySubmit = async (event) => {
     event.preventDefault();
 
-    const errors = {};
+    const surveyData = {
+      prolific_id: prolificID,
+      study_id: studyID,
+      task_id: taskID,
+      document_id: textData._id,
+      responses,
+    };
 
-    if (!responses.charityFeedback.trim()) {
-      errors.charityFeedback = config.questions.feedback;
-    }
-
-    if (!responses.adSource) {
-      errors.adSource = config.questions.adSource;
-    }
-
-    if (!responses.recipeUsed.length) {
-      errors.recipeUsed = config.questions.recipeUsed;
-    }
-
-    setValidationErrors(errors);
-
-    if (Object.keys(errors).length === 0) {
-      const surveyData = {
-        prolific_id: prolificID,
-        study_id: studyID,
-        task_id: taskID,
-        document_id: textData._id,
-        responses,  // Includes donationAmount now
-      };
-
-      try {
-        await apiClient.post("/log_survey", surveyData);
-       // navigate("https://app.prolific.com/researcher/get-started");
-       window.location.href = `https://app.prolific.com/submissions/complete?cc=${tasksConfig.redirectCode}`;
-      } catch (error) {
-        console.error("Error submitting survey:", error);
-      }
+    try {
+      await apiClient.post("/log_survey", surveyData);
+      window.location.href = `https://app.prolific.com/submissions/complete?cc=${tasksConfig.redirectCode}`;
+    } catch (error) {
+      console.error("Error submitting survey:", error);
     }
   };
 
@@ -98,38 +121,95 @@ const DonationSurvey = () => {
   }
 
   return (
-    <div className="survey-container p-4 bg-light">
+    <div className="survey-container p-4 bg-light" style={{
+      maxWidth: '90vw',  // Adjust to make it occupy more width
+      maxHeight: '90vh', // Adjust to make it occupy more height
+      width: '80%',     // Ensure it takes up full available width
+      height: 'auto',    // Allow it to scale with content, or set to '100%' for full height
+      margin: 'auto',    // Centering the container
+      padding: '2rem',   // Padding for internal spacing
+      boxSizing: 'border-box', // Ensure padding is included in the width/height calculation
+      overflow: 'auto',  // Handle overflow for smaller screens
+    }}>
       <div className="card shadow-sm p-4">
-        {!showSurvey ? (
+        {currentStep !== 'pre-questionnaire' && (
+         <div className="text-box mb-4 p-4 border rounded bg-light" 
+         style={{
+            maxHeight: '60vh',  // Increased height for more text display area
+            overflowY: 'auto',
+            fontSize: '1.2rem',  // Adjust font size for better readability
+            lineHeight: '1.6',
+            width: '100%',  // Occupy full width
+            maxWidth: '80vw',  // Ensure the box is large but not too wide
+            margin: 'auto',  // Centering the box
+            textAlign: 'center',  // Center the text inside the box
+          }}>
+      {/* Displaying plain text with newlines */}
+      <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+        {textData?.content}
+      </pre>
+    </div>
+        )}
+
+        {currentStep === 'pre-questionnaire' && (
+          <>
+            <h4 className="mb-4">How familiar are you with WWF charity?</h4>
+            <input
+              type="text"
+              className="form-control"
+              value={responses.familiarity}
+              onChange={(e) => handleInputChange('familiarity', e.target.value)}
+            />
+            {validationErrors.familiarity && (
+              <div className="text-danger mt-2">
+                <i className="fas fa-exclamation-triangle"></i> {validationErrors.familiarity}
+              </div>
+            )}
+            <div className="text-center">
+              <Button className="mt-4" variant="primary" size="lg" onClick={() => validateAndProceed('familiarity')}>
+                Next
+              </Button>
+            </div>
+          </>
+        )}
+
+        {currentStep === 'ad-display' && (
           <>
             <h2 className="h4 mb-4 text-center">{config.labels.instruction}</h2>
-            <div className="text-box mb-4 p-3 border rounded bg-light">
-              {textData?.plain_text}
+            <div className="text-center">
+              <Button className="mt-4" variant="primary" size="lg" onClick={handleNextStep}>
+                Proceed to Donation
+              </Button>
             </div>
-            <form onSubmit={handleDonationSubmit}>
-              <h4 className="mb-4">{config.questions.donation}</h4>
-              <input
-                type="number"
-                className="form-control"
-                value={responses.donationAmount}
-                onChange={(e) => setResponses({ ...responses, donationAmount: e.target.value })}
-                min="0"
-                step = "0.1"
-                max="1.5"
-              />
-              {validationErrors.donationAmount && (
-                <div className="text-danger mt-2">
-                  <i className="fas fa-exclamation-triangle"></i> {validationErrors.donationAmount}
-                </div>
-              )}
-              <div className="text-center">
-                <Button className="mt-4" variant="primary" size="lg" type="submit">
-                  {config.labels.submit}
-                </Button>
-              </div>
-            </form>
           </>
-        ) : (
+        )}
+
+        {currentStep === 'donation' && (
+          <form onSubmit={handleDonationSubmit}>
+            <h4 className="mb-4">{config.questions.donation}</h4>
+            <input
+              type="number"
+              className="form-control"
+              value={responses.donationAmount}
+              onChange={(e) => handleInputChange('donationAmount', e.target.value)}
+              min="0"
+              step="0.1"
+              max="1.5"
+            />
+            {validationErrors.donationAmount && (
+              <div className="text-danger mt-2">
+                <i className="fas fa-exclamation-triangle"></i> {validationErrors.donationAmount}
+              </div>
+            )}
+            <div className="text-center">
+              <Button className="mt-4" variant="primary" size="lg" type="submit">
+                {config.labels.submit}
+              </Button>
+            </div>
+          </form>
+        )}
+
+        {currentStep === 'post-questionnaire' && (
           <form onSubmit={handleSurveySubmit}>
             <div className="form-group mb-4">
               <label className="form-label">{config.questions.feedback}</label>
@@ -137,7 +217,7 @@ const DonationSurvey = () => {
                 className="form-control"
                 rows="3"
                 value={responses.charityFeedback}
-                onChange={(e) => setResponses({ ...responses, charityFeedback: e.target.value })}
+                onChange={(e) => handleInputChange('charityFeedback', e.target.value)}
               />
               {validationErrors.charityFeedback && (
                 <div className="text-danger mt-2">
@@ -156,7 +236,7 @@ const DonationSurvey = () => {
                     value="AI"
                     className="form-check-input"
                     checked={responses.adSource === "AI"}
-                    onChange={() => setResponses({ ...responses, adSource: "AI" })}
+                    onChange={() => handleOptionChange('adSource', 'AI')}
                   /> {config.options.adSource.ai}
                 </label>
                 <label className="form-check">
@@ -166,7 +246,7 @@ const DonationSurvey = () => {
                     value="Human"
                     className="form-check-input"
                     checked={responses.adSource === "Human"}
-                    onChange={() => setResponses({ ...responses, adSource: "Human" })}
+                    onChange={() => handleOptionChange('adSource', 'Human')}
                   /> {config.options.adSource.human}
                 </label>
               </div>
@@ -188,12 +268,7 @@ const DonationSurvey = () => {
                       value={option}
                       className="form-check-input"
                       checked={responses.recipeUsed.includes(option)}
-                      onChange={() => {
-                        const newRecipeUsed = responses.recipeUsed.includes(option)
-                          ? responses.recipeUsed.filter((r) => r !== option)
-                          : [...responses.recipeUsed, option];
-                        setResponses({ ...responses, recipeUsed: newRecipeUsed });
-                      }}
+                      onChange={() => handleOptionChange('recipeUsed', option)}
                     /> {option}
                   </label>
                 ))}
