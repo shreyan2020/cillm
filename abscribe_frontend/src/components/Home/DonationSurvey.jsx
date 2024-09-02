@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { TaskContext } from '../../context/TaskContext';
@@ -8,16 +8,23 @@ const DonationSurvey = () => {
   const navigate = useNavigate();
   const { prolificID, studyID, taskID, tasksConfig } = useContext(TaskContext);
   const [textData, setTextData] = useState(null);
-  const [currentStep, setCurrentStep] = useState('pre-questionnaire');
+  const [currentStep, setCurrentStep] = useState('ad-display');
   const [responses, setResponses] = useState({
-    familiarity: '',
     donationAmount: '',
-    charityFeedback: '',
+    charityFeedbackPositive: '',
+    charityFeedbackNegative: '',
     adSource: '',
     recipeUsed: [],
+    emotionalAppeal: {},
+    // perceptionMission: {},
+    informationAwareness: {},
+    // perceivedImpact: {},
+    // personalIdentity: {},
+    behavioralIntentions: {},
   });
   const [validationErrors, setValidationErrors] = useState({});
   const [loading, setLoading] = useState(true);
+  const errorRefs = useRef({});
 
   const config = tasksConfig.config;
 
@@ -43,18 +50,59 @@ const DonationSurvey = () => {
   }, [taskID, prolificID]);
 
   const handleNextStep = () => {
-    setCurrentStep((prevStep) => {
-      switch (prevStep) {
-        case 'pre-questionnaire':
-          return 'ad-display';
-        case 'ad-display':
-          return 'donation';
-        case 'donation':
-          return 'post-questionnaire';
-        default:
-          return 'post-questionnaire';
-      }
-    });
+    const errors = {};
+
+    // Check the current step and validate accordingly
+    if (currentStep.startsWith('post-questionnaire')) {
+      const section = currentStep.split('-')[2]; // e.g., 'emotionalAppeal'
+      const questions = config.questions[section].options;
+
+      Object.keys(questions).forEach(key => {
+        if (!responses[section][key]) {
+          errors[section] = errors[section] || {};
+          errors[section][key] = 'This question is required.';
+          errorRefs.current[`${section}-${key}`].focus();
+        }
+      });
+    }
+    
+
+    if (Object.keys(errors).length === 0) {
+      setValidationErrors({});
+      // Proceed to next step
+      setCurrentStep((prevStep) => {
+        switch (prevStep) {
+          case 'ad-display':
+            return 'donation';
+          case 'donation':
+            return 'post-questionnaire-emotionalAppeal';
+          case 'post-questionnaire-emotionalAppeal':
+            return 'post-questionnaire-informationAwareness';
+          // case 'post-questionnaire-perceptionMission':
+            // return 'post-questionnaire-informationAwareness';
+          case 'post-questionnaire-informationAwareness':
+            return 'post-questionnaire-behavioralIntentions';
+          // case 'post-questionnaire-perceivedImpact':
+            // return 'post-questionnaire-personalIdentity';
+          // case 'post-questionnaire-personalIdentity':
+            // return 'post-questionnaire-behavioralIntentions';
+          case 'post-questionnaire-behavioralIntentions':
+            return 'feedback-positive';
+          case 'feedback-positive':
+            return 'feedback-negative';
+          case 'feedback-negative':
+            return 'adSource';
+          case 'adSource':
+            return 'recipeUsed';
+          case 'recipeUsed':
+            return 'final-submit';
+          default:
+            return 'final-submit';
+        }
+      });
+    } else {
+      setValidationErrors(errors);
+    }
   };
 
   const handleInputChange = (key, value) => {
@@ -73,17 +121,14 @@ const DonationSurvey = () => {
     });
   };
 
-  const validateAndProceed = (currentKey) => {
-    const errors = {};
-
-    if (!responses[currentKey].trim()) {
-      errors[currentKey] = `Please provide an answer for ${config.questions[currentKey]}`;
-      setValidationErrors(errors);
-      return false;
-    }
-    setValidationErrors({});
-    handleNextStep();
-    return true;
+  const handleLikertChange = (category, key, value) => {
+    setResponses((prevResponses) => ({
+      ...prevResponses,
+      [category]: {
+        ...prevResponses[category],
+        [key]: value,
+      },
+    }));
   };
 
   const handleDonationSubmit = (event) => {
@@ -91,13 +136,14 @@ const DonationSurvey = () => {
     const donationValue = parseFloat(responses.donationAmount);
     if (!responses.donationAmount || isNaN(donationValue) || donationValue < 0) {
       setValidationErrors({ donationAmount: "Please enter a valid donation amount." });
+      errorRefs.current['donationAmount'].focus();
     } else {
       setValidationErrors({});
       handleNextStep();
     }
   };
 
-  const handleSurveySubmit = async (event) => {
+  const handleFinalSubmit = async (event) => {
     event.preventDefault();
 
     const surveyData = {
@@ -122,55 +168,32 @@ const DonationSurvey = () => {
 
   return (
     <div className="survey-container p-4 bg-light" style={{
-      maxWidth: '90vw',  // Adjust to make it occupy more width
-      maxHeight: '90vh', // Adjust to make it occupy more height
-      width: '80%',     // Ensure it takes up full available width
-      height: 'auto',    // Allow it to scale with content, or set to '100%' for full height
-      margin: 'auto',    // Centering the container
-      padding: '2rem',   // Padding for internal spacing
-      boxSizing: 'border-box', // Ensure padding is included in the width/height calculation
-      overflow: 'auto',  // Handle overflow for smaller screens
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+      width: '80%',
+      height: 'auto',
+      margin: 'auto',
+      padding: '2rem',
+      boxSizing: 'border-box',
+      overflow: 'auto',
     }}>
       <div className="card shadow-sm p-4">
-        {currentStep !== 'pre-questionnaire' && (
-         <div className="text-box mb-4 p-4 border rounded bg-light" 
-         style={{
-            maxHeight: '60vh',  // Increased height for more text display area
-            overflowY: 'auto',
-            fontSize: '1.2rem',  // Adjust font size for better readability
-            lineHeight: '1.6',
-            width: '100%',  // Occupy full width
-            maxWidth: '80vw',  // Ensure the box is large but not too wide
-            margin: 'auto',  // Centering the box
-            textAlign: 'center',  // Center the text inside the box
-          }}>
-      {/* Displaying plain text with newlines */}
-      <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-        {textData?.content}
-      </pre>
-    </div>
-        )}
-
-        {currentStep === 'pre-questionnaire' && (
-          <>
-            <h4 className="mb-4">How familiar are you with WWF charity?</h4>
-            <input
-              type="text"
-              className="form-control"
-              value={responses.familiarity}
-              onChange={(e) => handleInputChange('familiarity', e.target.value)}
-            />
-            {validationErrors.familiarity && (
-              <div className="text-danger mt-2">
-                <i className="fas fa-exclamation-triangle"></i> {validationErrors.familiarity}
-              </div>
-            )}
-            <div className="text-center">
-              <Button className="mt-4" variant="primary" size="lg" onClick={() => validateAndProceed('familiarity')}>
-                Next
-              </Button>
-            </div>
-          </>
+        {currentStep !== 'ad-display' && (
+          <div className="text-box mb-4 p-4 border rounded bg-light"
+            style={{
+              maxHeight: '60vh',
+              overflowY: 'auto',
+              fontSize: '1.2rem',
+              lineHeight: '1.6',
+              width: '100%',
+              maxWidth: '80vw',
+              margin: 'auto',
+              textAlign: 'center',
+            }}>
+            <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+              {textData?.content}
+            </pre>
+          </div>
         )}
 
         {currentStep === 'ad-display' && (
@@ -195,6 +218,7 @@ const DonationSurvey = () => {
               min="0"
               step="0.1"
               max="1.5"
+              ref={(el) => errorRefs.current['donationAmount'] = el}
             />
             {validationErrors.donationAmount && (
               <div className="text-danger mt-2">
@@ -209,46 +233,116 @@ const DonationSurvey = () => {
           </form>
         )}
 
-        {currentStep === 'post-questionnaire' && (
-          <form onSubmit={handleSurveySubmit}>
+        {['emotionalAppeal', 'perceptionMission', 'informationAwareness', 'perceivedImpact', 'personalIdentity', 'behavioralIntentions'].map((section, idx) => (
+          currentStep === `post-questionnaire-${section}` && (
+            <div key={idx}>
+              <h4 className="mb-4">{config.questions[section].header}</h4>
+              {Object.keys(config.questions[section].options).map((key) => (
+                <div key={key} className="form-group mb-4">
+                  <label className="form-label">{config.questions[section].options[key]}</label>
+                  <div className="likert-scale d-flex justify-content-between">
+                    {config.likertScale.map((option, idx) => (
+                      <label key={idx} className="likert-option me-3">
+                        <input
+                          type="radio"
+                          className="form-check-input"
+                          name={`${section}-${key}`}
+                          value={option}
+                          checked={responses[section][key] === option}
+                          onChange={() => handleLikertChange(section, key, option)}
+                          ref={(el) => errorRefs.current[`${section}-${key}`] = el}
+                        />
+                        <span className="ms-2">{option}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {validationErrors[section]?.[key] && (
+                    <div className="text-danger mt-2">
+                      <i className="fas fa-exclamation-triangle"></i> {validationErrors[section][key]}
+                    </div>
+                  )}
+                </div>
+              ))}
+              <div className="text-center">
+                <Button className="mt-4" variant="primary" size="lg" onClick={handleNextStep}>
+                  Next
+                </Button>
+              </div>
+            </div>
+          )
+        ))}
+
+        {/* Positive Feedback */}
+        {currentStep === 'feedback-positive' && (
+          <form onSubmit={handleNextStep}>
             <div className="form-group mb-4">
-              <label className="form-label">{config.questions.feedback}</label>
+              <label className="form-label">{config.questions.feedbackPositive}</label>
               <textarea
                 className="form-control"
                 rows="3"
-                value={responses.charityFeedback}
-                onChange={(e) => handleInputChange('charityFeedback', e.target.value)}
+                value={responses.charityFeedbackPositive}
+                onChange={(e) => handleInputChange('charityFeedbackPositive', e.target.value)}
+                ref={(el) => errorRefs.current['charityFeedbackPositive'] = el}
               />
-              {validationErrors.charityFeedback && (
+              {validationErrors.charityFeedbackPositive && (
                 <div className="text-danger mt-2">
-                  <i className="fas fa-exclamation-triangle"></i> {validationErrors.charityFeedback}
+                  <i className="fas fa-exclamation-triangle"></i> {validationErrors.charityFeedbackPositive}
                 </div>
               )}
             </div>
+            <div className="text-center">
+              <Button className="mt-4" variant="primary" size="lg" type="submit">
+                Next
+              </Button>
+            </div>
+          </form>
+        )}
 
+        {/* Negative Feedback */}
+        {currentStep === 'feedback-negative' && (
+          <form onSubmit={handleNextStep}>
+            <div className="form-group mb-4">
+              <label className="form-label">{config.questions.feedbackNegative}</label>
+              <textarea
+                className="form-control"
+                rows="3"
+                value={responses.charityFeedbackNegative}
+                onChange={(e) => handleInputChange('charityFeedbackNegative', e.target.value)}
+                ref={(el) => errorRefs.current['charityFeedbackNegative'] = el}
+              />
+              {validationErrors.charityFeedbackNegative && (
+                <div className="text-danger mt-2">
+                  <i className="fas fa-exclamation-triangle"></i> {validationErrors.charityFeedbackNegative}
+                </div>
+              )}
+            </div>
+            <div className="text-center">
+              <Button className="mt-4" variant="primary" size="lg" type="submit">
+                Next
+              </Button>
+            </div>
+          </form>
+        )}
+
+        {/* Ad Source */}
+        {currentStep === 'adSource' && (
+          <form onSubmit={handleNextStep}>
             <div className="form-group mb-4">
               <label className="form-label">{config.questions.adSource}</label>
               <div className="d-flex flex-column">
-                <label className="form-check">
-                  <input
-                    type="radio"
-                    name="adSource"
-                    value="AI"
-                    className="form-check-input"
-                    checked={responses.adSource === "AI"}
-                    onChange={() => handleOptionChange('adSource', 'AI')}
-                  /> {config.options.adSource.ai}
-                </label>
-                <label className="form-check">
-                  <input
-                    type="radio"
-                    name="adSource"
-                    value="Human"
-                    className="form-check-input"
-                    checked={responses.adSource === "Human"}
-                    onChange={() => handleOptionChange('adSource', 'Human')}
-                  /> {config.options.adSource.human}
-                </label>
+                {Object.keys(config.options.adSource).map(key => (
+                  <label key={key} className="form-check">
+                    <input
+                      type="radio"
+                      name="adSource"
+                      value={key}
+                      className="form-check-input"
+                      checked={responses.adSource === key}
+                      onChange={() => handleOptionChange('adSource', key)}
+                      ref={(el) => errorRefs.current['adSource'] = el}
+                    /> {config.options.adSource[key]}
+                  </label>
+                ))}
               </div>
               {validationErrors.adSource && (
                 <div className="text-danger mt-2">
@@ -256,7 +350,17 @@ const DonationSurvey = () => {
                 </div>
               )}
             </div>
+            <div className="text-center">
+              <Button className="mt-4" variant="primary" size="lg" type="submit">
+                Next
+              </Button>
+            </div>
+          </form>
+        )}
 
+        {/* Recipe Used */}
+        {currentStep === 'recipeUsed' && (
+          <form onSubmit={handleFinalSubmit}>
             <div className="form-group mb-4">
               <label className="form-label">{config.questions.recipeUsed}</label>
               <div className="d-flex flex-column">
@@ -269,6 +373,7 @@ const DonationSurvey = () => {
                       className="form-check-input"
                       checked={responses.recipeUsed.includes(option)}
                       onChange={() => handleOptionChange('recipeUsed', option)}
+                      ref={(el) => errorRefs.current['recipeUsed'] = el}
                     /> {option}
                   </label>
                 ))}
@@ -279,7 +384,6 @@ const DonationSurvey = () => {
                 </div>
               )}
             </div>
-
             <div className="text-center">
               <Button className="mt-4" variant="primary" size="lg" type="submit">
                 {config.labels.submit}

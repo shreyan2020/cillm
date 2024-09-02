@@ -134,7 +134,7 @@ def get_persuasive_text():
     data = request.get_json()
     task_category = data.get("task_category")
     prolific_id = data.get("prolific_id")
-    print(data)
+    print('asdssa', data)
     if not all([task_category, prolific_id]):
         return jsonify({"error": "Missing required fields"}), 400
 
@@ -144,6 +144,7 @@ def get_persuasive_text():
             inc__view_count=1,  # Increment view_count
             new=True  # Return the updated document
         )
+        
         if document:
             logging.info(f"Prolific ID {prolific_id} fetched document ID {document.id}")
             print(document.view_count)
@@ -185,14 +186,6 @@ def save_survey_response():
     except Exception as e:
         print("Error saving survey responses:", e)
         return jsonify({"error": str(e)}), 500
-
-
-
-
-
-
-
-
 
 
 
@@ -295,6 +288,7 @@ def save_participant_info():
 
 @app.route("/api/documents", methods=["GET"])
 def get_documents_route() -> Response:
+    logging.info(f"called")
     documents: List[Document] = get_documents()
     response_data: List[dict] = [document.to_dict() for document in documents]
     return Response(json.dumps(response_data), content_type="application/json")

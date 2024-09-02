@@ -475,3 +475,516 @@
 2024-08-30 23:34:52,410 127.0.0.1 - - [30/Aug/2024 23:34:52] "POST /api/get_persuasive_text HTTP/1.1" 200 -
 2024-08-30 23:34:52,456 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c6e5986db9c208f260cab9
 2024-08-30 23:34:52,457 127.0.0.1 - - [30/Aug/2024 23:34:52] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 10:07:44,036 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.178.129:8080
+2024-08-31 10:07:44,036 [33mPress CTRL+C to quit[0m
+2024-08-31 10:07:44,038  * Restarting with stat
+2024-08-31 10:07:45,062  * Debugger is active!
+2024-08-31 10:07:45,067  * Debugger PIN: 442-777-315
+2024-08-31 10:09:44,629  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-31 10:09:44,821  * Restarting with stat
+2024-08-31 10:09:45,854  * Debugger is active!
+2024-08-31 10:09:45,858  * Debugger PIN: 442-777-315
+2024-08-31 10:09:53,098 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.178.129:8080
+2024-08-31 10:09:53,098 [33mPress CTRL+C to quit[0m
+2024-08-31 10:09:53,100  * Restarting with stat
+2024-08-31 10:09:54,080  * Debugger is active!
+2024-08-31 10:09:54,083  * Debugger PIN: 442-777-315
+2024-08-31 10:10:02,602  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-31 10:10:03,157  * Restarting with stat
+2024-08-31 10:10:04,246  * Debugger is active!
+2024-08-31 10:10:04,250  * Debugger PIN: 442-777-315
+2024-08-31 10:12:31,755 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.178.129:8080
+2024-08-31 10:12:31,757 [33mPress CTRL+C to quit[0m
+2024-08-31 10:12:31,758  * Restarting with stat
+2024-08-31 10:12:32,794  * Debugger is active!
+2024-08-31 10:12:32,798  * Debugger PIN: 442-777-315
+2024-08-31 10:12:40,138  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-31 10:12:40,512  * Restarting with stat
+2024-08-31 10:12:41,555  * Debugger is active!
+2024-08-31 10:12:41,558  * Debugger PIN: 442-777-315
+2024-08-31 10:13:23,792  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-31 10:13:24,192  * Restarting with stat
+2024-08-31 10:13:27,579  * Restarting with stat
+2024-08-31 10:13:28,637  * Debugger is active!
+2024-08-31 10:13:28,641  * Debugger PIN: 442-777-315
+2024-08-31 10:14:48,979 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.178.129:8080
+2024-08-31 10:14:48,979 [33mPress CTRL+C to quit[0m
+2024-08-31 10:14:48,980  * Restarting with stat
+2024-08-31 10:14:49,960  * Debugger is active!
+2024-08-31 10:14:49,964  * Debugger PIN: 442-777-315
+2024-08-31 10:16:54,504 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.178.129:8080
+2024-08-31 10:16:54,504 [33mPress CTRL+C to quit[0m
+2024-08-31 10:16:54,505  * Restarting with stat
+2024-08-31 10:16:55,502  * Debugger is active!
+2024-08-31 10:16:55,505  * Debugger PIN: 442-777-315
+2024-08-31 10:17:06,050  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-31 10:17:06,618  * Restarting with stat
+2024-08-31 10:17:07,770  * Debugger is active!
+2024-08-31 10:17:07,774  * Debugger PIN: 442-777-315
+2024-08-31 10:19:27,383 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.178.129:8080
+2024-08-31 10:19:27,383 [33mPress CTRL+C to quit[0m
+2024-08-31 10:19:27,385  * Restarting with stat
+2024-08-31 10:19:28,370  * Debugger is active!
+2024-08-31 10:19:28,373  * Debugger PIN: 442-777-315
+2024-08-31 10:20:00,908  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-31 10:20:01,461  * Restarting with stat
+2024-08-31 10:20:02,511  * Debugger is active!
+2024-08-31 10:20:02,516  * Debugger PIN: 442-777-315
+2024-08-31 10:20:48,685  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-31 10:20:49,248  * Restarting with stat
+2024-08-31 10:20:50,286  * Debugger is active!
+2024-08-31 10:20:50,290  * Debugger PIN: 442-777-315
+2024-08-31 10:21:46,035  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-31 10:21:46,482  * Restarting with stat
+2024-08-31 10:21:47,524  * Debugger is active!
+2024-08-31 10:21:47,528  * Debugger PIN: 442-777-315
+2024-08-31 10:22:17,138 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.178.129:8080
+2024-08-31 10:22:17,138 [33mPress CTRL+C to quit[0m
+2024-08-31 10:22:17,139  * Restarting with stat
+2024-08-31 10:22:18,104  * Debugger is active!
+2024-08-31 10:22:18,107  * Debugger PIN: 442-777-315
+2024-08-31 10:23:33,669  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-08-31 10:23:34,220  * Restarting with stat
+2024-08-31 10:23:35,309  * Debugger is active!
+2024-08-31 10:23:35,313  * Debugger PIN: 442-777-315
+2024-08-31 10:25:58,069 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.178.129:8080
+2024-08-31 10:25:58,070 [33mPress CTRL+C to quit[0m
+2024-08-31 10:25:58,071  * Restarting with stat
+2024-08-31 10:25:59,218  * Debugger is active!
+2024-08-31 10:25:59,222  * Debugger PIN: 442-777-315
+2024-08-31 10:26:07,922 called
+2024-08-31 10:26:07,937 127.0.0.1 - - [31/Aug/2024 10:26:07] "GET /api/documents HTTP/1.1" 200 -
+2024-08-31 10:26:08,173 127.0.0.1 - - [31/Aug/2024 10:26:08] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-08-31 10:27:00,757 127.0.0.1 - - [31/Aug/2024 10:27:00] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-31 10:27:01,036 127.0.0.1 - - [31/Aug/2024 10:27:01] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-31 10:27:09,873 127.0.0.1 - - [31/Aug/2024 10:27:09] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 10:27:10,176 127.0.0.1 - - [31/Aug/2024 10:27:10] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 10:27:10,202 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c6eb326db9c208f260cacf
+2024-08-31 10:27:10,203 127.0.0.1 - - [31/Aug/2024 10:27:10] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 10:27:10,495 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c6ef3c6db9c208f260cadb
+2024-08-31 10:27:10,496 127.0.0.1 - - [31/Aug/2024 10:27:10] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:22:58,555 127.0.0.1 - - [31/Aug/2024 14:22:58] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-31 14:22:58,817 127.0.0.1 - - [31/Aug/2024 14:22:58] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-31 14:22:58,983 127.0.0.1 - - [31/Aug/2024 14:22:58] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:22:59,286 127.0.0.1 - - [31/Aug/2024 14:22:59] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:22:59,293 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-08-31 14:22:59,294 127.0.0.1 - - [31/Aug/2024 14:22:59] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:22:59,607 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5e4be2f44d7b54f76e52d
+2024-08-31 14:22:59,608 127.0.0.1 - - [31/Aug/2024 14:22:59] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:10,333 127.0.0.1 - - [31/Aug/2024 14:23:10] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:10,603 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5a21086c57a87db6f59e1
+2024-08-31 14:23:10,604 127.0.0.1 - - [31/Aug/2024 14:23:10] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:15,037 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c88773e46942c099b32393
+2024-08-31 14:23:15,038 127.0.0.1 - - [31/Aug/2024 14:23:15] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:16,619 127.0.0.1 - - [31/Aug/2024 14:23:16] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:16,895 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5a3e386c57a87db6f59f9
+2024-08-31 14:23:16,895 127.0.0.1 - - [31/Aug/2024 14:23:16] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:17,701 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5a85186c57a87db6f5a21
+2024-08-31 14:23:17,701 127.0.0.1 - - [31/Aug/2024 14:23:17] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:19,080 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5a42286c57a87db6f59fa
+2024-08-31 14:23:19,081 127.0.0.1 - - [31/Aug/2024 14:23:19] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:19,866 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c522869236da2225cc8cf2
+2024-08-31 14:23:19,867 127.0.0.1 - - [31/Aug/2024 14:23:19] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:21,681 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5a9ab86c57a87db6f5a32
+2024-08-31 14:23:21,682 127.0.0.1 - - [31/Aug/2024 14:23:21] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:22,287 127.0.0.1 - - [31/Aug/2024 14:23:22] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:22,601 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5e76c2f44d7b54f76e534
+2024-08-31 14:23:22,602 127.0.0.1 - - [31/Aug/2024 14:23:22] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:23,148 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c524a69236da2225cc8cfd
+2024-08-31 14:23:23,148 127.0.0.1 - - [31/Aug/2024 14:23:23] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:24,148 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c88f79e46942c099b323a7
+2024-08-31 14:23:24,149 127.0.0.1 - - [31/Aug/2024 14:23:24] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:24,796 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5a45586c57a87db6f59fc
+2024-08-31 14:23:24,797 127.0.0.1 - - [31/Aug/2024 14:23:24] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:25,755 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c88d0be46942c099b323a0
+2024-08-31 14:23:25,756 127.0.0.1 - - [31/Aug/2024 14:23:25] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:26,146 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c88731e46942c099b32391
+2024-08-31 14:23:26,147 127.0.0.1 - - [31/Aug/2024 14:23:26] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:26,957 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5241b9236da2225cc8cfa
+2024-08-31 14:23:26,958 127.0.0.1 - - [31/Aug/2024 14:23:26] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:27,323 127.0.0.1 - - [31/Aug/2024 14:23:27] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:27,635 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c6181507bfd712ba618584
+2024-08-31 14:23:27,636 127.0.0.1 - - [31/Aug/2024 14:23:27] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:27,965 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c627b607bfd712ba6185cc
+2024-08-31 14:23:27,965 127.0.0.1 - - [31/Aug/2024 14:23:27] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 14:23:28,870 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c6302d07bfd712ba6185e3
+2024-08-31 14:23:28,871 127.0.0.1 - - [31/Aug/2024 14:23:28] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 22:17:39,346 127.0.0.1 - - [31/Aug/2024 22:17:39] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 22:17:39,349 127.0.0.1 - - [31/Aug/2024 22:17:39] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 22:17:39,588 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c78f7df837defabd5eb804
+2024-08-31 22:17:39,590 127.0.0.1 - - [31/Aug/2024 22:17:39] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 22:17:39,661 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7905af837defabd5eb80a
+2024-08-31 22:17:39,662 127.0.0.1 - - [31/Aug/2024 22:17:39] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 22:19:08,345 127.0.0.1 - - [31/Aug/2024 22:19:08] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 22:19:08,345 127.0.0.1 - - [31/Aug/2024 22:19:08] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 22:19:08,610 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7a655f837defabd5eb872
+2024-08-31 22:19:08,613 127.0.0.1 - - [31/Aug/2024 22:19:08] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 22:19:08,659 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7d114f837defabd5eb8b6
+2024-08-31 22:19:08,661 127.0.0.1 - - [31/Aug/2024 22:19:08] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 23:17:43,378 127.0.0.1 - - [31/Aug/2024 23:17:43] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 23:17:43,383 127.0.0.1 - - [31/Aug/2024 23:17:43] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 23:17:43,631 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7de66f837defabd5eb8c1
+2024-08-31 23:17:43,636 127.0.0.1 - - [31/Aug/2024 23:17:43] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 23:17:43,710 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c685cc6db9c208f260ca3a
+2024-08-31 23:17:43,715 127.0.0.1 - - [31/Aug/2024 23:17:43] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 23:17:52,268 127.0.0.1 - - [31/Aug/2024 23:17:52] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-08-31 23:17:52,589 127.0.0.1 - - [31/Aug/2024 23:17:52] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-08-31 23:17:53,537 127.0.0.1 - - [31/Aug/2024 23:17:53] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 23:17:53,852 127.0.0.1 - - [31/Aug/2024 23:17:53] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 23:17:53,859 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c6978c6db9c208f260ca68
+2024-08-31 23:17:53,864 127.0.0.1 - - [31/Aug/2024 23:17:53] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 23:17:54,177 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c71e356db9c208f260cb5a
+2024-08-31 23:17:54,178 127.0.0.1 - - [31/Aug/2024 23:17:54] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 23:53:50,358 127.0.0.1 - - [31/Aug/2024 23:53:50] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-08-31 23:53:50,618 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7374d6db9c208f260cbc8
+2024-08-31 23:53:50,621 127.0.0.1 - - [31/Aug/2024 23:53:50] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:07:50,357 127.0.0.1 - - [01/Sep/2024 00:07:50] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:07:50,618 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c74aea6db9c208f260cbfe
+2024-09-01 00:07:50,620 127.0.0.1 - - [01/Sep/2024 00:07:50] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:26:23,338 127.0.0.1 - - [01/Sep/2024 00:26:23] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:26:23,588 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7a4bdf837defabd5eb863
+2024-09-01 00:26:23,589 127.0.0.1 - - [01/Sep/2024 00:26:23] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:26:54,127 127.0.0.1 - - [01/Sep/2024 00:26:54] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:26:54,429 127.0.0.1 - - [01/Sep/2024 00:26:54] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:26:54,436 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7a8a6f837defabd5eb887
+2024-09-01 00:26:54,437 127.0.0.1 - - [01/Sep/2024 00:26:54] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:26:54,738 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7aa3ef837defabd5eb88b
+2024-09-01 00:26:54,739 127.0.0.1 - - [01/Sep/2024 00:26:54] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:27:07,997 127.0.0.1 - - [01/Sep/2024 00:27:07] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 00:27:08,250 127.0.0.1 - - [01/Sep/2024 00:27:08] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 00:27:08,771 127.0.0.1 - - [01/Sep/2024 00:27:08] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:27:09,085 127.0.0.1 - - [01/Sep/2024 00:27:09] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:27:09,088 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c6e5986db9c208f260cab9
+2024-09-01 00:27:09,090 127.0.0.1 - - [01/Sep/2024 00:27:09] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:27:09,405 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c6eb326db9c208f260cacf
+2024-09-01 00:27:09,406 127.0.0.1 - - [01/Sep/2024 00:27:09] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:29:44,067 127.0.0.1 - - [01/Sep/2024 00:29:44] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 00:29:44,321 127.0.0.1 - - [01/Sep/2024 00:29:44] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 00:29:44,527 127.0.0.1 - - [01/Sep/2024 00:29:44] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:29:44,829 127.0.0.1 - - [01/Sep/2024 00:29:44] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:29:44,839 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c6ef3c6db9c208f260cadb
+2024-09-01 00:29:44,840 127.0.0.1 - - [01/Sep/2024 00:29:44] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:29:45,156 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c6f3126db9c208f260cae4
+2024-09-01 00:29:45,157 127.0.0.1 - - [01/Sep/2024 00:29:45] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:30:19,356 127.0.0.1 - - [01/Sep/2024 00:30:19] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:30:19,357 127.0.0.1 - - [01/Sep/2024 00:30:19] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:30:19,605 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7333c6db9c208f260cbc1
+2024-09-01 00:30:19,606 127.0.0.1 - - [01/Sep/2024 00:30:19] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:30:19,666 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7c5a0f837defabd5eb8ac
+2024-09-01 00:30:19,667 127.0.0.1 - - [01/Sep/2024 00:30:19] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:30:41,069 127.0.0.1 - - [01/Sep/2024 00:30:41] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:30:41,382 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c958a5b087a0712a44d238
+2024-09-01 00:30:41,383 127.0.0.1 - - [01/Sep/2024 00:30:41] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:40:22,330 127.0.0.1 - - [01/Sep/2024 00:40:22] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:40:22,330 127.0.0.1 - - [01/Sep/2024 00:40:22] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:40:22,593 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66ca0dfb46d5a80600137ed3
+2024-09-01 00:40:22,593 127.0.0.1 - - [01/Sep/2024 00:40:22] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:40:22,640 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c6fb5d6db9c208f260caff
+2024-09-01 00:40:22,640 127.0.0.1 - - [01/Sep/2024 00:40:22] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:40:34,667 127.0.0.1 - - [01/Sep/2024 00:40:34] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 00:40:34,990 127.0.0.1 - - [01/Sep/2024 00:40:34] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 00:40:35,242 127.0.0.1 - - [01/Sep/2024 00:40:35] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:40:35,550 127.0.0.1 - - [01/Sep/2024 00:40:35] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:40:35,552 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c6fe226db9c208f260cb0c
+2024-09-01 00:40:35,553 127.0.0.1 - - [01/Sep/2024 00:40:35] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:40:35,863 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c6ffc76db9c208f260cb13
+2024-09-01 00:40:35,863 127.0.0.1 - - [01/Sep/2024 00:40:35] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:40:45,982 127.0.0.1 - - [01/Sep/2024 00:40:45] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:40:45,984 127.0.0.1 - - [01/Sep/2024 00:40:45] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:40:46,246 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c711cc6db9c208f260cb2a
+2024-09-01 00:40:46,246 127.0.0.1 - - [01/Sep/2024 00:40:46] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:40:46,291 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c71e1a6db9c208f260cb58
+2024-09-01 00:40:46,292 127.0.0.1 - - [01/Sep/2024 00:40:46] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:41:01,021 127.0.0.1 - - [01/Sep/2024 00:41:01] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:41:01,332 127.0.0.1 - - [01/Sep/2024 00:41:01] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:41:01,333 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c742626db9c208f260cbeb
+2024-09-01 00:41:01,334 127.0.0.1 - - [01/Sep/2024 00:41:01] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:41:01,649 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c750f16db9c208f260cc18
+2024-09-01 00:41:01,649 127.0.0.1 - - [01/Sep/2024 00:41:01] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:41:22,319 127.0.0.1 - - [01/Sep/2024 00:41:22] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:41:22,588 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c75a3c6db9c208f260cc38
+2024-09-01 00:41:22,589 127.0.0.1 - - [01/Sep/2024 00:41:22] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:45:47,337 127.0.0.1 - - [01/Sep/2024 00:45:47] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:45:47,340 127.0.0.1 - - [01/Sep/2024 00:45:47] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:45:47,605 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9d64b925382be57718981
+2024-09-01 00:45:47,606 127.0.0.1 - - [01/Sep/2024 00:45:47] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:45:47,649 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9d652925382be57718982
+2024-09-01 00:45:47,649 127.0.0.1 - - [01/Sep/2024 00:45:47] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:46:07,026 127.0.0.1 - - [01/Sep/2024 00:46:07] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:46:07,335 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9d89a925382be57718988
+2024-09-01 00:46:07,336 127.0.0.1 - - [01/Sep/2024 00:46:07] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:50:12,052 127.0.0.1 - - [01/Sep/2024 00:50:12] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:50:12,054 127.0.0.1 - - [01/Sep/2024 00:50:12] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:50:12,317 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9d8c3925382be5771898a
+2024-09-01 00:50:12,318 127.0.0.1 - - [01/Sep/2024 00:50:12] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:50:12,362 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9d92a925382be5771898f
+2024-09-01 00:50:12,363 127.0.0.1 - - [01/Sep/2024 00:50:12] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:51:32,331 127.0.0.1 - - [01/Sep/2024 00:51:32] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:51:32,331 127.0.0.1 - - [01/Sep/2024 00:51:32] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:51:32,598 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9d947925382be57718990
+2024-09-01 00:51:32,598 127.0.0.1 - - [01/Sep/2024 00:51:32] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:51:32,644 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9d9aa925382be57718994
+2024-09-01 00:51:32,644 127.0.0.1 - - [01/Sep/2024 00:51:32] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:51:38,695 127.0.0.1 - - [01/Sep/2024 00:51:38] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 00:51:39,013 127.0.0.1 - - [01/Sep/2024 00:51:39] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 00:51:39,628 127.0.0.1 - - [01/Sep/2024 00:51:39] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:51:39,939 127.0.0.1 - - [01/Sep/2024 00:51:39] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:51:39,943 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9d9c1925382be57718995
+2024-09-01 00:51:39,943 127.0.0.1 - - [01/Sep/2024 00:51:39] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:51:40,269 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9d9d2925382be57718997
+2024-09-01 00:51:40,270 127.0.0.1 - - [01/Sep/2024 00:51:40] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:52:43,488 127.0.0.1 - - [01/Sep/2024 00:52:43] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 00:52:43,755 127.0.0.1 - - [01/Sep/2024 00:52:43] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 00:52:43,903 127.0.0.1 - - [01/Sep/2024 00:52:43] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:52:44,220 127.0.0.1 - - [01/Sep/2024 00:52:44] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:52:44,221 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9da27925382be5771899c
+2024-09-01 00:52:44,222 127.0.0.1 - - [01/Sep/2024 00:52:44] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:52:44,564 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9da2f925382be5771899d
+2024-09-01 00:52:44,565 127.0.0.1 - - [01/Sep/2024 00:52:44] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:55:37,332 127.0.0.1 - - [01/Sep/2024 00:55:37] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:55:37,334 127.0.0.1 - - [01/Sep/2024 00:55:37] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:55:37,593 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9da94925382be577189a2
+2024-09-01 00:55:37,594 127.0.0.1 - - [01/Sep/2024 00:55:37] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:55:37,656 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9dbe4925382be577189af
+2024-09-01 00:55:37,656 127.0.0.1 - - [01/Sep/2024 00:55:37] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:55:48,243 127.0.0.1 - - [01/Sep/2024 00:55:48] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 00:55:48,562 127.0.0.1 - - [01/Sep/2024 00:55:48] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 00:55:49,345 127.0.0.1 - - [01/Sep/2024 00:55:49] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:55:49,652 127.0.0.1 - - [01/Sep/2024 00:55:49] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:55:49,659 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9dc59925382be577189b5
+2024-09-01 00:55:49,660 127.0.0.1 - - [01/Sep/2024 00:55:49] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:55:49,969 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9f03a925382be577189c6
+2024-09-01 00:55:49,970 127.0.0.1 - - [01/Sep/2024 00:55:49] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:59:44,322 127.0.0.1 - - [01/Sep/2024 00:59:44] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:59:44,592 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c9f049925382be577189c8
+2024-09-01 00:59:44,593 127.0.0.1 - - [01/Sep/2024 00:59:44] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 00:59:57,712 127.0.0.1 - - [01/Sep/2024 00:59:57] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 00:59:58,030 127.0.0.1 - - [01/Sep/2024 00:59:58] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:02:14,569 127.0.0.1 - - [01/Sep/2024 01:02:14] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:02:14,835 127.0.0.1 - - [01/Sep/2024 01:02:14] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:02:15,158 127.0.0.1 - - [01/Sep/2024 01:02:15] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:02:15,473 127.0.0.1 - - [01/Sep/2024 01:02:15] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:02:15,475 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 98711f35d6b34bf888d83583_LLM
+2024-09-01 01:02:15,475 127.0.0.1 - - [01/Sep/2024 01:02:15] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:02:15,784 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 055fa1f1176340ab9989b1a4_LLM
+2024-09-01 01:02:15,785 127.0.0.1 - - [01/Sep/2024 01:02:15] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:04:46,389 127.0.0.1 - - [01/Sep/2024 01:04:46] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:04:46,653 127.0.0.1 - - [01/Sep/2024 01:04:46] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:04:46,887 127.0.0.1 - - [01/Sep/2024 01:04:46] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:04:47,203 127.0.0.1 - - [01/Sep/2024 01:04:47] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:04:47,210 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 74b90bbeff7b44e3a573ce86_LLM
+2024-09-01 01:04:47,211 127.0.0.1 - - [01/Sep/2024 01:04:47] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:04:47,519 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 52c7c3d997534b7eaac1be5c_LLM
+2024-09-01 01:04:47,520 127.0.0.1 - - [01/Sep/2024 01:04:47] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:06:29,325 127.0.0.1 - - [01/Sep/2024 01:06:29] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:06:29,327 127.0.0.1 - - [01/Sep/2024 01:06:29] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:06:29,595 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 16b557672d4e46ab842954b4_LLM
+2024-09-01 01:06:29,596 127.0.0.1 - - [01/Sep/2024 01:06:29] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:06:29,642 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 5d68b3454faf49b4a456b925_LLM
+2024-09-01 01:06:29,643 127.0.0.1 - - [01/Sep/2024 01:06:29] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:06:40,241 127.0.0.1 - - [01/Sep/2024 01:06:40] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:06:40,564 127.0.0.1 - - [01/Sep/2024 01:06:40] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:06:41,150 127.0.0.1 - - [01/Sep/2024 01:06:41] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:06:41,466 127.0.0.1 - - [01/Sep/2024 01:06:41] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:06:41,472 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID defe833bc1dd4366b6011191_LLM
+2024-09-01 01:06:41,473 127.0.0.1 - - [01/Sep/2024 01:06:41] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:06:41,779 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 1f5a1efd66424cf5920ab194_LLM
+2024-09-01 01:06:41,779 127.0.0.1 - - [01/Sep/2024 01:06:41] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:08:24,924 127.0.0.1 - - [01/Sep/2024 01:08:24] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:08:25,173 127.0.0.1 - - [01/Sep/2024 01:08:25] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:08:25,409 127.0.0.1 - - [01/Sep/2024 01:08:25] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:08:25,720 127.0.0.1 - - [01/Sep/2024 01:08:25] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:08:25,723 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 9a9799735a0849098a66207c_LLM
+2024-09-01 01:08:25,725 127.0.0.1 - - [01/Sep/2024 01:08:25] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:08:26,034 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID c1a65cf02e834841a1432c62_LLM
+2024-09-01 01:08:26,034 127.0.0.1 - - [01/Sep/2024 01:08:26] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:09:50,133 127.0.0.1 - - [01/Sep/2024 01:09:50] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:09:50,401 127.0.0.1 - - [01/Sep/2024 01:09:50] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:09:50,652 127.0.0.1 - - [01/Sep/2024 01:09:50] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:09:50,958 127.0.0.1 - - [01/Sep/2024 01:09:50] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:09:50,961 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 56361e81a01c4ae89f54de41_LLM
+2024-09-01 01:09:50,961 127.0.0.1 - - [01/Sep/2024 01:09:50] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:09:51,278 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 0c107b5b67fe4e97b1ac570c_LLM
+2024-09-01 01:09:51,279 127.0.0.1 - - [01/Sep/2024 01:09:51] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:15:23,348 127.0.0.1 - - [01/Sep/2024 01:15:23] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:15:23,615 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 830476be7a364e93b2a2396c_LLM
+2024-09-01 01:15:23,616 127.0.0.1 - - [01/Sep/2024 01:15:23] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:15:31,636 127.0.0.1 - - [01/Sep/2024 01:15:31] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:15:31,950 127.0.0.1 - - [01/Sep/2024 01:15:31] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:15:31,954 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 47c95f2471804cc5b71770d7_LLM
+2024-09-01 01:15:31,954 127.0.0.1 - - [01/Sep/2024 01:15:31] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:15:32,262 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 1bf3a96714e445a79dd8cf95_LLM
+2024-09-01 01:15:32,263 127.0.0.1 - - [01/Sep/2024 01:15:32] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:17:09,334 127.0.0.1 - - [01/Sep/2024 01:17:09] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-09-01 01:17:09,603 127.0.0.1 - - [01/Sep/2024 01:17:09] "POST /api/log_survey HTTP/1.1" 200 -
+2024-09-01 01:19:46,877 127.0.0.1 - - [01/Sep/2024 01:19:46] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:19:47,130 127.0.0.1 - - [01/Sep/2024 01:19:47] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:19:47,410 127.0.0.1 - - [01/Sep/2024 01:19:47] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:19:47,724 127.0.0.1 - - [01/Sep/2024 01:19:47] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:19:47,727 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID ee565586777540f88b9f4406_LLM
+2024-09-01 01:19:47,728 127.0.0.1 - - [01/Sep/2024 01:19:47] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:19:48,036 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID b26cec036e124bf184e16707_CONTROL
+2024-09-01 01:19:48,036 127.0.0.1 - - [01/Sep/2024 01:19:48] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:20:52,904 127.0.0.1 - - [01/Sep/2024 01:20:52] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:20:53,174 127.0.0.1 - - [01/Sep/2024 01:20:53] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:20:53,367 127.0.0.1 - - [01/Sep/2024 01:20:53] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:20:53,672 127.0.0.1 - - [01/Sep/2024 01:20:53] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:20:53,676 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-09-01 01:20:53,676 127.0.0.1 - - [01/Sep/2024 01:20:53] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:20:53,989 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5e4be2f44d7b54f76e52d
+2024-09-01 01:20:53,989 127.0.0.1 - - [01/Sep/2024 01:20:53] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:26:11,333 127.0.0.1 - - [01/Sep/2024 01:26:11] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:26:11,597 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5a21086c57a87db6f59e1
+2024-09-01 01:26:11,597 127.0.0.1 - - [01/Sep/2024 01:26:11] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:26:21,020 127.0.0.1 - - [01/Sep/2024 01:26:21] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:26:21,338 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c88773e46942c099b32393
+2024-09-01 01:26:21,339 127.0.0.1 - - [01/Sep/2024 01:26:21] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:26:27,937 127.0.0.1 - - [01/Sep/2024 01:26:27] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:26:28,250 127.0.0.1 - - [01/Sep/2024 01:26:28] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:26:28,250 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5a3e386c57a87db6f59f9
+2024-09-01 01:26:28,252 127.0.0.1 - - [01/Sep/2024 01:26:28] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:26:28,564 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5a85186c57a87db6f5a21
+2024-09-01 01:26:28,565 127.0.0.1 - - [01/Sep/2024 01:26:28] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:26:39,624 127.0.0.1 - - [01/Sep/2024 01:26:39] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:26:39,894 127.0.0.1 - - [01/Sep/2024 01:26:39] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:26:40,045 127.0.0.1 - - [01/Sep/2024 01:26:40] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:26:40,364 127.0.0.1 - - [01/Sep/2024 01:26:40] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:26:40,365 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5a42286c57a87db6f59fa
+2024-09-01 01:26:40,365 127.0.0.1 - - [01/Sep/2024 01:26:40] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:26:40,671 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c522869236da2225cc8cf2
+2024-09-01 01:26:40,672 127.0.0.1 - - [01/Sep/2024 01:26:40] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:27:06,259 127.0.0.1 - - [01/Sep/2024 01:27:06] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:27:06,523 127.0.0.1 - - [01/Sep/2024 01:27:06] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:27:06,718 127.0.0.1 - - [01/Sep/2024 01:27:06] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:27:07,021 127.0.0.1 - - [01/Sep/2024 01:27:07] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:27:07,038 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5a9ab86c57a87db6f5a32
+2024-09-01 01:27:07,038 127.0.0.1 - - [01/Sep/2024 01:27:07] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:27:07,337 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5e76c2f44d7b54f76e534
+2024-09-01 01:27:07,338 127.0.0.1 - - [01/Sep/2024 01:27:07] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:29:53,418 127.0.0.1 - - [01/Sep/2024 01:29:53] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:29:53,419 127.0.0.1 - - [01/Sep/2024 01:29:53] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:29:53,686 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c524a69236da2225cc8cfd
+2024-09-01 01:29:53,686 127.0.0.1 - - [01/Sep/2024 01:29:53] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:29:53,732 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c88f79e46942c099b323a7
+2024-09-01 01:29:53,732 127.0.0.1 - - [01/Sep/2024 01:29:53] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:30:54,284 127.0.0.1 - - [01/Sep/2024 01:30:54] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-09-01 01:30:54,536 127.0.0.1 - - [01/Sep/2024 01:30:54] "POST /api/log_survey HTTP/1.1" 200 -
+2024-09-01 01:36:42,731 127.0.0.1 - - [01/Sep/2024 01:36:42] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:36:42,999 127.0.0.1 - - [01/Sep/2024 01:36:42] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:36:43,206 127.0.0.1 - - [01/Sep/2024 01:36:43] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:36:43,519 127.0.0.1 - - [01/Sep/2024 01:36:43] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:36:43,521 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5a45586c57a87db6f59fc
+2024-09-01 01:36:43,522 127.0.0.1 - - [01/Sep/2024 01:36:43] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:36:43,833 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c88d0be46942c099b323a0
+2024-09-01 01:36:43,834 127.0.0.1 - - [01/Sep/2024 01:36:43] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:37:11,337 127.0.0.1 - - [01/Sep/2024 01:37:11] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:37:11,653 127.0.0.1 - - [01/Sep/2024 01:37:11] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:37:11,656 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c88731e46942c099b32391
+2024-09-01 01:37:11,656 127.0.0.1 - - [01/Sep/2024 01:37:11] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:37:11,966 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c5241b9236da2225cc8cfa
+2024-09-01 01:37:11,966 127.0.0.1 - - [01/Sep/2024 01:37:11] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:38:55,246 127.0.0.1 - - [01/Sep/2024 01:38:55] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:38:55,501 127.0.0.1 - - [01/Sep/2024 01:38:55] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:38:55,787 127.0.0.1 - - [01/Sep/2024 01:38:55] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:38:56,097 127.0.0.1 - - [01/Sep/2024 01:38:56] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:38:56,097 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c6181507bfd712ba618584
+2024-09-01 01:38:56,097 127.0.0.1 - - [01/Sep/2024 01:38:56] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:38:56,414 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c627b607bfd712ba6185cc
+2024-09-01 01:38:56,416 127.0.0.1 - - [01/Sep/2024 01:38:56] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:41:47,414 127.0.0.1 - - [01/Sep/2024 01:41:47] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:41:47,679 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c6302d07bfd712ba6185e3
+2024-09-01 01:41:47,679 127.0.0.1 - - [01/Sep/2024 01:41:47] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:45:01,358 127.0.0.1 - - [01/Sep/2024 01:45:01] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:45:01,613 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c78f7df837defabd5eb804
+2024-09-01 01:45:01,614 127.0.0.1 - - [01/Sep/2024 01:45:01] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:45:17,428 127.0.0.1 - - [01/Sep/2024 01:45:17] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:45:17,742 127.0.0.1 - - [01/Sep/2024 01:45:17] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:45:18,617 127.0.0.1 - - [01/Sep/2024 01:45:18] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:45:18,924 127.0.0.1 - - [01/Sep/2024 01:45:18] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:45:18,927 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7905af837defabd5eb80a
+2024-09-01 01:45:18,928 127.0.0.1 - - [01/Sep/2024 01:45:18] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:45:19,241 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7a655f837defabd5eb872
+2024-09-01 01:45:19,242 127.0.0.1 - - [01/Sep/2024 01:45:19] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:51:05,900 127.0.0.1 - - [01/Sep/2024 01:51:05] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:51:06,169 127.0.0.1 - - [01/Sep/2024 01:51:06] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:51:06,410 127.0.0.1 - - [01/Sep/2024 01:51:06] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:51:06,726 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7d114f837defabd5eb8b6
+2024-09-01 01:51:06,727 127.0.0.1 - - [01/Sep/2024 01:51:06] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:51:06,727 127.0.0.1 - - [01/Sep/2024 01:51:06] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:51:07,037 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7de66f837defabd5eb8c1
+2024-09-01 01:51:07,038 127.0.0.1 - - [01/Sep/2024 01:51:07] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:52:48,335 127.0.0.1 - - [01/Sep/2024 01:52:48] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:52:48,601 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c685cc6db9c208f260ca3a
+2024-09-01 01:52:48,602 127.0.0.1 - - [01/Sep/2024 01:52:48] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:54:48,345 127.0.0.1 - - [01/Sep/2024 01:54:48] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:54:48,593 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c6978c6db9c208f260ca68
+2024-09-01 01:54:48,594 127.0.0.1 - - [01/Sep/2024 01:54:48] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:55:06,940 127.0.0.1 - - [01/Sep/2024 01:55:06] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:55:07,273 127.0.0.1 - - [01/Sep/2024 01:55:07] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:55:07,692 127.0.0.1 - - [01/Sep/2024 01:55:07] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:55:08,004 127.0.0.1 - - [01/Sep/2024 01:55:08] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:55:08,018 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c71e356db9c208f260cb5a
+2024-09-01 01:55:08,020 127.0.0.1 - - [01/Sep/2024 01:55:08] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:55:08,333 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7374d6db9c208f260cbc8
+2024-09-01 01:55:08,334 127.0.0.1 - - [01/Sep/2024 01:55:08] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:56:48,800 127.0.0.1 - - [01/Sep/2024 01:56:48] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:56:49,069 127.0.0.1 - - [01/Sep/2024 01:56:49] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 01:56:49,147 127.0.0.1 - - [01/Sep/2024 01:56:49] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:56:49,453 127.0.0.1 - - [01/Sep/2024 01:56:49] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:56:49,460 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c74aea6db9c208f260cbfe
+2024-09-01 01:56:49,461 127.0.0.1 - - [01/Sep/2024 01:56:49] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 01:56:49,768 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7a4bdf837defabd5eb863
+2024-09-01 01:56:49,769 127.0.0.1 - - [01/Sep/2024 01:56:49] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 02:03:06,032 127.0.0.1 - - [01/Sep/2024 02:03:06] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 02:03:06,285 127.0.0.1 - - [01/Sep/2024 02:03:06] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-01 02:03:06,472 127.0.0.1 - - [01/Sep/2024 02:03:06] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 02:03:06,781 127.0.0.1 - - [01/Sep/2024 02:03:06] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 02:03:06,785 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7a8a6f837defabd5eb887
+2024-09-01 02:03:06,786 127.0.0.1 - - [01/Sep/2024 02:03:06] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 02:03:07,099 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c7aa3ef837defabd5eb88b
+2024-09-01 02:03:07,100 127.0.0.1 - - [01/Sep/2024 02:03:07] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 02:03:54,346 127.0.0.1 - - [01/Sep/2024 02:03:54] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-01 02:03:54,595 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 66c6e5986db9c208f260cab9
+2024-09-01 02:03:54,595 127.0.0.1 - - [01/Sep/2024 02:03:54] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-02 09:25:00,928 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://145.90.34.246:8080
+2024-09-02 09:25:00,929 [33mPress CTRL+C to quit[0m
+2024-09-02 09:25:00,930  * Restarting with stat
+2024-09-02 09:25:01,832  * Debugger is active!
+2024-09-02 09:25:01,836  * Debugger PIN: 442-777-315
+2024-09-02 09:25:26,062 127.0.0.1 - - [02/Sep/2024 09:25:26] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-02 09:25:26,366 127.0.0.1 - - [02/Sep/2024 09:25:26] "POST /api/save_participant_info HTTP/1.1" 200 -
+2024-09-02 09:25:28,330 127.0.0.1 - - [02/Sep/2024 09:25:28] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-02 09:25:28,639 127.0.0.1 - - [02/Sep/2024 09:25:28] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-02 09:25:28,647 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c5a13c86c57a87db6f59d9
+2024-09-02 09:25:28,648 127.0.0.1 - - [02/Sep/2024 09:25:28] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-02 09:25:28,955 Prolific ID 66c616da5ea4ebca7f461ac7 fetched document ID 66c5e4be2f44d7b54f76e52d
+2024-09-02 09:25:28,957 127.0.0.1 - - [02/Sep/2024 09:25:28] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-02 09:25:53,789 127.0.0.1 - - [02/Sep/2024 09:25:53] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-09-02 09:25:54,047 127.0.0.1 - - [02/Sep/2024 09:25:54] "POST /api/log_survey HTTP/1.1" 200 -

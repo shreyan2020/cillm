@@ -2,7 +2,7 @@ const charityTaskConfigEN = {
   config: {
     consentText: `
       <p>
-        We are a group of researchers at the Technical University of Delft in The Netherlands. In this research project, we aim to investigate the persuasiveness of a text through donation behavior. As such, you are invited to participate in our research study.
+        We are a group of researchers at the Technical University of Delft in The Netherlands and Goettingen University. In this research project, we aim to investigate the persuasiveness of a text through donation behavior. As such, you are invited to participate in our research study.
       </p>
       <p>
         The following task is part of the research project described above. Upon accessing the web application, you will be presented with a charity advertisement and subsequently asked to donate some amount and answer some questions.
@@ -26,16 +26,71 @@ const charityTaskConfigEN = {
         By clicking “I consent” at the bottom of this page, you confirm that you have read, understood, and consent to the above information.
       </p>
       <p>
-        Note: You can exit the task at any time. This will imply revoking your consent, and subsequently, all your data will be discarded from our databases.
+        Note: You can exit the task at any time. This will imply revoking your consent, and subsequently, all your data will be discarded from our databases. If you want to contact the researchers beyond this task you can email at s.biswas@tudelft.nl
       </p>
     `,
     time: '15 minutes',
     language: 'ENG',
+    likertScale: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'],
+    labels: {
+      instruction: "Please read the following text and decide your donation: Note that you are provided a maximum of 1.5 euros for donation, whatever you decide to donate, the balance will be added to your compensation (1 euro) back to you.",
+      submit: "Submit",
+    },
     questions: {
       donation: "How much would you like to donate to the charity?",
-      feedback: "What aspect did you like about the charity ad?",
+      emotionalAppeal: {
+        header: "Emotional Appeal",
+        options: {
+        EA1: "The advertisement made me feel emotionally connected to the cause.",
+        EA2: "I felt a strong sense of empathy for the cause featured in the advertisement.",
+        EA3: "The ad evoked feelings of compassion and a desire to help."
+        }
+      },
+      // perceptionMission: {
+      //   header: "Perception of the Organization’s Mission",
+      //   options: {
+      //   PM1: "The advertisement clearly communicated the mission of the organization.",
+      //   PM2: "I believe the organization’s mission is important.",
+      //   PM3: "The ad made me more aware of the challenges the organization is addressing."
+      //   }
+      // },
+      informationAwareness: {
+        header: "Information and Awareness",
+        options: {
+        IA1: "The advertisement provided useful information about the organization.",
+        IA2: "I feel more informed about the organization's work after seeing the ad.",
+        IA3: "The ad increased my understanding of the impact the organization has."
+        }
+      },
+      // perceivedImpact: {
+      //   header: "Perceived Social Impact",
+      //   options: {
+      //   PSI1: "The advertisement convinced me that donating to this organization would have a significant positive impact.",
+      //   PSI2: "I believe that my contribution could make a difference because of this organization.",
+      //   PSI3: "The ad made me feel that this organization is effective in achieving its goals."
+      //   }
+      // },
+      // personalIdentity: {
+      //   header: "Personal Identity and Values",
+      //   options: {
+      //   PI1: "The advertisement made me feel that donating is an expression of my personal values.",
+      //   PI2: "I believe that donating to this organization reflects positively on my character.",
+      //   PI3: "The ad made me think that being a good person involves supporting causes like this one."
+      //   }
+      // },
+      behavioralIntentions: {
+        header: "Behavioral Intentions",
+        options: {
+        // BI1: "How likely are you to donate to the organization after seeing this advertisement?",
+        BI2: "How likely are you to share this advertisement or talk about the cause with others?",
+        BI3: "How likely are you to seek more information about the organization?"
+        }
+      },
+      feedbackPositive: "What aspect did you like about the charity ad? (If nothing, write NA)",
+      feedbackNegative: "What aspect did you NOT like about the charity ad? (If nothing, write NA)",
       adSource: "Who do you think wrote the ad?",
-      recipeUsed: "What caught your attention in the ad?",
+      recipeUsed: "What caught your attention the most in the ad?",
+      validattionMessage: "This question is required.",
     },
     options: {
       adSource: {
@@ -49,13 +104,8 @@ const charityTaskConfigEN = {
         "Numbers highlighting the negative consequences of not donating.",
         "How donations can make a difference right away.",
         "How donations will help in the long run.",
+        "None of the Above",
       ],
-    },
-    labels: {
-      donationAmount: "Donation Amount",
-      submit: "Submit",
-      instruction: "Please read the following text and decide your donation:",
-      errorMessage: "There was an error submitting your survey responses. Please try again.",
     },
     jobDescription: {
       headers: {
@@ -67,16 +117,15 @@ const charityTaskConfigEN = {
         estimatedTime: "Estimated Time",
       },
       taskDetails: `
-        <p>After clicking next you will be presented with a charity advertisement. First, read the advertisement text carefully. You are provided an amount of €1.5 to donate to the charity. You can either keep it for yourself or donate to the charity fully or in any amount you deem fit.</p>
-        <p>For example, if you choose to donate €1.5, then you will only get €1 for completing the task. If you donate €1, then you will get €1 + (€1.5 - €1) = €1.5, and so on.</p>
-        <p>After donating, you will be asked to answer a few questions regarding the text.</p>
+        <p>After clicking "Next," you will see a charity advertisement. Please take a moment to carefully read the advertisement text. You will be given €1.5, which you can choose to keep for yourself, or contribute any portion of the amount as you see fit.</p>
+        <!-- Remaining task details -->
       `,
       eligibilityCriteria: `
         <li>Must be 18 years or older.</li>
         <li>Must be fluent in English.</li>
       `,
       compensation: `
-        <p>You will be compensated based on the amount you choose to keep after your donation. The base payment for the task is €1.</p>
+        <p>The base payment for the task is €1. In addition, you will receive compensation based on the amount you decide to keep for yourself after making your donation.</p>
       `,
       bonusTable: [
         { level: "Task Completion", amount: "€1.0" },
