@@ -14,25 +14,25 @@ services:
       - MONGO_PORT=27017
       - MONGO_HOST=mongodb
       - FLASK_ENV=production
-      - OLLAMA_HOST=http://ollama:11434 # Set Flask environment to production
+      # - OLLAMA_HOST=http://ollama:11434 # Set Flask environment to production
     ports:
       - "8080:8080"
-    depends_on:
-      - ollama
+    # depends_on:
+      # - ollama
 
-  ollama:
-    container_name: ollama
-    image: ollama/ollama  # Replace with the specific Ollama version if needed
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              capabilities: ["gpu"]
-              count: all  # Adjust count for the number of GPUs you want to use
-    volumes:
-      - ollama:/root/.ollama
-    restart: always
+  # ollama:
+  #   container_name: ollama
+  #   image: ollama/ollama  # Replace with the specific Ollama version if needed
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             capabilities: ["gpu"]
+  #             count: all  # Adjust count for the number of GPUs you want to use
+  #   volumes:
+  #     - ollama:/root/.ollama
+  #   restart: always
     # runtime: nvidia
 
   mongodb:
@@ -56,7 +56,7 @@ services:
     depends_on:
       - frontend
       - backend
-      - ollama
+      # - ollama
       - mongodb
 
 volumes:
