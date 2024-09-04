@@ -100,7 +100,7 @@ const DonationSurvey = () => {
           if (!responses.adSource) {
             errors.adSource = errorMsg;
             if (errorRefs.current['adSource']) {
-              errorRefs.current['adSource'].focus();
+              // errorRefs.current['adSource'].focus();
             }
           }
           break;
@@ -108,7 +108,7 @@ const DonationSurvey = () => {
           if (responses.recipeUsed.length === 0) {
             errors.recipeUsed = errorMsg;
             if (errorRefs.current['recipeUsed']) {
-              errorRefs.current['recipeUsed'].focus();
+              // errorRefs.current['recipeUsed'].focus();
             }
           }
           break;
@@ -116,7 +116,7 @@ const DonationSurvey = () => {
           if (!responses.attentionCheck) {
             errors.attentionCheck = errorMsg;
             if (errorRefs.current['attentionCheck']) {
-              errorRefs.current['attentionCheck'].focus();
+              // errorRefs.current['attentionCheck'].focus();
             }
           }
           break;
@@ -204,9 +204,22 @@ const DonationSurvey = () => {
     }
   };
 
-  const handleFinalSubmit = async (event) => {
+  const handleFinalSubmit = (event) => {
     event.preventDefault();
-
+  
+    const errors = {};
+    
+    // Validate that at least one `recipeUsed` option is selected
+    if (responses.recipeUsed.length === 0) {
+      errors.recipeUsed = "Please select at least one option.";
+    }
+  
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;  // Prevent form submission if there are validation errors
+    }
+  
+    // No validation errors, proceed with submission
     const surveyData = {
       prolific_id: prolificID,
       study_id: studyID,
@@ -214,14 +227,15 @@ const DonationSurvey = () => {
       document_id: textData._id,
       responses,
     };
-
+  
     try {
-      await apiClient.post("/log_survey", surveyData);
-      window.location.href = `https://app.prolific.com/submissions/complete?cc=${tasksConfig.redirectCode}`;
+      apiClient.post("/log_survey", surveyData);
+      window.location.href = `https://app.prolific.com/submissions/complete?cc=${tasksConfig.config.redirectCode}`;
     } catch (error) {
       console.error("Error submitting survey:", error);
     }
   };
+  
 
   if (loading) {
     return <div className="text-center">Loading...</div>;

@@ -36,10 +36,10 @@ export default function Welcome() {
       try {
         let configModule;
         switch (studyID) {
-          case '66d8296a1f4202dbce504533':
+          case '66d82b36e3cb5863a2e34f1e':
             configModule = await import('../../configs/charityTaskConfigEN.js');
             break;
-          case '66c63f4f7c3e886b7c9cc498':
+          case '66d82b4cc966a4c9bd40b1d6':
             configModule = await import('../../configs/charityTaskConfigES.js');
             break;
           case '66d8461863df672d5ffe15b2':
@@ -55,7 +55,7 @@ export default function Welcome() {
         
         if (configModule && configModule.default) {
           setTasksConfig(configModule.default);  // Setting tasksConfig in context
-          console.log('Task config loaded:', configModule.default);
+          // console.log('Task config loaded:', configModule.default);
         } else {
           console.error('Task config is undefined or null.');
         }
@@ -70,7 +70,7 @@ export default function Welcome() {
   }, [studyID, setTasksConfig]);
 
   useEffect(() => {
-    console.log('Task Config from context after setting:', tasksConfig);
+    // console.log('Task Config from context after setting:', tasksConfig);
   }, [tasksConfig]);
 
 
