@@ -7,7 +7,10 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client['documents_db']
 # db.create_collection("persuasive_texts")
 collection = db['persuasive_texts']
-df = pd.read_csv('../data/buckets_combined/master_docs_with_control.csv')
+
+collection.delete_many({})
+
+df = pd.read_csv('./analysis/data/buckets_combined/master_docs_with_basic_formatting_0109.csv')
 # df.head()
 # Insert data
 data_dict = df.to_dict("records")
