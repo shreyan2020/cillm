@@ -34,7 +34,7 @@ const charityTaskConfigES = {
     language: 'ESP',
     likertScale: ['Totalmente en desacuerdo', 'En desacuerdo', 'Neutral', 'De acuerdo', 'Totalmente de acuerdo'],
     labels: {
-      instruction: "Haz clic en el botón `Proceder a la Donación` para ver el texto del anuncio y decidir tu donación: Ten en cuenta que se te proporciona un máximo de 1.5 libras para donar, lo que decidas no donar se añadirá a tu compensación (1 libra).",
+      instruction: "Haz clic en el botón `Proceder a la Donación` para leer sobre WWF y decidir tu donación. Ten en cuenta que se te proporciona un máximo de 1.5 GBP para donar. Lo que decidas no donar se añadirá a tu pago base de 1 GBP y te será enviado.",
       submit: "Enviar",
       validationmessage: "Esta pregunta es obligatoria.",
     },
@@ -43,7 +43,7 @@ const charityTaskConfigES = {
       emotionalAppeal: {
         header: "Atractivo Emocional",
         options: {
-        EA1: "El anuncio me hizo sentir conectado emocionalmente con la causa.",
+        EA1: "El anuncio me hizo sentir emocionalmente conectado con la causa.",
         EA2: "Sentí una fuerte sensación de empatía por la causa presentada en el anuncio.",
         EA3: "El anuncio evocó sentimientos de compasión y un deseo de ayudar."
         }
@@ -67,17 +67,18 @@ const charityTaskConfigES = {
         header: "¿A qué organización benéfica has donado en esta tarea?",
         options: ["WWF", "Cruz Roja", "UNICEF", "Médicos Sin Fronteras"],
       },
-      feedbackPositive: "¿Qué aspecto te gustó del anuncio de la organización benéfica? (Si nada, escribe NA)",
-      feedbackNegative: "¿Qué aspecto NO te gustó del anuncio de la organización benéfica? (Si nada, escribe NA)",
+      feedbackPositive: "¿Qué aspecto o aspectos te gustaron del anuncio de la organización benéfica y por qué? (Si nada, escribe NA)",
+      feedbackNegative: "¿Qué aspecto o aspectos NO te gustaron del anuncio de la organización benéfica y por qué? (Si nada, escribe NA)",
       adSource: {
         header: "¿Quién crees que escribió el anuncio?",
+        headerReason: "¿Por qué seleccionaste",
         options: {
             AS1: "IA",
             AS2: "Humano",
           },
       },
       recipeUsed: {
-        header: "¿Qué llamó más tu atención en el anuncio?",
+        header: "¿Qué llamó más tu atención en el anuncio? Marca todas las que apliquen.",
         options: {
         RU1: "Una historia positiva sobre cómo las donaciones han ayudado a otros.",
         RU2: "Una historia de advertencia sobre lo que puede suceder sin donaciones.",
@@ -100,16 +101,16 @@ const charityTaskConfigES = {
         estimatedTime: "Tiempo Estimado",
       },
       taskDetails: `
-        <p>En esta encuesta, recibirás una dotación de £1.5. Se te pedirá que dividas estas £1.5 entre ti y la organización benéfica World Wildlife Fund (WWF).</p>
-        <p>Eres libre de donar tanto o tan poco como desees. Por ejemplo, puedes decidir quedarte con las £1.5 todas para ti, o también puedes decidir donar las £1.5 por completo.</p>
-        <p>Antes de tomar tu decisión de donación, leerás un texto que te informará sobre la WWF. Por favor, lee el texto detenidamente antes de decidir cómo dividir tus £1.5.</p>
+        <p>En esta encuesta, recibirás una dotación de £1.5. Se te pedirá que dividas £1.5 entre ti y la organización benéfica World Wildlife Fund (WWF).</p>
+        <p>Eres libre de donar tanto o tan poco como desees.</p>
+        <p>Antes de tomar tu decisión de donación, leerás un texto que te informará sobre WWF. Por favor, lee el texto detenidamente antes de decidir cómo dividir tus £1.5.</p>
       `,
       eligibilityCriteria: `
         <li>Debes tener 18 años o más.</li>
         <li>Debes tener fluidez en inglés.</li>
       `,
       compensation: `
-        <p>Tu compensación total se basa en el pago base de esta tarea y el pago de bonificación. El pago base es £1. El pago de bonificación depende de tu decisión de donación, y puede ser entre £0 y £1.5.</p>
+        <p>Tu compensación total se basa en el pago base de esta tarea, y tu pago de bonificación. El pago base es £1. El pago de bonificación depende de tu decisión de donación, y puede ser entre £0 y £1.5.</p>
       `,
       bonusTable: [
         { level: "Finalización de la Tarea", amount: "€1.0" },

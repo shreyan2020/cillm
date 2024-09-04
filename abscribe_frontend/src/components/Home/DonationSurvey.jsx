@@ -18,6 +18,7 @@ const DonationSurvey = () => {
     charityFeedbackPositive: '',
     charityFeedbackNegative: '',
     adSource: '',
+    adSourceReason: '', // New field to store the reason for ad source
     recipeUsed: [],
     // perceptionMission: {},
     // perceivedImpact: {},
@@ -101,6 +102,12 @@ const DonationSurvey = () => {
             errors.adSource = errorMsg;
             if (errorRefs.current['adSource']) {
               // errorRefs.current['adSource'].focus();
+            }
+          }
+          if (responses.adSource && !responses.adSourceReason.trim()) {
+            errors.adSourceReason = errorMsg;
+            if (errorRefs.current['adSourceReason']) {
+              errorRefs.current['adSourceReason'].focus();
             }
           }
           break;
@@ -311,7 +318,7 @@ const DonationSurvey = () => {
         {['emotionalAppeal', 'perceptionMission', 'informationAwareness', 'perceivedImpact', 'personalIdentity', 'behavioralIntentions'].map((section, idx) => (
           currentStep === `post-questionnaire-${section}` && (
             <div key={idx}>
-              <h4 className="mb-4">{config.questions[section].header}</h4>
+              {/* <h4 className="mb-4">{config.questions[section].header}</h4> */}
               {Object.keys(config.questions[section].options).map((key) => (
                 <div key={key} className="form-group mb-4">
                   <label className="form-label">{config.questions[section].options[key]}</label>
@@ -458,8 +465,29 @@ const DonationSurvey = () => {
                 <div className="text-danger mt-2">
                   <i className="fas fa-exclamation-triangle"></i> {validationErrors.adSource}
                 </div>
-              )}
+              )}  
             </div>
+             {/* Conditional question based on adSource */}
+             {responses.adSource && (
+              <div className="form-group mb-4">
+              <label className="form-label">
+                  {`${config.questions.adSource.headerReason} ${config.questions.adSource.options[responses.adSource]}?`}
+                  </label>
+
+                <textarea
+                  className="form-control"
+                  rows="3"
+                  value={responses.adSourceReason}
+                  onChange={(e) => handleInputChange('adSourceReason', e.target.value)}
+                  ref={(el) => errorRefs.current['adSourceReason'] = el}
+                />
+                {validationErrors.adSourceReason && (
+                  <div className="text-danger mt-2">
+                    <i className="fas fa-exclamation-triangle"></i> {validationErrors.adSourceReason}
+                  </div>
+                )}
+              </div>
+            )}
             <div className="text-center">
               <Button className="mt-4" variant="primary" size="lg" type="submit">
                 Next

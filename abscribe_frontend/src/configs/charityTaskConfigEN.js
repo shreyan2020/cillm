@@ -34,7 +34,7 @@ const charityTaskConfigEN = {
     language: 'ENG',
     likertScale: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'],
     labels: {
-      instruction: "Click `Proceed to Donation` button to see the advertisement text and decide your donation: Note that you are provided a maximum of 1.5 pounds for donation, whatever you decide to donate, the balance will be added to your compensation (1 pounds) back to you.",
+      instruction: "Click the`Proceed to Donation` button to see read about WWF and decide your donation. Note that you are provided a maximum of 1.5 GBP for donation. Whatever you decide to donate, any balance will be added to your base payment of 1 GBP and sent to you.",
       submit: "Submit",
       validationmessage: "This question is required.",
     },
@@ -92,18 +92,18 @@ const charityTaskConfigEN = {
         header: "Which charity have you donated to in this task?",
         options: ["WWF", "Red Cross", "UNICEF", "Doctors Without Borders"],
       },
-      feedbackPositive: "What aspect did you like about the charity ad? (If nothing, write NA)",
-      feedbackNegative: "What aspect did you NOT like about the charity ad? (If nothing, write NA)",
+      feedbackPositive: "What aspect  or aspects did you like about the charity ad and why? (If nothing, write NA)",
+      feedbackNegative: "What aspect or aspects did you NOT like about the charity ad and why? (If nothing, write NA)",
       adSource: {
         header: "Who do you think wrote the ad?",
+        headerReason: "Why did you select",
         options: {
             AS1: "AI",
             AS2: "Human",
           },
-
       },
       recipeUsed: {
-        header: "What caught your attention the most in the ad?",
+        header: "What caught your attention the most in the ad? Check all that apply.",
         options: {
         RU1: "A positive story about how donations have helped others.",
         RU2: "A warning story about what can happen without donations.",
@@ -126,8 +126,8 @@ const charityTaskConfigEN = {
         estimatedTime: "Estimated Time",
       },
       taskDetails: `
-        <p>In this survey, you will receive an endowment of £1.5. You will be asked to split these £1.5 between yourself, and the charity World Wildlife Fund (WWF). </p>
-        <p> You are free to donate as much or as little as you want. For example, you can decide to keep the £1.5 all for yourself, or you can also decide to donate all of the £1.5</p>
+        <p>In this survey, you will receive an endowment of £1.5. You will be asked to split the £1.5 between yourself, and the World Wildlife Fund (WWF) charity. </p>
+        <p> You are free to donate as much or as little as you want.</p>
         <p>Before making your donation decision, you will read a text informing you about the WWF. Please read the text carefully before deciding how to split your £1.5.</p>
       `,
       eligibilityCriteria: `
@@ -135,7 +135,7 @@ const charityTaskConfigEN = {
         <li>Must be fluent in English.</li>
       `,
       compensation: `
-        <p>Your total compensation is based on this tasks base payment, and your bonus payment. The base payment is £1. The bonus payment depends on your donation decision, and can be anything between £0 and £1.5.</p>
+        <p>our total compensation is based on the base payment of this task, and your bonus payment. The base payment is £1. The bonus payment depends on your donation decision, and can be anything between £0 and £1.5</p>
       `,
       bonusTable: [
         { level: "Task Completion", amount: "€1.0" },
