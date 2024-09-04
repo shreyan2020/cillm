@@ -1,5 +1,6 @@
 const charityTaskConfigEN = {
   config: {
+    redirectCode: "C127DB3G",
     consentText: `
       <p>
         We are a group of researchers at the Technical University of Delft in The Netherlands and Goettingen University. In this research project, we aim to investigate the persuasiveness of a text through donation behavior. As such, you are invited to participate in our research study.

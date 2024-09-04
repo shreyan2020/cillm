@@ -36,11 +36,17 @@ export default function Welcome() {
       try {
         let configModule;
         switch (studyID) {
-          case '66c616da5ea4ebca7f461ac7':
+          case '66d8296a1f4202dbce504533':
             configModule = await import('../../configs/charityTaskConfigEN.js');
             break;
           case '66c63f4f7c3e886b7c9cc498':
             configModule = await import('../../configs/charityTaskConfigES.js');
+            break;
+          case '66d8461863df672d5ffe15b2':
+            configModule = await import('../../configs/charityTaskConfigEN_AE.js');
+            break;
+          case '66d847204c5ed7a7e6ccde9c':
+            configModule = await import('../../configs/charityTaskConfig_ES_AE.js');
             break;
           default:
             configModule = await import('../../configs/charityTaskConfigEN.js');
