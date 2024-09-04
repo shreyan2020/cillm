@@ -88,6 +88,7 @@ export default function Welcome() {
         spanish_proficiency: spanishProficiency,
       };
       saveParticipantInfo(participantData);
+      console.log('data saved')
       navigate("/instruction");
     } else {
       setValidationError("You must agree before proceeding.");

@@ -27,7 +27,7 @@ from abscribe_backend.models.chunk import Chunk
 from abscribe_backend.models.document import Document
 from abscribe_backend.models.particiapnt_info import ParticipantInfo
 from abscribe_backend.models.survey import SurveyResponse
-import abscribe_backend.services.chatgpt_service as chatgpt_service
+# import abscribe_backend.services.chatgpt_service as chatgpt_service
 # from abscribe_backend.models.keylogger import KeyloggerActivity
 
 
@@ -125,7 +125,7 @@ def to_dict(obj):
 
 
 
-
+logging.info(f"app started")
 
 
 
@@ -134,7 +134,7 @@ def get_persuasive_text():
     data = request.get_json()
     task_category = data.get("task_category")
     prolific_id = data.get("prolific_id")
-    print('asdssa', data)
+    logging.info(f"Prolific ID {prolific_id} called to fetch using the following data {data}")
     if not all([task_category, prolific_id]):
         return jsonify({"error": "Missing required fields"}), 400
 
@@ -475,38 +475,38 @@ def remove_version_route(
 
 #     return Response(sync_stream_chat(), mimetype="text/event-stream")
 
+# # @app.route("/api/chatGPT/chat", methods=['POST'])
 # @app.route("/api/chatGPT/chat", methods=['POST'])
-@app.route("/api/chatGPT/chat", methods=['POST'])
-def generate_text():
-    data = request.get_json()
-    prompt = data.get('prompt')
-    stream = data.get('stream', False)
-    # feature = data.get('feature', "")
-    # task_id = data.get('task_id', "")
-    # prolific_id = data.get('prolific_id', "")
-    # original_text = data.get("original_text", "")
-    print('hello', stream)
-    chat_stream = chatgpt_service.get_chat(prompt, stream)
+# def generate_text():
+#     data = request.get_json()
+#     prompt = data.get('prompt')
+#     stream = data.get('stream', False)
+#     # feature = data.get('feature', "")
+#     # task_id = data.get('task_id', "")
+#     # prolific_id = data.get('prolific_id', "")
+#     # original_text = data.get("original_text", "")
+#     print('hello', stream)
+#     chat_stream = chatgpt_service.get_chat(prompt, stream)
     
-    if stream:
-        def stream_chat():
-            for chunk in chat_stream:
-                try:
-                    content = chunk['response']
-                except KeyError:
-                    content = ''
-                yield f"data: {content}\n\n"
-                if '\n' in content:
-                    yield f"data: \n\n"
-        return app.response_class(stream_chat(), mimetype="text/event-stream")
-    else:
-        # content = ""
-        # for chunk in chat_stream:
-        #     try:
-        #         content += chunk['response']
-        #     except KeyError:
-        #         continue
-        return jsonify({'response': chat_stream['response']})
+#     if stream:
+#         def stream_chat():
+#             for chunk in chat_stream:
+#                 try:
+#                     content = chunk['response']
+#                 except KeyError:
+#                     content = ''
+#                 yield f"data: {content}\n\n"
+#                 if '\n' in content:
+#                     yield f"data: \n\n"
+#         return app.response_class(stream_chat(), mimetype="text/event-stream")
+#     else:
+#         # content = ""
+#         # for chunk in chat_stream:
+#         #     try:
+#         #         content += chunk['response']
+#         #     except KeyError:
+#         #         continue
+#         return jsonify({'response': chat_stream['response']})
     
 # def extract_relevant_text(output_text):
 #     pattern = re.compile(r'\[\/INST\](.*?)<\/s>', re.DOTALL)

@@ -31,10 +31,12 @@ const DonationSurvey = () => {
   useEffect(() => {
     const fetchText = async () => {
       try {
+        // console.log('calling the method');
         const response = await apiClient.post("get_persuasive_text", {
           task_category: tasksConfig.config.language,
           prolific_id: prolificID,
         });
+        // console.log('response from the method',response, task_category, prolific_id);
         if (response.status === 200) {
           setTextData(response.data);
           setLoading(false);
