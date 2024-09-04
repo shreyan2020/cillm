@@ -11,20 +11,22 @@ const DonationSurvey = () => {
   const [currentStep, setCurrentStep] = useState('ad-display');
   const [responses, setResponses] = useState({
     donationAmount: '',
+    emotionalAppeal: {},
+    informationAwareness: {},
+    behavioralIntentions: {},
+    attentionCheck: '',
     charityFeedbackPositive: '',
     charityFeedbackNegative: '',
     adSource: '',
     recipeUsed: [],
-    emotionalAppeal: {},
     // perceptionMission: {},
-    informationAwareness: {},
     // perceivedImpact: {},
     // personalIdentity: {},
-    behavioralIntentions: {},
   });
   const [validationErrors, setValidationErrors] = useState({});
   const [loading, setLoading] = useState(true);
   const errorRefs = useRef({});
+  const textContainerRef = useRef(null); 
 
   const config = tasksConfig.config;
 
@@ -51,23 +53,78 @@ const DonationSurvey = () => {
     fetchText();
   }, [taskID, prolificID]);
 
+
+  useEffect(() => {
+    if (textContainerRef.current) {
+      const textHeight = textContainerRef.current.scrollHeight;
+      textContainerRef.current.style.height = `${textHeight}px`; // Dynamically adjust height
+    }
+  }, [textData]); // Adjust the height when textData is updated
+
+
   const handleNextStep = () => {
     const errors = {};
-
+    const errorMsg = config.labels.validationmessage;
     // Check the current step and validate accordingly
     if (currentStep.startsWith('post-questionnaire')) {
       const section = currentStep.split('-')[2]; // e.g., 'emotionalAppeal'
       const questions = config.questions[section].options;
-
       Object.keys(questions).forEach(key => {
         if (!responses[section][key]) {
           errors[section] = errors[section] || {};
-          errors[section][key] = 'This question is required.';
-          errorRefs.current[`${section}-${key}`].focus();
+          errors[section][key] = errorMsg;
+          if (errorRefs.current[`${section}-${key}`]) {
+            errorRefs.current[`${section}-${key}`].focus();
+          }
         }
       });
+    } else {
+      switch (currentStep) {
+        case 'feedback-positive':
+          if (!responses.charityFeedbackPositive.trim()) {
+            errors.charityFeedbackPositive = errorMsg;
+            if (errorRefs.current['charityFeedbackPositive']) {
+              errorRefs.current['charityFeedbackPositive'].focus();
+            }
+          }
+          break;
+        case 'feedback-negative':
+          if (!responses.charityFeedbackNegative.trim()) {
+            errors.charityFeedbackNegative = errorMsg;
+            if (errorRefs.current['charityFeedbackNegative']) {
+              errorRefs.current['charityFeedbackNegative'].focus();
+            }
+          }
+          break;
+        case 'adSource':
+          if (!responses.adSource) {
+            errors.adSource = errorMsg;
+            if (errorRefs.current['adSource']) {
+              errorRefs.current['adSource'].focus();
+            }
+          }
+          break;
+        case 'recipeUsed':
+          if (responses.recipeUsed.length === 0) {
+            errors.recipeUsed = errorMsg;
+            if (errorRefs.current['recipeUsed']) {
+              errorRefs.current['recipeUsed'].focus();
+            }
+          }
+          break;
+        case 'attention-check':
+          if (!responses.attentionCheck) {
+            errors.attentionCheck = errorMsg;
+            if (errorRefs.current['attentionCheck']) {
+              errorRefs.current['attentionCheck'].focus();
+            }
+          }
+          break;
+        default:
+          break;
+      }
     }
-    
+
 
     if (Object.keys(errors).length === 0) {
       setValidationErrors({});
@@ -89,6 +146,8 @@ const DonationSurvey = () => {
           // case 'post-questionnaire-personalIdentity':
             // return 'post-questionnaire-behavioralIntentions';
           case 'post-questionnaire-behavioralIntentions':
+            return 'attention-check';
+          case 'attention-check':
             return 'feedback-positive';
           case 'feedback-positive':
             return 'feedback-negative';
@@ -181,7 +240,7 @@ const DonationSurvey = () => {
     }}>
       <div className="card shadow-sm p-4">
         {currentStep !== 'ad-display' && (
-          <div className="text-box mb-4 p-4 border rounded bg-light"
+          <div ref={textContainerRef}  className="text-box mb-4 p-4 border rounded bg-light"
             style={{
               maxHeight: '60vh',
               overflowY: 'auto',
@@ -274,9 +333,44 @@ const DonationSurvey = () => {
           )
         ))}
 
+{currentStep === 'attention-check' && (
+  <form onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>
+    <div className="form-group mb-4">
+      <label className="form-label">{config.questions.attentionCheck.header}</label>
+      <div className="d-flex flex-column">
+        {config.questions.attentionCheck.options.map((option, index) => (
+          <label key={index} className="form-check">
+            <input
+              type="radio"
+              name="attentionCheck"
+              value={option}
+              className="form-check-input"
+              checked={responses.attentionCheck === option}
+              onChange={() => handleInputChange('attentionCheck', option)}
+              ref={(el) => errorRefs.current['attentionCheck'] = el}
+            /> {option}
+          </label>
+        ))}
+      </div>
+      {validationErrors.attentionCheck && (
+        <div className="text-danger mt-2">
+          <i className="fas fa-exclamation-triangle"></i> {validationErrors.attentionCheck}
+        </div>
+      )}
+    </div>
+    <div className="text-center">
+      <Button className="mt-4" variant="primary" size="lg" type="submit">
+        Next
+      </Button>
+    </div>
+  </form>
+)}
+
+
+
         {/* Positive Feedback */}
         {currentStep === 'feedback-positive' && (
-          <form onSubmit={handleNextStep}>
+           <form onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>
             <div className="form-group mb-4">
               <label className="form-label">{config.questions.feedbackPositive}</label>
               <textarea
@@ -302,7 +396,7 @@ const DonationSurvey = () => {
 
         {/* Negative Feedback */}
         {currentStep === 'feedback-negative' && (
-          <form onSubmit={handleNextStep}>
+           <form onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>
             <div className="form-group mb-4">
               <label className="form-label">{config.questions.feedbackNegative}</label>
               <textarea
@@ -328,11 +422,11 @@ const DonationSurvey = () => {
 
         {/* Ad Source */}
         {currentStep === 'adSource' && (
-          <form onSubmit={handleNextStep}>
+           <form onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>
             <div className="form-group mb-4">
-              <label className="form-label">{config.questions.adSource}</label>
+              <label className="form-label">{config.questions.adSource.header}</label>
               <div className="d-flex flex-column">
-                {Object.keys(config.options.adSource).map(key => (
+                {Object.keys(config.questions.adSource.options).map(key => (
                   <label key={key} className="form-check">
                     <input
                       type="radio"
@@ -342,7 +436,7 @@ const DonationSurvey = () => {
                       checked={responses.adSource === key}
                       onChange={() => handleOptionChange('adSource', key)}
                       ref={(el) => errorRefs.current['adSource'] = el}
-                    /> {config.options.adSource[key]}
+                    /> {config.questions.adSource.options[key]}
                   </label>
                 ))}
               </div>
@@ -362,37 +456,38 @@ const DonationSurvey = () => {
 
         {/* Recipe Used */}
         {currentStep === 'recipeUsed' && (
-          <form onSubmit={handleFinalSubmit}>
-            <div className="form-group mb-4">
-              <label className="form-label">{config.questions.recipeUsed}</label>
-              <div className="d-flex flex-column">
-                {config.options.recipeUsed.map((option, index) => (
-                  <label key={index} className="form-check">
-                    <input
-                      type="checkbox"
-                      name="recipeUsed"
-                      value={option}
-                      className="form-check-input"
-                      checked={responses.recipeUsed.includes(option)}
-                      onChange={() => handleOptionChange('recipeUsed', option)}
-                      ref={(el) => errorRefs.current['recipeUsed'] = el}
-                    /> {option}
-                  </label>
-                ))}
-              </div>
-              {validationErrors.recipeUsed && (
-                <div className="text-danger mt-2">
-                  <i className="fas fa-exclamation-triangle"></i> {validationErrors.recipeUsed}
-                </div>
-              )}
-            </div>
-            <div className="text-center">
-              <Button className="mt-4" variant="primary" size="lg" type="submit">
-                {config.labels.submit}
-              </Button>
-            </div>
-          </form>
-        )}
+  <form onSubmit={handleFinalSubmit}>
+    <div className="form-group mb-4">
+      <label className="form-label">{config.questions.recipeUsed.header}</label>
+      <div className="d-flex flex-column">
+        {Object.entries(config.questions.recipeUsed.options).map(([key, option], index) => (
+          <label key={index} className="form-check">
+            <input
+              type="checkbox"
+              name="recipeUsed"
+              value={key}
+              className="form-check-input"
+              checked={responses.recipeUsed.includes(key)}
+              onChange={() => handleOptionChange('recipeUsed', key)}
+              ref={(el) => errorRefs.current['recipeUsed'] = el}
+            /> {option}
+          </label>
+        ))}
+      </div>
+      {validationErrors.recipeUsed && (
+        <div className="text-danger mt-2">
+          <i className="fas fa-exclamation-triangle"></i> {validationErrors.recipeUsed}
+        </div>
+      )}
+    </div>
+    <div className="text-center">
+      <Button className="mt-4" variant="primary" size="lg" type="submit">
+        {config.labels.submit}
+      </Button>
+    </div>
+  </form>
+)}
+
       </div>
     </div>
   );
