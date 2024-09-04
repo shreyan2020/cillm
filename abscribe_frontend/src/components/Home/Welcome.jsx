@@ -119,7 +119,7 @@ export default function Welcome() {
               <hr style={{ borderTop: "5px solid #bbb" }} />
 
               <form onSubmit={handleSubmit}>
-                <div className="form-group mb-3">
+                {/* <div className="form-group mb-3">
                   <label className="mb-2" htmlFor="gender">Gender</label>
                   <select
                     id="gender"
@@ -134,9 +134,9 @@ export default function Welcome() {
                     <option value="non-binary">Non-binary</option>
                     <option value="prefer-not-to-say">Prefer not to say</option>
                   </select>
-                </div>
+                </div> */}
                 
-                <div className="form-group mb-3">
+                {/* <div className="form-group mb-3">
                   <label htmlFor="age" className="mb-2">Age</label>
                   <input
                     type="number"
@@ -146,7 +146,7 @@ export default function Welcome() {
                     onChange={(e) => setAge(e.target.value)}
                     required
                   />
-                </div>
+                </div> */}
                
                 {tasksConfig && tasksConfig.config.language === "ENG" && (
                   <div className="form-group mb-3">

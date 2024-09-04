@@ -6,13 +6,13 @@ const charityTaskConfigEN = {
         We are a group of researchers at the Technical University of Delft in The Netherlands and Goettingen University. In this research project, we aim to investigate the persuasiveness of a text through donation behavior. As such, you are invited to participate in our research study.
       </p>
       <p>
-        The following task is part of the research project described above. Upon accessing the web application, you will be presented with a charity advertisement and subsequently asked to donate some amount and answer some questions.
+        The following task is part of the research project described above. Upon accessing the web application, you make a donation and answer some questions.
       </p>
       <p>
         Completion of these tasks does not require any specific equipment. Your participation in this task is entirely voluntary, and you can withdraw at any time.
       </p>
       <p>
-        We will collect your usage and your experience with the tool. This includes:
+        We will collect the following information
       </p>
       <ul>
         <li>Personal information: age and gender</li>
@@ -34,11 +34,12 @@ const charityTaskConfigEN = {
     language: 'ENG',
     likertScale: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'],
     labels: {
-      instruction: "Please read the following text and decide your donation: Note that you are provided a maximum of 1.5 euros for donation, whatever you decide to donate, the balance will be added to your compensation (1 euro) back to you.",
+      instruction: "Click `Proceed to Donation` button to see the advertisement text and decide your donation: Note that you are provided a maximum of 1.5 pounds for donation, whatever you decide to donate, the balance will be added to your compensation (1 pounds) back to you.",
       submit: "Submit",
+      validationmessage: "This question is required.",
     },
     questions: {
-      donation: "How much would you like to donate to the charity?",
+      donation: "How much would you like to donate (max £1.5)?",
       emotionalAppeal: {
         header: "Emotional Appeal",
         options: {
@@ -83,31 +84,38 @@ const charityTaskConfigEN = {
         header: "Behavioral Intentions",
         options: {
         // BI1: "How likely are you to donate to the organization after seeing this advertisement?",
-        BI2: "How likely are you to share this advertisement or talk about the cause with others?",
-        BI3: "How likely are you to seek more information about the organization?"
+        BI1: "How likely are you to share this advertisement or talk about the cause with others?",
+        BI2: "How likely are you to seek more information about the organization?"
         }
+      },
+      attentionCheck: {
+        header: "Which charity have you donated to in this task?",
+        options: ["WWF", "Red Cross", "UNICEF", "Doctors Without Borders"],
       },
       feedbackPositive: "What aspect did you like about the charity ad? (If nothing, write NA)",
       feedbackNegative: "What aspect did you NOT like about the charity ad? (If nothing, write NA)",
-      adSource: "Who do you think wrote the ad?",
-      recipeUsed: "What caught your attention the most in the ad?",
-      validattionMessage: "This question is required.",
-    },
-    options: {
       adSource: {
-        ai: "AI",
-        human: "Human",
+        header: "Who do you think wrote the ad?",
+        options: {
+            AS1: "AI",
+            AS2: "Human",
+          },
+
       },
-      recipeUsed: [
-        "A positive story about how donations have helped others.",
-        "A warning story about what can happen without donations.",
-        "Numbers showing the positive impact of donations.",
-        "Numbers highlighting the negative consequences of not donating.",
-        "How donations can make a difference right away.",
-        "How donations will help in the long run.",
-        "None of the Above",
-      ],
+      recipeUsed: {
+        header: "What caught your attention the most in the ad?",
+        options: {
+        RU1: "A positive story about how donations have helped others.",
+        RU2: "A warning story about what can happen without donations.",
+        RU3: "Numbers showing the positive impact of donations.",
+        RU4: "Numbers highlighting the negative consequences of not donating.",
+        RU5: "How donations can make a difference right away.",
+        RU6: "How donations will help in the long run.",
+        RU7: "None of the Above",
+        }
+      }
     },
+    
     jobDescription: {
       headers: {
         taskDetails: "Task Details",
@@ -118,22 +126,23 @@ const charityTaskConfigEN = {
         estimatedTime: "Estimated Time",
       },
       taskDetails: `
-        <p>After clicking "Next," you will see a charity advertisement. Please take a moment to carefully read the advertisement text. You will be given €1.5, which you can choose to keep for yourself, or contribute any portion of the amount as you see fit.</p>
-        <!-- Remaining task details -->
+        <p>In this survey, you will receive an endowment of £1.5. You will be asked to split these £1.5 between yourself, and the charity World Wildlife Fund (WWF). </p>
+        <p> You are free to donate as much or as little as you want. For example, you can decide to keep the £1.5 all for yourself, or you can also decide to donate all of the £1.5</p>
+        <p>Before making your donation decision, you will read a text informing you about the WWF. Please read the text carefully before deciding how to split your £1.5.</p>
       `,
       eligibilityCriteria: `
         <li>Must be 18 years or older.</li>
         <li>Must be fluent in English.</li>
       `,
       compensation: `
-        <p>The base payment for the task is €1. In addition, you will receive compensation based on the amount you decide to keep for yourself after making your donation.</p>
+        <p>Your total compensation is based on this tasks base payment, and your bonus payment. The base payment is £1. The bonus payment depends on your donation decision, and can be anything between £0 and £1.5.</p>
       `,
       bonusTable: [
         { level: "Task Completion", amount: "€1.0" },
         { level: "Leftover Endowment", amount: "Varies based on donation amount" },
       ],
       estimatedTime: `
-        <p>The task is expected to take approximately 5 minutes to complete.</p>
+        <p>Click on the button below to proceed to the donation decision.</p>
       `,
     },
   },

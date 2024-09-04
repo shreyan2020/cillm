@@ -234,7 +234,8 @@ def save_participant_info():
     english_proficiency = data.get("english_proficiency")
     spanish_proficiency = data.get("spanish_proficiency")
 
-    if not all([prolific_id, study_id, age, gender]):
+    # if not all([prolific_id, study_id, age, gender]):
+    if not all([prolific_id, study_id]):
         return jsonify({"error": "Missing required fields"}), 400
 
     try:
