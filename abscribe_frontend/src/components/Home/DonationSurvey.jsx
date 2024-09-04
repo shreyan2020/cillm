@@ -14,7 +14,7 @@ const DonationSurvey = () => {
     emotionalAppeal: {},
     informationAwareness: {},
     behavioralIntentions: {},
-    attentionCheck: '',
+    charity: '',
     charityFeedbackPositive: '',
     charityFeedbackNegative: '',
     adSource: '',
@@ -120,10 +120,10 @@ const DonationSurvey = () => {
           }
           break;
         case 'attention-check':
-          if (!responses.attentionCheck) {
-            errors.attentionCheck = errorMsg;
-            if (errorRefs.current['attentionCheck']) {
-              // errorRefs.current['attentionCheck'].focus();
+          if (!responses.charity) {
+            errors.charity = errorMsg;
+            if (errorRefs.current['charity']) {
+              // errorRefs.current['charity'].focus();
             }
           }
           break;
@@ -211,7 +211,7 @@ const DonationSurvey = () => {
     }
   };
 
-  const handleFinalSubmit = (event) => {
+  const handleFinalSubmit = async (event) => {
     event.preventDefault();
   
     const errors = {};
@@ -236,8 +236,14 @@ const DonationSurvey = () => {
     };
   
     try {
-      apiClient.post("/log_survey", surveyData);
-      window.location.href = `https://app.prolific.com/submissions/complete?cc=${tasksConfig.config.redirectCode}`;
+      // apiClient.post("/log_survey", surveyData);
+      const response = await apiClient.post("/log_survey", surveyData);
+      if (response.status === 200 && response.data.redirectCode) {
+        window.location.href = `https://app.prolific.com/submissions/complete?cc=${response.data.redirectCode}`;
+      }
+      else {
+        console.error("Error in backend response:", response.data.error);
+      }
     } catch (error) {
       console.error("Error submitting survey:", error);
     }
@@ -357,25 +363,25 @@ const DonationSurvey = () => {
 {currentStep === 'attention-check' && (
   <form onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>
     <div className="form-group mb-4">
-      <label className="form-label">{config.questions.attentionCheck.header}</label>
+      <label className="form-label">{config.questions.charity.header}</label>
       <div className="d-flex flex-column">
-        {config.questions.attentionCheck.options.map((option, index) => (
+        {config.questions.charity.options.map((option, index) => (
           <label key={index} className="form-check">
             <input
               type="radio"
-              name="attentionCheck"
+              name="charity"
               value={option}
               className="form-check-input"
-              checked={responses.attentionCheck === option}
-              onChange={() => handleInputChange('attentionCheck', option)}
-              ref={(el) => errorRefs.current['attentionCheck'] = el}
+              checked={responses.charity === option}
+              onChange={() => handleInputChange('charity', option)}
+              ref={(el) => errorRefs.current['charity'] = el}
             /> {option}
           </label>
         ))}
       </div>
-      {validationErrors.attentionCheck && (
+      {validationErrors.charity && (
         <div className="text-danger mt-2">
-          <i className="fas fa-exclamation-triangle"></i> {validationErrors.attentionCheck}
+          <i className="fas fa-exclamation-triangle"></i> {validationErrors.charity}
         </div>
       )}
     </div>

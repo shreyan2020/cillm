@@ -356,3 +356,89 @@
 2024-09-04 18:42:51,194 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 9a909be8f6244e86b6eb90ac_LLM
 2024-09-04 18:42:51,195 127.0.0.1 - - [04/Sep/2024 18:42:51] "POST /api/get_persuasive_text HTTP/1.1" 200 -
 2024-09-04 18:43:09,879 127.0.0.1 - - [04/Sep/2024 18:43:09] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-09-04 22:00:25,615 app started
+2024-09-04 22:00:25,635 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.178.129:8080
+2024-09-04 22:00:25,635 [33mPress CTRL+C to quit[0m
+2024-09-04 22:00:25,637  * Restarting with stat
+2024-09-04 22:00:26,032 app started
+2024-09-04 22:00:26,046  * Debugger is active!
+2024-09-04 22:00:26,051  * Debugger PIN: 442-777-315
+2024-09-04 22:50:08,525 app started
+2024-09-04 22:50:08,544 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.178.129:8080
+2024-09-04 22:50:08,544 [33mPress CTRL+C to quit[0m
+2024-09-04 22:50:08,547  * Restarting with stat
+2024-09-04 22:50:08,946 app started
+2024-09-04 22:50:08,967  * Debugger is active!
+2024-09-04 22:50:08,973  * Debugger PIN: 442-777-315
+2024-09-04 22:50:24,605 127.0.0.1 - - [04/Sep/2024 22:50:24] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-04 22:50:24,854 127.0.0.1 - - [04/Sep/2024 22:50:24] "[35m[1mPOST /api/save_participant_info HTTP/1.1[0m" 500 -
+2024-09-04 22:50:25,075 127.0.0.1 - - [04/Sep/2024 22:50:25] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-04 22:50:25,380 127.0.0.1 - - [04/Sep/2024 22:50:25] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-04 22:50:25,395 Prolific ID 65e6fb8c62b34b6ef5249890 called to fetch using the following data {'task_category': 'ENG', 'prolific_id': '65e6fb8c62b34b6ef5249890'}
+2024-09-04 22:50:25,415 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID c8db9512e8db46a982e957ad_LLM
+2024-09-04 22:50:25,416 127.0.0.1 - - [04/Sep/2024 22:50:25] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-04 22:50:25,690 Prolific ID 65e6fb8c62b34b6ef5249890 called to fetch using the following data {'task_category': 'ENG', 'prolific_id': '65e6fb8c62b34b6ef5249890'}
+2024-09-04 22:50:25,691 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID acfb9d88b9104c2a8b895a97_LLM
+2024-09-04 22:50:25,691 127.0.0.1 - - [04/Sep/2024 22:50:25] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-04 22:50:52,239 127.0.0.1 - - [04/Sep/2024 22:50:52] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-09-04 22:50:52,498 Prolific ID: 65e6fb8c62b34b6ef5249890 for Document ID: acfb9d88b9104c2a8b895a97_LLM saved: {'donationAmount': '1', 'emotionalAppeal': {'EA1': 'Disagree', 'EA2': 'Neutral', 'EA3': 'Neutral'}, 'informationAwareness': {'IA2': 'Disagree', 'IA1': 'Disagree', 'IA3': 'Disagree'}, 'behavioralIntentions': {'BI1': 'Disagree', 'BI2': 'Disagree'}, 'attentionCheck': 'UNICEF', 'charityFeedbackPositive': 'sd', 'charityFeedbackNegative': 'sda', 'adSource': 'AS1', 'adSourceReason': 'asd', 'recipeUsed': ['RU4']}
+2024-09-04 22:50:52,501 127.0.0.1 - - [04/Sep/2024 22:50:52] "POST /api/log_survey HTTP/1.1" 200 -
+2024-09-04 22:51:48,554  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-09-04 22:51:48,731  * Restarting with stat
+2024-09-04 22:51:49,158 app started
+2024-09-04 22:51:49,172  * Debugger is active!
+2024-09-04 22:51:49,177  * Debugger PIN: 442-777-315
+2024-09-04 22:51:53,355  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-09-04 22:51:53,803  * Restarting with stat
+2024-09-04 22:51:54,220 app started
+2024-09-04 22:51:54,234  * Debugger is active!
+2024-09-04 22:51:54,241  * Debugger PIN: 442-777-315
+2024-09-04 22:55:45,411 app started
+2024-09-04 22:55:45,431 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.178.129:8080
+2024-09-04 22:55:45,431 [33mPress CTRL+C to quit[0m
+2024-09-04 22:55:45,433  * Restarting with stat
+2024-09-04 22:55:45,859 app started
+2024-09-04 22:55:45,874  * Debugger is active!
+2024-09-04 22:55:45,881  * Debugger PIN: 442-777-315
+2024-09-04 22:55:56,298 127.0.0.1 - - [04/Sep/2024 22:55:56] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-04 22:55:56,565 127.0.0.1 - - [04/Sep/2024 22:55:56] "[35m[1mPOST /api/save_participant_info HTTP/1.1[0m" 500 -
+2024-09-04 22:55:56,688 127.0.0.1 - - [04/Sep/2024 22:55:56] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-04 22:55:57,002 Prolific ID 65e6fb8c62b34b6ef5249890 called to fetch using the following data {'task_category': 'ENG', 'prolific_id': '65e6fb8c62b34b6ef5249890'}
+2024-09-04 22:55:57,006 127.0.0.1 - - [04/Sep/2024 22:55:57] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-04 22:55:57,009 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID b3e909d724ef484497717540_LLM
+2024-09-04 22:55:57,011 127.0.0.1 - - [04/Sep/2024 22:55:57] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-04 22:55:57,328 Prolific ID 65e6fb8c62b34b6ef5249890 called to fetch using the following data {'task_category': 'ENG', 'prolific_id': '65e6fb8c62b34b6ef5249890'}
+2024-09-04 22:55:57,331 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID d17fdcaa755142cdb96168e4_LLM
+2024-09-04 22:55:57,332 127.0.0.1 - - [04/Sep/2024 22:55:57] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-04 22:56:24,044 127.0.0.1 - - [04/Sep/2024 22:56:24] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-09-04 22:56:24,316 Prolific ID: 65e6fb8c62b34b6ef5249890 for Document ID: d17fdcaa755142cdb96168e4_LLM saved: {'donationAmount': '1', 'emotionalAppeal': {'EA1': 'Disagree', 'EA2': 'Disagree', 'EA3': 'Disagree'}, 'informationAwareness': {'IA1': 'Disagree', 'IA2': 'Disagree', 'IA3': 'Disagree'}, 'behavioralIntentions': {'BI2': 'Disagree', 'BI1': 'Disagree'}, 'charity': 'WWF', 'charityFeedbackPositive': 'as', 'charityFeedbackNegative': 'asd', 'adSource': 'AS2', 'adSourceReason': 'asd', 'recipeUsed': ['RU6']}
+2024-09-04 22:56:24,319 127.0.0.1 - - [04/Sep/2024 22:56:24] "POST /api/log_survey HTTP/1.1" 200 -
+2024-09-04 22:56:53,940 127.0.0.1 - - [04/Sep/2024 22:56:53] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-04 22:56:54,268 127.0.0.1 - - [04/Sep/2024 22:56:54] "[35m[1mPOST /api/save_participant_info HTTP/1.1[0m" 500 -
+2024-09-04 22:57:02,497 127.0.0.1 - - [04/Sep/2024 22:57:02] "OPTIONS /api/save_participant_info HTTP/1.1" 200 -
+2024-09-04 22:57:02,811 127.0.0.1 - - [04/Sep/2024 22:57:02] "[35m[1mPOST /api/save_participant_info HTTP/1.1[0m" 500 -
+2024-09-04 22:57:03,133 127.0.0.1 - - [04/Sep/2024 22:57:03] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-04 22:57:03,446 127.0.0.1 - - [04/Sep/2024 22:57:03] "OPTIONS /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-04 22:57:03,448 Prolific ID 65e6fb8c62b34b6ef5249890 called to fetch using the following data {'task_category': 'ENG', 'prolific_id': '65e6fb8c62b34b6ef5249890'}
+2024-09-04 22:57:03,451 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID 863584420798407b890d80a1_LLM
+2024-09-04 22:57:03,452 127.0.0.1 - - [04/Sep/2024 22:57:03] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-04 22:57:03,760 Prolific ID 65e6fb8c62b34b6ef5249890 called to fetch using the following data {'task_category': 'ENG', 'prolific_id': '65e6fb8c62b34b6ef5249890'}
+2024-09-04 22:57:03,763 Prolific ID 65e6fb8c62b34b6ef5249890 fetched document ID b0a65922556b4a31afa1d00f_LLM
+2024-09-04 22:57:03,764 127.0.0.1 - - [04/Sep/2024 22:57:03] "POST /api/get_persuasive_text HTTP/1.1" 200 -
+2024-09-04 22:57:28,858 127.0.0.1 - - [04/Sep/2024 22:57:28] "OPTIONS /api/log_survey HTTP/1.1" 200 -
+2024-09-04 22:57:29,122 Prolific ID: 65e6fb8c62b34b6ef5249890 for Document ID: b0a65922556b4a31afa1d00f_LLM saved: {'donationAmount': '1', 'emotionalAppeal': {'EA1': 'Disagree', 'EA2': 'Disagree', 'EA3': 'Neutral'}, 'informationAwareness': {'IA1': 'Strongly Disagree', 'IA2': 'Disagree', 'IA3': 'Disagree'}, 'behavioralIntentions': {'BI2': 'Neutral', 'BI1': 'Neutral'}, 'charity': 'UNICEF', 'charityFeedbackPositive': 'asd', 'charityFeedbackNegative': 'asda', 'adSource': 'AS2', 'adSourceReason': 'asd', 'recipeUsed': ['RU3']}
+2024-09-04 22:57:29,123 127.0.0.1 - - [04/Sep/2024 22:57:29] "POST /api/log_survey HTTP/1.1" 200 -
+2024-09-04 22:58:25,795  * Detected change in 'C:\\Users\\shrey\\OneDrive\\Documents\\all-codes\\abscribe\\abscribe_backend\\abscribe_backend\\app.py', reloading
+2024-09-04 22:58:26,208  * Restarting with stat
+2024-09-04 22:58:26,660 app started
+2024-09-04 22:58:26,675  * Debugger is active!
+2024-09-04 22:58:26,681  * Debugger PIN: 442-777-315

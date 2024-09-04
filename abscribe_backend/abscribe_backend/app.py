@@ -165,6 +165,7 @@ def save_survey_response():
 
     prolific_id = data.get("prolific_id")
     document_id = data.get("document_id")
+    study_id = data.get("study_id")
     # task_id = data.get("task_id")
     # donationAmount = 
     responses = data.get("responses", {})
@@ -182,7 +183,14 @@ def save_survey_response():
         )
         survey_response.save()
 
-        return jsonify({"message": "Survey responses saved successfully"}), 200
+        if study_id in ['66d82b36e3cb5863a2e34f1e', '66d82b4cc966a4c9bd40b1d6']:
+            redirect_code = "C127DB3G"
+        elif study_id in ['66d8461863df672d5ffe15b2', '66d847204c5ed7a7e6ccde9c']:
+            redirect_code = "C1MGNTBM"
+        else:
+            redirect_code = "ACASCCDD"
+    
+        return jsonify({"message": "Survey logged", "redirectCode": redirect_code}), 200
     except Exception as e:
         print("Error saving survey responses:", e)
         return jsonify({"error": str(e)}), 500

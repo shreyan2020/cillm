@@ -1,6 +1,5 @@
 const charityTaskConfigEN = {
   config: {
-    redirectCode: "C1MGNTBM",
     consentText: `
       <p>
         We are a group of researchers at the Technical University of Delft in The Netherlands and Goettingen University. In this research project, we aim to investigate the persuasiveness of a text through donation behavior. As such, you are invited to participate in our research study.
@@ -88,7 +87,7 @@ const charityTaskConfigEN = {
         BI2: "How likely are you to seek more information about the organization?"
         }
       },
-      attentionCheck: {
+      charity: {
         header: "Which charity have you donated to in this task?",
         options: ["WWF", "Red Cross", "UNICEF", "Doctors Without Borders"],
       },
