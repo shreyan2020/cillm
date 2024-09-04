@@ -33,11 +33,7 @@ services:
   #   volumes:
   #     - ollama:/root/.ollama
   #   restart: always
-<<<<<<< HEAD
-    # runtime: nvidia
-=======
   #   # runtime: nvidia
->>>>>>> 71dc4a9811343f5d00545c799e8a627fe03bc12a
 
   mongodb:
     image: mongo:latest
