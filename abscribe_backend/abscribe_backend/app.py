@@ -168,7 +168,7 @@ def save_survey_response():
     # task_id = data.get("task_id")
     # donationAmount = 
     responses = data.get("responses", {})
-
+    logging.info(f"Prolific ID: {prolific_id} for Document ID: {document_id} saved: {responses}")
     if not all([prolific_id, document_id]):
         return jsonify({"error": "Missing required fields"}), 400
 
