@@ -41,3 +41,6 @@ dist/
 
 #Ignore data
 analysis/data/*
+analysis/output/*
+analysis/*/*.csv
+analysis/*/*.pdf
